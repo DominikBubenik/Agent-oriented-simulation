@@ -24,7 +24,7 @@ namespace Agents.AgentBoss
 		}
 
 		//meta! sender="AgentEnviroment", id="9", type="Notice"
-		public void ProcessPatienArrival(MessageForm message)
+		public void ProcessPatientArrival(MessageForm message)
 		{
 		}
 
@@ -54,8 +54,8 @@ namespace Agents.AgentBoss
 				ProcessTreatPatient(message);
 			break;
 
-			case Mc.PatienArrival:
-				ProcessPatienArrival(message);
+			case Mc.PatientArrival:
+				ProcessPatientArrival(message);
 			break;
 
 			default:

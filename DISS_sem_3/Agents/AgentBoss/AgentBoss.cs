@@ -22,8 +22,8 @@ namespace Agents.AgentBoss
 		private void Init()
 		{
 			new ManagerBoss(SimId.ManagerBoss, MySim, this);
-			AddOwnMessage(Mc.PatienArrival);
 			AddOwnMessage(Mc.TreatPatient);
+			AddOwnMessage(Mc.PatientArrival);
 		}
 		//meta! tag="end"
 	}
