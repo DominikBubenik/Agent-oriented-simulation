@@ -1,0 +1,89 @@
+using OSPABA;
+using Simulation;
+
+namespace Agents.AgentEnviroment
+{
+	//meta! id="5"
+	public class ManagerEnviroment : OSPABA.Manager
+	{
+		public ManagerEnviroment(int id, OSPABA.Simulation mySim, Agent myAgent) :
+			base(id, mySim, myAgent)
+		{
+			Init();
+		}
+
+		override public void PrepareReplication()
+		{
+			base.PrepareReplication();
+			// Setup component for the next replication
+
+			if (PetriNet != null)
+			{
+				PetriNet.Clear();
+			}
+		}
+
+		//meta! sender="AgentBoss", id="15", type="Notice"
+		public void ProcessPatientExit(MessageForm message)
+		{
+		}
+
+		//meta! sender="AmbulancePatient", id="18", type="Finish"
+		public void ProcessFinishAmbulancePatient(MessageForm message)
+		{
+		}
+
+		//meta! sender="RegularPatient", id="20", type="Finish"
+		public void ProcessFinishRegularPatient(MessageForm message)
+		{
+		}
+
+		//meta! userInfo="Process messages defined in code", id="0"
+		public void ProcessDefault(MessageForm message)
+		{
+			switch (message.Code)
+			{
+			}
+		}
+
+		//meta! userInfo="Generated code: do not modify", tag="begin"
+		public void Init()
+		{
+		}
+
+		override public void ProcessMessage(MessageForm message)
+		{
+			switch (message.Code)
+			{
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
+			break;
+
+			case Mc.Finish:
+				switch (message.Sender.Id)
+				{
+				case SimId.AmbulancePatient:
+					ProcessFinishAmbulancePatient(message);
+				break;
+
+				case SimId.RegularPatient:
+					ProcessFinishRegularPatient(message);
+				break;
+				}
+			break;
+
+			default:
+				ProcessDefault(message);
+			break;
+			}
+		}
+		//meta! tag="end"
+		public new AgentEnviroment MyAgent
+		{
+			get
+			{
+				return (AgentEnviroment)base.MyAgent;
+			}
+		}
+	}
+}
