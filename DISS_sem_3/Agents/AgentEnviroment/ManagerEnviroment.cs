@@ -37,7 +37,12 @@ namespace Agents.AgentEnviroment
 		//meta! sender="RegularPatient", id="20", type="Finish"
 		public void ProcessFinishRegularPatient(MessageForm message)
 		{
+			message.Addressee = MyAgent.Parent;
+			Notice(message);
+			
 			Console.WriteLine("pateint ");
+			var newMessage = (MyMessage)message.CreateCopy();
+			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -45,16 +50,6 @@ namespace Agents.AgentEnviroment
 		{
 			switch (message.Code)
 			{
-				case Mc.PatientArrival:
-					// Hold(TOTO_BUDE_NEJAKY_GEN, message.CreateCopy());
-					message.Addressee = MyAgent.Parent;
-					Notice(message);
-					
-					var newMessage = (MyMessage)message.CreateCopy();
-					var id = newMessage.Patient.ArrivedByAmbulance ? SimId.AmbulancePatient : SimId.RegularPatient;
-					newMessage.Addressee = MyAgent.FindAssistant(id);
-					StartContinualAssistant(newMessage);
-					break;
 			}
 		}
 

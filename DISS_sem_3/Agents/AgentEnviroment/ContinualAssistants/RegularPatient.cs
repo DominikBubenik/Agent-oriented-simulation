@@ -37,12 +37,12 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			switch (message.Code)
 			{
 				case Mc.PatientArrival:
-					// Hold(TOTO_BUDE_NEJAKY_GEN, message.CreateCopy());
+					Hold(TOTO_BUDE_NEJAKY_GEN, message.CreateCopy());
 					
 					var myMsg = (MyMessage)message;
 					myMsg.Patient = new Patient(patientCounter, MySim, MySim.CurrentTime, false);
 					myMsg.Addressee = MyAgent;
-					// myMsg.Code = Mc.Finish;
+					myMsg.Code = Mc.Finish;
 					patientCounter++;
 					Notice(myMsg);
 					break;

@@ -31,10 +31,12 @@ namespace Agents.AgentEnviroment
 		{
 			var message = new MyMessage(MySim);
 			message.Addressee = FindAssistant(SimId.RegularPatient);
+			message.Code = Mc.Start;
 			MyManager.StartContinualAssistant(message);
 			
 			message = new MyMessage(MySim);
 			message.Addressee = FindAssistant(SimId.AmbulancePatient);
+			message.Code = Mc.Start;
 			MyManager.StartContinualAssistant(message);
 		}
 
