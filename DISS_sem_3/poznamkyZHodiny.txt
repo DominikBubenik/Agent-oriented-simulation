@@ -1,0 +1,49 @@
+do checkpointu dat aj dokumentaciu agentov
+obrazok a popisat co agenti znamenaju
+rozkliknut agentov a popisat to co je vnutri
+
+2 krok vygenerujem kody
+vacsina modelu je posielania sprav a zmeny kodov sprav
+
+pridat generatory a fronty sprav
+davame do triedy agent davame logiku tych radov
+
+v MySimulation budu iba nejake globalne statistiky inak vsetko rozbite v agentoch
+
+potrebujeme spravit logger, sprava prisla tomuto manazerovi, takyto pacient s takymto 
+
+potom spravime gui nahotovo zrychlovanie, spomalovanie, zobrazovat tabulky, vsetko nech ma id vypisovat v simulacii
+
+dam si tam jednoduchy manazment zdrojov, oddebuggovat si vsetko od zaciatku po koniec
+
+data su na elearningu, nasa uloha je zanalyzovat vstupne data
+vystup aky generator pouzit a ake parametre budu pre tieto generatory
+input analyzer mozeme pouzit
+
+1) spravit co najviac statistik, priemerne dlzky casov, vytazenie zamestnancov pre kazdy zdroj
+pre pacienta rozne cakacie doby, cim viac statistik 
+
+2) experimentalna cinnost, navrhnut rozdelovania zdrojov, 3 druhy zdrojov
+navrhnut pridelovanie zdrojov, spravit vlastne experimenty, 
+napriklad sanovat lekarov podla typu pacienta, treba zdroje setrit
+
+NIKDY nezasahovat do ineho inak ako prostrednictvom spravy
+
+navrhnut rozne varianty, zdokumentovat, skusit nejaky variant a uvidime, mozem menit aj pocet doktorov a sestriciek
+vysledky treba realizovat, ked mam nejaky variant pridelovania zdrojov tak ten si musim byt schopny menit z gui.
+treba manazovat aj nejako presuny, vsetky presuny medzi ambulanciami a podobne.
+
+mozeme vyuzit ze pozname vela statistik, tak mozeme vyuzivat a uvidime
+vysledok bude ako to cele manazovat, hodnoti sa aj unikatnost a ako sme sa zamyslali
+
+3) urcit premerny pocet lekarov a sestier
+cez replikacie robime a preverujeme zdroje, najlepsie robit automaticky, a bude
+pre dany variant a stanovit zavery zo simulacnej studie, vsetky varianty musia byt vykonatelne priamo z aplikacie
+musi byt jasne ako sme dospely k zaveru
+dokumentacia staci na malo stran
+
+animacia-----
+moze byt trivialna, ked tak sa daju strhnut body, 
+aj keby bola skareda
+ak tam nie je cas je to cas 0
+fiktivne rady- nemusia byt zobrazene
