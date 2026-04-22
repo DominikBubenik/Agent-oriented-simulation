@@ -37,6 +37,8 @@ namespace Simulation
 		{
 			// Display simulation results
 			base.SimulationFinished();
+			
+			Console.WriteLine("Simulation finished");
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

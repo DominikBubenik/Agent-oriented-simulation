@@ -1,9 +1,11 @@
+using DISS_sem_3.Entities;
 using OSPABA;
 
 namespace Simulation
 {
 	public class MyMessage : OSPABA.MessageForm
 	{
+		public Patient Patient { get; set; }
 		public MyMessage(OSPABA.Simulation mySim) :
 			base(mySim)
 		{
@@ -25,6 +27,7 @@ namespace Simulation
 			base.Copy(message);
 			MyMessage original = (MyMessage)message;
 			// Copy attributes
+			Patient = original.Patient;
 		}
 	}
 }

@@ -1,0 +1,3 @@
+TODO 1) mame si nejako upravit tie svoje statisticke rady aby to boli priority queue s nejakou prioritov?
+
+TODO 2) 
