@@ -32,6 +32,11 @@ namespace Agents.AgentEnviroment
 		//meta! sender="AmbulancePatient", id="18", type="Finish"
 		public void ProcessFinishAmbulancePatient(MessageForm message)
 		{
+			message.Addressee = MyAgent.Parent;
+			Notice(message);
+			
+			var newMessage = (MyMessage)message.CreateCopy();
+			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! sender="RegularPatient", id="20", type="Finish"
@@ -40,7 +45,6 @@ namespace Agents.AgentEnviroment
 			message.Addressee = MyAgent.Parent;
 			Notice(message);
 			
-			Console.WriteLine("pateint ");
 			var newMessage = (MyMessage)message.CreateCopy();
 			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}

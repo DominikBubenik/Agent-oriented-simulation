@@ -26,7 +26,7 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 		public void ProcessStart(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			myMsg.Code = Mc.PatientArrival;
+			myMsg.Code = Mc.Finish;
 			
 			Hold(TOTO_BUDE_NEJAKY_GEN, myMsg);
 		}
@@ -36,7 +36,7 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 		{
 			switch (message.Code)
 			{
-				case Mc.PatientArrival:
+				case Mc.Finish:
 					Hold(TOTO_BUDE_NEJAKY_GEN, message.CreateCopy());
 					
 					var myMsg = (MyMessage)message;
@@ -44,7 +44,7 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 					myMsg.Addressee = MyAgent;
 					myMsg.Code = Mc.Finish;
 					patientCounter++;
-					Notice(myMsg);
+					AssistantFinished(myMsg);
 					break;
 			}
 		}
