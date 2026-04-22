@@ -28,13 +28,13 @@ namespace Agents.AgentEntryExam
 		{
 		}
 
-		//meta! sender="ProcessEntryFinished", id="71", type="Finish"
+		//meta! userInfo="Removed from model"
 		public void ProcessFinishProcessEntryFinished(MessageForm message)
 		{
 		}
 
 		//meta! sender="ProcessEntryExam", id="53", type="Finish"
-		public void ProcessFinishProcessEntryExam(MessageForm message)
+		public void ProcessFinish(MessageForm message)
 		{
 		}
 
@@ -56,16 +56,7 @@ namespace Agents.AgentEntryExam
 			switch (message.Code)
 			{
 			case Mc.Finish:
-				switch (message.Sender.Id)
-				{
-				case SimId.ProcessEntryExam:
-					ProcessFinishProcessEntryExam(message);
-				break;
-
-				case SimId.ProcessEntryFinished:
-					ProcessFinishProcessEntryFinished(message);
-				break;
-				}
+				ProcessFinish(message);
 			break;
 
 			case Mc.EntryExamPatient:

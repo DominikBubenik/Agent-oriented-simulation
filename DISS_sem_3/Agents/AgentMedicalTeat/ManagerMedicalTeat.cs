@@ -29,15 +29,10 @@ namespace Agents.AgentMedicalTeat
 		}
 
 		//meta! sender="ProcessMedicalTreat", id="56", type="Finish"
-		public void ProcessFinishProcessMedicalTreat(MessageForm message)
+		public void ProcessFinish(MessageForm message)
 		{
 		}
-
-		//meta! sender="ProcessMedicalTreatFinished", id="78", type="Finish"
-		public void ProcessFinishProcessMedicalTreatFinished(MessageForm message)
-		{
-		}
-
+		
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
 		{
@@ -56,16 +51,7 @@ namespace Agents.AgentMedicalTeat
 			switch (message.Code)
 			{
 			case Mc.Finish:
-				switch (message.Sender.Id)
-				{
-				case SimId.ProcessMedicalTreat:
-					ProcessFinishProcessMedicalTreat(message);
-				break;
-
-				case SimId.ProcessMedicalTreatFinished:
-					ProcessFinishProcessMedicalTreatFinished(message);
-				break;
-				}
+				ProcessFinish(message);
 			break;
 
 			case Mc.MedicalTreatPatient:

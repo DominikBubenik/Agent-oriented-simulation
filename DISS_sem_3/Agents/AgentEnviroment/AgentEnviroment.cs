@@ -47,7 +47,6 @@ namespace Agents.AgentEnviroment
 			new RegularPatient(SimId.RegularPatient, MySim, this);
 			new AmbulancePatient(SimId.AmbulancePatient, MySim, this);
 			AddOwnMessage(Mc.PatientExit);
-			AddOwnMessage(Mc.PatientArrival);
 		}
 		//meta! tag="end"
 	}

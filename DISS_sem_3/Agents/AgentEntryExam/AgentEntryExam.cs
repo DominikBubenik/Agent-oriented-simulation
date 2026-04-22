@@ -24,7 +24,6 @@ namespace Agents.AgentEntryExam
 		{
 			new ManagerEntryExam(SimId.ManagerEntryExam, MySim, this);
 			new ProcessEntryExam(SimId.ProcessEntryExam, MySim, this);
-			new ProcessEntryFinished(SimId.ProcessEntryFinished, MySim, this);
 			AddOwnMessage(Mc.EntryExamPatient);
 		}
 		//meta! tag="end"

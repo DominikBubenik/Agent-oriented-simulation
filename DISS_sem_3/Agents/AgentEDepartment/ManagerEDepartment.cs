@@ -58,6 +58,16 @@ namespace Agents.AgentEDepartment
 			}
 		}
 
+		//meta! sender="AgentTransition", id="112", type="Response"
+		public void ProcessMedicalTreatTransition(MessageForm message)
+		{
+		}
+
+		//meta! sender="AgentTransition", id="111", type="Response"
+		public void ProcessEntryExamTransition(MessageForm message)
+		{
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -67,6 +77,22 @@ namespace Agents.AgentEDepartment
 		{
 			switch (message.Code)
 			{
+			case Mc.EntryExamTransition:
+				ProcessEntryExamTransition(message);
+			break;
+
+			case Mc.TreatPatient:
+				ProcessTreatPatient(message);
+			break;
+
+			case Mc.EntryExamResources:
+				ProcessEntryExamResources(message);
+			break;
+
+			case Mc.MedicalTreatTransition:
+				ProcessMedicalTreatTransition(message);
+			break;
+
 			case Mc.MedicalTreatPatient:
 				ProcessMedicalTreatPatient(message);
 			break;
@@ -77,14 +103,6 @@ namespace Agents.AgentEDepartment
 
 			case Mc.MedicalTreatResources:
 				ProcessMedicalTreatResources(message);
-			break;
-
-			case Mc.TreatPatient:
-				ProcessTreatPatient(message);
-			break;
-
-			case Mc.EntryExamResources:
-				ProcessEntryExamResources(message);
 			break;
 
 			default:

@@ -4,6 +4,7 @@ using OSPABA;
 using Agents.AgentEntryExam;
 using Agents.AgentEnviroment;
 using Agents.AgentMedicalTeat;
+using Agents.AgentTransition;
 using Agents.AgentEDepartment;
 
 namespace Simulation
@@ -49,6 +50,7 @@ namespace Simulation
 			AgentEDepartment = new AgentEDepartment(SimId.AgentEDepartment, this, AgentBoss);
 			AgentResources = new AgentResources(SimId.AgentResources, this, AgentEDepartment);
 			AgentEntryExam = new AgentEntryExam(SimId.AgentEntryExam, this, AgentEDepartment);
+			AgentTransition = new AgentTransition(SimId.AgentTransition, this, AgentEDepartment);
 			AgentMedicalTeat = new AgentMedicalTeat(SimId.AgentMedicalTeat, this, AgentEDepartment);
 		}
 		public AgentBoss AgentBoss
@@ -60,6 +62,8 @@ namespace Simulation
 		public AgentResources AgentResources
 		{ get; set; }
 		public AgentEntryExam AgentEntryExam
+		{ get; set; }
+		public AgentTransition AgentTransition
 		{ get; set; }
 		public AgentMedicalTeat AgentMedicalTeat
 		{ get; set; }

@@ -23,7 +23,6 @@ namespace Agents.AgentMedicalTeat
 		private void Init()
 		{
 			new ManagerMedicalTeat(SimId.ManagerMedicalTeat, MySim, this);
-			new ProcessMedicalTreatFinished(SimId.ProcessMedicalTreatFinished, MySim, this);
 			new ProcessMedicalTreat(SimId.ProcessMedicalTreat, MySim, this);
 			AddOwnMessage(Mc.MedicalTreatPatient);
 		}
