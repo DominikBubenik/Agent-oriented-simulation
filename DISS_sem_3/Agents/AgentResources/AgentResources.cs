@@ -23,8 +23,8 @@ namespace Agents.AgentResources
 		private void Init()
 		{
 			new ManagerResources(SimId.ManagerResources, MySim, this);
-			new AllocateEntryExamRes(SimId.AllocateEntryExamRes, MySim, this);
 			new AllocateMedicalTreatRes(SimId.AllocateMedicalTreatRes, MySim, this);
+			new AllocateEntryExamRes(SimId.AllocateEntryExamRes, MySim, this);
 			AddOwnMessage(Mc.FreeUpResources);
 			AddOwnMessage(Mc.MedicalTreatResources);
 			AddOwnMessage(Mc.EntryExamResources);

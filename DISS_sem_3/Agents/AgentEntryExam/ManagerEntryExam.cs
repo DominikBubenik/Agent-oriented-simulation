@@ -58,12 +58,12 @@ namespace Agents.AgentEntryExam
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
-				case SimId.ProcessEntryFinished:
-					ProcessFinishProcessEntryFinished(message);
-				break;
-
 				case SimId.ProcessEntryExam:
 					ProcessFinishProcessEntryExam(message);
+				break;
+
+				case SimId.ProcessEntryFinished:
+					ProcessFinishProcessEntryFinished(message);
 				break;
 				}
 			break;

@@ -55,10 +55,6 @@ namespace Agents.AgentMedicalTeat
 		{
 			switch (message.Code)
 			{
-			case Mc.MedicalTreatPatient:
-				ProcessMedicalTreatPatient(message);
-			break;
-
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -70,6 +66,10 @@ namespace Agents.AgentMedicalTeat
 					ProcessFinishProcessMedicalTreatFinished(message);
 				break;
 				}
+			break;
+
+			case Mc.MedicalTreatPatient:
+				ProcessMedicalTreatPatient(message);
 			break;
 
 			default:

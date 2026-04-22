@@ -58,6 +58,19 @@ namespace Agents.AgentEnviroment
 			}
 		}
 
+		//meta! sender="RegularPatient", id="100", type="Notice"
+		public void ProcessPatientArrival(MessageForm message)
+		{
+			message.Addressee = MyAgent.Parent;
+			Notice(message);
+					
+			var newMessage = (MyMessage)message.CreateCopy();
+			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
+			var id = newMessage.Patient.ArrivedByAmbulance ? SimId.AmbulancePatient : SimId.RegularPatient;
+			newMessage.Addressee = MyAgent.FindAssistant(id);
+			StartContinualAssistant(newMessage);
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -65,13 +78,8 @@ namespace Agents.AgentEnviroment
 
 		override public void ProcessMessage(MessageForm message)
 		{
-			Console.WriteLine("heeere");
 			switch (message.Code)
 			{
-			case Mc.PatientExit:
-				ProcessPatientExit(message);
-			break;
-
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -83,6 +91,14 @@ namespace Agents.AgentEnviroment
 					ProcessFinishRegularPatient(message);
 				break;
 				}
+			break;
+
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
+			break;
+
+			case Mc.PatientArrival:
+				ProcessPatientArrival(message);
 			break;
 
 			default:

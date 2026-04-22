@@ -31,6 +31,7 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentBoss", id="23", type="Request"
 		public void ProcessTreatPatient(MessageForm message)
 		{
+			var myMsg = ((MyMessage)message).CreateCopy();
 		}
 
 		//meta! sender="AgentEntryExam", id="47", type="Response"
@@ -41,6 +42,7 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentResources", id="44", type="Response"
 		public void ProcessEntryExamResources(MessageForm message)
 		{
+			//tuto ho zoberiem z radu lebo az teraz sa priradia resource
 		}
 
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"
@@ -69,20 +71,20 @@ namespace Agents.AgentEDepartment
 				ProcessMedicalTreatPatient(message);
 			break;
 
-			case Mc.MedicalTreatResources:
-				ProcessMedicalTreatResources(message);
-			break;
-
 			case Mc.EntryExamPatient:
 				ProcessEntryExamPatient(message);
 			break;
 
-			case Mc.EntryExamResources:
-				ProcessEntryExamResources(message);
+			case Mc.MedicalTreatResources:
+				ProcessMedicalTreatResources(message);
 			break;
 
 			case Mc.TreatPatient:
 				ProcessTreatPatient(message);
+			break;
+
+			case Mc.EntryExamResources:
+				ProcessEntryExamResources(message);
 			break;
 
 			default:
