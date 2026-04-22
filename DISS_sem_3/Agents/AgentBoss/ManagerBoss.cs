@@ -26,11 +26,17 @@ namespace Agents.AgentBoss
 		//meta! sender="AgentEnviroment", id="9", type="Notice"
 		public void ProcessPatientArrival(MessageForm message)
 		{
+			message.Code = Mc.TreatPatient;
+			message.Addressee = MySimInstance.FindAgent(SimId.AgentEDepartment);
+			Request(message);
 		}
 
 		//meta! sender="AgentEDepartment", id="23", type="Response"
 		public void ProcessTreatPatient(MessageForm message)
 		{
+			message.Code = Mc.PatientExit;
+			message.Addressee = MySimInstance.YellowPages.FindFirstAgent(Mc.PatientExit);
+			Notice(message);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -71,5 +77,7 @@ namespace Agents.AgentBoss
 				return (AgentBoss)base.MyAgent;
 			}
 		}
+		
+		public MySimulation MySimInstance => (MySimulation)MySim;
 	}
 }
