@@ -24,7 +24,9 @@ namespace Simulation
 		public const int RegularPatient = 1002;
 		public const int AllocateMedicalTreatRes = 1012;
 		public const int ProcessEntryExam = 1003;
+		public const int EntryExamTransfer = 1013;
 		public const int ProcessMedicalTreat = 1004;
+		public const int MedicalTreatTransfer = 1014;
 		//meta! tag="end"
 	}
 }

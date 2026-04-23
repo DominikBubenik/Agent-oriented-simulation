@@ -41,6 +41,16 @@ namespace Agents.AgentTransition
 			}
 		}
 
+		//meta! sender="MedicalTreatTransfer", id="121", type="Finish"
+		public void ProcessFinishMedicalTreatTransfer(MessageForm message)
+		{
+		}
+
+		//meta! sender="EntryExamTransfer", id="119", type="Finish"
+		public void ProcessFinishEntryExamTransfer(MessageForm message)
+		{
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -50,12 +60,25 @@ namespace Agents.AgentTransition
 		{
 			switch (message.Code)
 			{
-			case Mc.MedicalTreatTransition:
-				ProcessMedicalTreatTransition(message);
+			case Mc.Finish:
+				switch (message.Sender.Id)
+				{
+				case SimId.MedicalTreatTransfer:
+					ProcessFinishMedicalTreatTransfer(message);
+				break;
+
+				case SimId.EntryExamTransfer:
+					ProcessFinishEntryExamTransfer(message);
+				break;
+				}
 			break;
-			
+
 			case Mc.EntryExamTransition:
 				ProcessEntryExamTransition(message);
+			break;
+
+			case Mc.MedicalTreatTransition:
+				ProcessMedicalTreatTransition(message);
 			break;
 
 			default:

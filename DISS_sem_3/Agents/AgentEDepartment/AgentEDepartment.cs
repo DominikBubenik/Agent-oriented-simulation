@@ -23,10 +23,10 @@ namespace Agents.AgentEDepartment
 		{
 			new ManagerEDepartment(SimId.ManagerEDepartment, MySim, this);
 			AddOwnMessage(Mc.MedicalTreatTransition);
-			AddOwnMessage(Mc.TreatPatient);
 			AddOwnMessage(Mc.MedicalTreatResources);
-			AddOwnMessage(Mc.EntryExamResources);
+			AddOwnMessage(Mc.TreatPatient);
 			AddOwnMessage(Mc.EntryExamPatient);
+			AddOwnMessage(Mc.EntryExamResources);
 			AddOwnMessage(Mc.MedicalTreatPatient);
 			AddOwnMessage(Mc.EntryExamTransition);
 		}

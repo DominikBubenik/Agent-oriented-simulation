@@ -1,3 +1,4 @@
+using Agents.AgentTransition.ContinualAssistants;
 using OSPABA;
 using Simulation;
 
@@ -22,6 +23,8 @@ namespace Agents.AgentTransition
 		private void Init()
 		{
 			new ManagerTransition(SimId.ManagerTransition, MySim, this);
+			new MedicalTreatTransfer(SimId.MedicalTreatTransfer, MySim, this);
+			new EntryExamTransfer(SimId.EntryExamTransfer, MySim, this);
 			AddOwnMessage(Mc.MedicalTreatTransition);
 			AddOwnMessage(Mc.EntryExamTransition);
 		}
