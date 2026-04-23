@@ -8,8 +8,20 @@ namespace Agents.AgentEnviroment
 	//meta! id="5"
 	public class AgentEnviroment : OSPABA.Agent
 	{
-		public SimpleStat TimeInSystem { get; private set; }
+		public SimpleStat TimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TimeInSystemWalkInPatient { get; private set; }
+
 		public int TreatedPatientsCount { get; set; }
+
+		public SimpleStat EntranceWaitingTimeAmbulanceP { get; private set; }
+		public SimpleStat EntranceWaitingTimeWalkInP { get; private set; }
+
+		public SimpleStat EntryExamWaitingTimeAmbulanceP { get; private set; }
+		public SimpleStat EntryExamWaitingTimeWalkInP { get; private set; }
+
+		public SimpleStat MedicalTreatWaitingTimeAmbulanceP { get; private set; }
+		public SimpleStat MedicalTreatWaitingTimeWalkInP { get; private set; }
+
 		public AgentEnviroment(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
 		{
@@ -21,8 +33,19 @@ namespace Agents.AgentEnviroment
 			base.PrepareReplication();
 			// Setup component for the next replication
 
-			TimeInSystem = new SimpleStat();
+			TimeInSystemAmbulancePatient = new SimpleStat();
+			TimeInSystemWalkInPatient = new SimpleStat();
+
 			TreatedPatientsCount = 0;
+
+			EntranceWaitingTimeAmbulanceP = new SimpleStat();
+			EntranceWaitingTimeWalkInP = new SimpleStat();
+
+			EntryExamWaitingTimeAmbulanceP = new SimpleStat();
+			EntryExamWaitingTimeWalkInP = new SimpleStat();
+
+			MedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
+			MedicalTreatWaitingTimeWalkInP = new SimpleStat();
 
 			SchedulePatientArrivals();
 		}

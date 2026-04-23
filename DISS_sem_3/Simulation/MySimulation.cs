@@ -6,11 +6,20 @@ using Agents.AgentEnviroment;
 using Agents.AgentMedicalTeat;
 using Agents.AgentTransition;
 using Agents.AgentEDepartment;
+using MainLogic;
 
 namespace Simulation
 {
 	public class MySimulation : OSPABA.Simulation
 	{
+		public SimpleStat TotalTimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TotalTimeInSystemWalkInPatient { get; private set; }
+		public SimpleStat TotalEntranceWaitingTimeAmbulanceP { get; private set; }
+		public SimpleStat TotalEntranceWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalEntryExamWaitingTimeAmbulanceP { get; private set; }
+		public SimpleStat TotalEntryExamWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
+		public SimpleStat TotalMedicalTreatWaitingTimeWalkInP { get; private set; }
 		public MySimulation()
 		{
 			Init();
@@ -20,6 +29,17 @@ namespace Simulation
 		{
 			base.PrepareSimulation();
 			// Create global statistcis
+			TotalTimeInSystemAmbulancePatient = new SimpleStat();
+			TotalTimeInSystemWalkInPatient = new SimpleStat();
+
+			TotalEntranceWaitingTimeAmbulanceP = new SimpleStat();
+			TotalEntranceWaitingTimeWalkInP = new SimpleStat();
+
+			TotalEntryExamWaitingTimeAmbulanceP = new SimpleStat();
+			TotalEntryExamWaitingTimeWalkInP = new SimpleStat();
+
+			TotalMedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
+			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
 		}
 
 		override public void PrepareReplication()
@@ -38,7 +58,19 @@ namespace Simulation
 		{
 			// Display simulation results
 			base.SimulationFinished();
-			
+
+			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
+			TotalTimeInSystemWalkInPatient.AddSample(AgentEnviroment.TimeInSystemWalkInPatient.GetAverage());
+
+			TotalEntranceWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
+			TotalEntranceWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
+
+			TotalEntryExamWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntryExamWaitingTimeAmbulanceP.GetAverage());
+			TotalEntryExamWaitingTimeWalkInP.AddSample(AgentEnviroment.EntryExamWaitingTimeWalkInP.GetAverage());
+
+			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
+			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());
+
 			Console.WriteLine("Simulation finished");
 		}
 
