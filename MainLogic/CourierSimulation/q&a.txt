@@ -1,0 +1,46 @@
+﻿TODO
+1) zanedbavam vykladanie tovaru?
+
+TODO
+2)ako reprezentovat dopravnu siet?
+-mame ju tam napisat natvrdo
+-je dobry napad mat napriklad segmenty a cesty
+    >segment obsahuje iba cas a farbu plus metodu ktora vygeneruje celkovy cas
+    >cesta je zlozena zo segmentov, 
+        .obsahuje odkial a kam ide
+        .napr Rajec to Divinka, Rajec-K,....
+
+TODO
+3)co sa tyka tych ciest s nejakou pravdepodobnostou (napr 0.4) vygenerujem hodnotu rychlosti z <40; 65)?
+
+TODO
+4) ziadne fiktivne hrany? Skutocne iba cez kazde mesto prejdem iba raz? Ze napr do Rajeckych idem bud z K alebo nemam inu moznost aby som nenavstivil iny vrchol
+
+TODO
+5)takze som napriklad v Rajeckych a ako sa dostanem do dalej, vygenerujem hodnotu pre tu modru 1 a pre modru 8 a idem kratsou alebo vygenerujem rovno celu trasu do Divinky?
+
+TODO
+6) pre kazde navrhovane poradie samostatny graf takze dokopy pre tutu ulohu 6 grafov?
+
+TODO
+7) ako urcit poradie? Mam to natvrdo vygenerovat vsetky moznosti? Alebo to program nejako automaticky vyselektuje?
+Ze napriklad zadam ze najskor 1 - RT, ST, DI;  2 - RT, DI, ST a takto pre kazdu moznost?
+
+TODO
+8) co je jadro ten beh v tom for cykle?
+
+TODO
+9) ake su to tie generatory spojiteho a diskretneho rozdelenia?
+mam na to mat samostatnu metodu alebo kazda hrana ma mat metodu kde mi to vygeneruje
+ako si mam vytvorit vlastne
+
+TODO
+10) je rozdiel ked idem zo Strecna do Rajeckych a z Rajeckych do Strecna?
+
+
+
+
+----
+co je v tomto pripade nahodny jav?
+
+dokumentacia popis generatorov a simulacneho jadra
