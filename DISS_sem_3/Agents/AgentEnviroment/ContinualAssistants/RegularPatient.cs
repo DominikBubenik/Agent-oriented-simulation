@@ -42,7 +42,6 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 					var myMsg = (MyMessage)message;
 					myMsg.Patient = new Patient(patientCounter, MySim, MySim.CurrentTime, false);
 					myMsg.Addressee = MyAgent;
-					myMsg.Code = Mc.Finish;
 					patientCounter++;
 					AssistantFinished(myMsg);
 					break;
