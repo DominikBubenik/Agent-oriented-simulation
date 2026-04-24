@@ -55,12 +55,12 @@ namespace Agents.AgentEntryExam
 		{
 			switch (message.Code)
 			{
-			case Mc.Finish:
-				ProcessFinish(message);
-			break;
-
 			case Mc.EntryExamPatient:
 				ProcessEntryExamPatient(message);
+			break;
+
+			case Mc.Finish:
+				ProcessFinish(message);
 			break;
 
 			default:

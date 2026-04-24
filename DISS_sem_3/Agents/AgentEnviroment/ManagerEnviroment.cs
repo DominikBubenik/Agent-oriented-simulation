@@ -68,10 +68,6 @@ namespace Agents.AgentEnviroment
 		{
 			switch (message.Code)
 			{
-			case Mc.PatientExit:
-				ProcessPatientExit(message);
-			break;
-
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -83,6 +79,10 @@ namespace Agents.AgentEnviroment
 					ProcessFinishRegularPatient(message);
 				break;
 				}
+			break;
+
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
 			break;
 
 			default:

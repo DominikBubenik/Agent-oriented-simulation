@@ -19,14 +19,16 @@ namespace Simulation
 		public const int ManagerTransition = 119;
 		public const int ManagerMedicalTeat = 112;
 		public const int ManagerEDepartment = 106;
+		public const int EntryWalkInPatient = 1015;
+		public const int EntryAmbulancePatient = 1016;
+		public const int ExitDepartment = 1017;
 		public const int AmbulancePatient = 1001;
 		public const int AllocateEntryExamRes = 1011;
 		public const int RegularPatient = 1002;
 		public const int AllocateMedicalTreatRes = 1012;
 		public const int ProcessEntryExam = 1003;
-		public const int EntryExamTransfer = 1013;
+		public const int AllRoomTransfer = 1013;
 		public const int ProcessMedicalTreat = 1004;
-		public const int MedicalTreatTransfer = 1014;
 		//meta! tag="end"
 	}
 }

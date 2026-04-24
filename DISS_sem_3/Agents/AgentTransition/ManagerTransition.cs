@@ -40,14 +40,24 @@ namespace Agents.AgentTransition
 			{
 			}
 		}
-
-		//meta! sender="MedicalTreatTransfer", id="121", type="Finish"
-		public void ProcessFinishMedicalTreatTransfer(MessageForm message)
+		
+		//meta! sender="AllRoomTransfer", id="119", type="Finish"
+		public void ProcessFinishAllRoomTransfer(MessageForm message)
 		{
 		}
 
-		//meta! sender="EntryExamTransfer", id="119", type="Finish"
-		public void ProcessFinishEntryExamTransfer(MessageForm message)
+		//meta! sender="EntryWalkInPatient", id="129", type="Finish"
+		public void ProcessFinishEntryWalkInPatient(MessageForm message)
+		{
+		}
+
+		//meta! sender="ExitDepartment", id="133", type="Finish"
+		public void ProcessFinishExitDepartment(MessageForm message)
+		{
+		}
+
+		//meta! sender="EntryAmbulancePatient", id="131", type="Finish"
+		public void ProcessFinishEntryAmbulancePatient(MessageForm message)
 		{
 		}
 
@@ -60,25 +70,33 @@ namespace Agents.AgentTransition
 		{
 			switch (message.Code)
 			{
+			case Mc.MedicalTreatTransition:
+				ProcessMedicalTreatTransition(message);
+			break;
+
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
-				case SimId.MedicalTreatTransfer:
-					ProcessFinishMedicalTreatTransfer(message);
+				case SimId.EntryWalkInPatient:
+					ProcessFinishEntryWalkInPatient(message);
 				break;
 
-				case SimId.EntryExamTransfer:
-					ProcessFinishEntryExamTransfer(message);
+				case SimId.AllRoomTransfer:
+					ProcessFinishAllRoomTransfer(message);
+				break;
+
+				case SimId.ExitDepartment:
+					ProcessFinishExitDepartment(message);
+				break;
+
+				case SimId.EntryAmbulancePatient:
+					ProcessFinishEntryAmbulancePatient(message);
 				break;
 				}
 			break;
 
 			case Mc.EntryExamTransition:
 				ProcessEntryExamTransition(message);
-			break;
-
-			case Mc.MedicalTreatTransition:
-				ProcessMedicalTreatTransition(message);
 			break;
 
 			default:

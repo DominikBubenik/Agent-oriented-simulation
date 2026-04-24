@@ -23,8 +23,10 @@ namespace Agents.AgentTransition
 		private void Init()
 		{
 			new ManagerTransition(SimId.ManagerTransition, MySim, this);
-			new MedicalTreatTransfer(SimId.MedicalTreatTransfer, MySim, this);
-			new EntryExamTransfer(SimId.EntryExamTransfer, MySim, this);
+			new ExitDepartment(SimId.ExitDepartment, MySim, this);
+			new AllRoomTransfer(SimId.AllRoomTransfer, MySim, this);
+			new EntryWalkInPatient(SimId.EntryWalkInPatient, MySim, this);
+			new EntryAmbulancePatient(SimId.EntryAmbulancePatient, MySim, this);
 			AddOwnMessage(Mc.MedicalTreatTransition);
 			AddOwnMessage(Mc.EntryExamTransition);
 		}

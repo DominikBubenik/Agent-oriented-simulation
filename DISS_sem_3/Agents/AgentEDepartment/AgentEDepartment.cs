@@ -1,7 +1,7 @@
-using DISS_sem_3.Entities;
-using MainLogic;
 using OSPABA;
 using Simulation;
+using DISS_sem_3.Entities;
+using MainLogic;
 
 namespace Agents.AgentEDepartment
 {
@@ -46,10 +46,10 @@ namespace Agents.AgentEDepartment
 		{
 			new ManagerEDepartment(SimId.ManagerEDepartment, MySim, this);
 			AddOwnMessage(Mc.MedicalTreatTransition);
-			AddOwnMessage(Mc.MedicalTreatResources);
 			AddOwnMessage(Mc.TreatPatient);
-			AddOwnMessage(Mc.EntryExamPatient);
+			AddOwnMessage(Mc.MedicalTreatResources);
 			AddOwnMessage(Mc.EntryExamResources);
+			AddOwnMessage(Mc.EntryExamPatient);
 			AddOwnMessage(Mc.MedicalTreatPatient);
 			AddOwnMessage(Mc.EntryExamTransition);
 		}
