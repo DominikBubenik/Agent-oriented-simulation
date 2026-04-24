@@ -6,6 +6,7 @@ using Agents.AgentEnviroment;
 using Agents.AgentMedicalTeat;
 using Agents.AgentTransition;
 using Agents.AgentEDepartment;
+using DISS_sem_3;
 using MainLogic;
 
 namespace Simulation
@@ -20,6 +21,12 @@ namespace Simulation
 		public SimpleStat TotalEntryExamWaitingTimeWalkInP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeWalkInP { get; private set; }
+		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
+
+		public int InitDoctorCount { get; set; } = 5;
+		public int InitNurseCount { get; set; } = 10;
+		public int InitRoomACount { get; set; } = 5;
+		public int InitRoomBCount { get; set; } = 7;
 		public MySimulation()
 		{
 			Init();
@@ -40,6 +47,9 @@ namespace Simulation
 
 			TotalMedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
 			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
+
+			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
+			
 		}
 
 		override public void PrepareReplication()

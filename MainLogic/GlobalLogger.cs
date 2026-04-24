@@ -4,7 +4,6 @@ public class GlobalLogger
 {
     public static void PrintLog(string message, double currentSimTime, double timeOfEvent = -1.0)
     {
-        return;
         if (timeOfEvent < 0)
         {
             Console.WriteLine($"Current simulation time: {FormatTime(currentSimTime)}, message: {message}");

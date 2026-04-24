@@ -6,6 +6,9 @@ namespace Simulation
 	public class MyMessage : OSPABA.MessageForm
 	{
 		public Patient Patient { get; set; }
+		public Nurse? Nurse { get; set; }
+		public Room? Room { get; set; }
+		public Doctor? Doctor { get; set; }
 		public MyMessage(OSPABA.Simulation mySim) :
 			base(mySim)
 		{
@@ -28,6 +31,9 @@ namespace Simulation
 			MyMessage original = (MyMessage)message;
 			// Copy attributes
 			Patient = original.Patient;
+			Nurse = original.Nurse;
+			Room = original.Room;
+			Doctor = original.Doctor;
 		}
 	}
 }

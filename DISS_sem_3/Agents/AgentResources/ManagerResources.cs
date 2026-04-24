@@ -1,3 +1,5 @@
+using DISS_sem_3.Entities;
+using MainLogic;
 using OSPABA;
 using Simulation;
 
@@ -36,6 +38,22 @@ namespace Agents.AgentResources
 		//meta! sender="AgentEDepartment", id="44", type="Request"
 		public void ProcessEntryExamResources(MessageForm message)
 		{
+			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+
+			myMsg.Nurse = null;
+			myMsg.Room = null;
+			GlobalLogger.PrintLog(myMsg.Patient.ToString() + " looking for some resources", MySim.CurrentTime);
+			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);
+			if (myMsg.Nurse != null && myMsg.Room != null)
+			{
+				myMsg.Code = Mc.EntryExamResources;
+				Response(myMsg);
+			}
+			else
+			{
+				GlobalLogger.PrintLog(myMsg.Patient.ToString() + " no resources", MySim.CurrentTime);
+				MyAgent.WaitingForEntryExam.Enqueue(myMsg);
+			}
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

@@ -33,6 +33,7 @@ namespace Agents.AgentEnviroment
 		public void ProcessFinishAmbulancePatient(MessageForm message)
 		{
 			message.Addressee = MyAgent.Parent;
+			message.Code = Mc.PatientArrival;
 			Notice(message);
 			
 			var newMessage = (MyMessage)message.CreateCopy();
@@ -43,6 +44,7 @@ namespace Agents.AgentEnviroment
 		public void ProcessFinishRegularPatient(MessageForm message)
 		{
 			message.Addressee = MyAgent.Parent;
+			message.Code = Mc.PatientArrival;
 			Notice(message);
 			
 			var newMessage = (MyMessage)message.CreateCopy();

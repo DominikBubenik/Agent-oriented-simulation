@@ -1,4 +1,6 @@
 using Agents.AgentResources;
+using DISS_sem_3;
+using MainLogic;
 using OSPABA;
 using Simulation;
 
@@ -17,7 +19,30 @@ namespace Agents.AgentResources.InstantAssistants
 
 		override public void Execute(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			var mySim = (MySimulation)MySim;
+			switch (mySim.ResourceAllocatingStrategy)
+			{
+				case ResourceAllocatingStrategy.Exp0FirstAvailable:
+					Exp0FirstAvailable(myMsg);
+					break;
+			}
 		}
+
+		private void Exp0FirstAvailable(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.RoomsTypeB;
+			if (nurses.Count > 0 && rooms.Count > 0)
+			{
+				myMsg.Nurse = nurses[0];
+				nurses.RemoveAt(0);
+				myMsg.Room = rooms[0];
+				rooms.RemoveAt(0);
+				GlobalLogger.PrintLog(myMsg.Patient.ToString() + $"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
+			}
+		}
+
 		public new AgentResources MyAgent
 		{
 			get

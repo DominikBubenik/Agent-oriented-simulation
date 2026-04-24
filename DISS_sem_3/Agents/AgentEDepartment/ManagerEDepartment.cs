@@ -1,3 +1,5 @@
+using DISS_sem_3.Entities;
+using MainLogic;
 using OSPABA;
 using Simulation;
 
@@ -31,9 +33,13 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentBoss", id="23", type="Request"
 		public void ProcessTreatPatient(MessageForm message)
 		{
-			var myMsg = ((MyMessage)message).CreateCopy();
+			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			MyAgent.EnqueuePatientEntry(myMsg);
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
+			myMsg.Code = Mc.EntryExamResources;
+			Request(myMsg);
 		}
-
+		
 		//meta! sender="AgentEntryExam", id="47", type="Response"
 		public void ProcessEntryExamPatient(MessageForm message)
 		{
@@ -43,6 +49,10 @@ namespace Agents.AgentEDepartment
 		public void ProcessEntryExamResources(MessageForm message)
 		{
 			//tuto ho zoberiem z radu lebo az teraz sa priradia resource
+			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			MyAgent.DequeuePatientEntry(myMsg);
+			myMsg.Code = Mc.EntryExamTransition;
+			Request(myMsg);
 		}
 
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"

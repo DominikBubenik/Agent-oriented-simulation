@@ -11,4 +11,9 @@ public class Doctor : MedicalStaff
     public Doctor(int id, OSPABA.Simulation mySim) : base(id, mySim)
     {
     }
+    
+    public override string ToString()
+    {
+        return "DOCTOR ID" + Id;
+    }
 }
