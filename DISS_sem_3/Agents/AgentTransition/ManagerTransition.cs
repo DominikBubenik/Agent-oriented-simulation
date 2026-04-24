@@ -22,14 +22,9 @@ namespace Agents.AgentTransition
 				PetriNet.Clear();
 			}
 		}
-
-		//meta! sender="AgentEDepartment", id="112", type="Request"
-		public void ProcessMedicalTreatTransition(MessageForm message)
-		{
-		}
-
+		
 		//meta! sender="AgentEDepartment", id="111", type="Request"
-		public void ProcessEntryExamTransition(MessageForm message)
+		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
 		}
 
@@ -61,6 +56,16 @@ namespace Agents.AgentTransition
 		{
 		}
 
+		//meta! sender="AgentEDepartment", id="136", type="Request"
+		public void ProcessEntranceTransmition(MessageForm message)
+		{
+		}
+
+		//meta! sender="AgentEDepartment", id="138", type="Request"
+		public void ProcessExitTransmition(MessageForm message)
+		{
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -70,10 +75,6 @@ namespace Agents.AgentTransition
 		{
 			switch (message.Code)
 			{
-			case Mc.MedicalTreatTransition:
-				ProcessMedicalTreatTransition(message);
-			break;
-
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -95,8 +96,16 @@ namespace Agents.AgentTransition
 				}
 			break;
 
-			case Mc.EntryExamTransition:
-				ProcessEntryExamTransition(message);
+			case Mc.EntranceTransmition:
+				ProcessEntranceTransmition(message);
+			break;
+
+			case Mc.ExitTransmition:
+				ProcessExitTransmition(message);
+			break;
+
+			case Mc.BetweenAmbulanceTransition:
+				ProcessBetweenAmbulanceTransition(message);
 			break;
 
 			default:

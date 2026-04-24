@@ -53,7 +53,6 @@ namespace Agents.AgentEDepartment
 			MyAgent.DequeuePatientEntry(myMsg);
 			
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			myMsg.Code = Mc.EntryExamTransition;
 			Request(myMsg);
 		}
 
@@ -70,13 +69,23 @@ namespace Agents.AgentEDepartment
 			}
 		}
 
-		//meta! sender="AgentTransition", id="112", type="Response"
+		//meta! userInfo="Removed from model"
 		public void ProcessMedicalTreatTransition(MessageForm message)
 		{
 		}
 
 		//meta! sender="AgentTransition", id="111", type="Response"
-		public void ProcessEntryExamTransition(MessageForm message)
+		public void ProcessBetweenAmbulanceTransition(MessageForm message)
+		{
+		}
+
+		//meta! sender="AgentTransition", id="136", type="Response"
+		public void ProcessEntranceTransmition(MessageForm message)
+		{
+		}
+
+		//meta! sender="AgentTransition", id="138", type="Response"
+		public void ProcessExitTransmition(MessageForm message)
 		{
 		}
 
@@ -89,10 +98,6 @@ namespace Agents.AgentEDepartment
 		{
 			switch (message.Code)
 			{
-			case Mc.MedicalTreatTransition:
-				ProcessMedicalTreatTransition(message);
-			break;
-
 			case Mc.EntryExamResources:
 				ProcessEntryExamResources(message);
 			break;
@@ -109,12 +114,20 @@ namespace Agents.AgentEDepartment
 				ProcessEntryExamPatient(message);
 			break;
 
-			case Mc.EntryExamTransition:
-				ProcessEntryExamTransition(message);
+			case Mc.EntranceTransmition:
+				ProcessEntranceTransmition(message);
+			break;
+
+			case Mc.BetweenAmbulanceTransition:
+				ProcessBetweenAmbulanceTransition(message);
 			break;
 
 			case Mc.MedicalTreatResources:
 				ProcessMedicalTreatResources(message);
+			break;
+
+			case Mc.ExitTransmition:
+				ProcessExitTransmition(message);
 			break;
 
 			default:

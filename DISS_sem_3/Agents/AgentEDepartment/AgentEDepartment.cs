@@ -45,13 +45,14 @@ namespace Agents.AgentEDepartment
 		private void Init()
 		{
 			new ManagerEDepartment(SimId.ManagerEDepartment, MySim, this);
-			AddOwnMessage(Mc.MedicalTreatTransition);
+			AddOwnMessage(Mc.EntranceTransmition);
 			AddOwnMessage(Mc.TreatPatient);
 			AddOwnMessage(Mc.MedicalTreatResources);
+			AddOwnMessage(Mc.ExitTransmition);
 			AddOwnMessage(Mc.EntryExamResources);
 			AddOwnMessage(Mc.EntryExamPatient);
 			AddOwnMessage(Mc.MedicalTreatPatient);
-			AddOwnMessage(Mc.EntryExamTransition);
+			AddOwnMessage(Mc.BetweenAmbulanceTransition);
 		}
 		//meta! tag="end"
 	}
