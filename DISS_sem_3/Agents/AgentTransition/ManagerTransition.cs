@@ -59,6 +59,11 @@ namespace Agents.AgentTransition
 		//meta! sender="AgentEDepartment", id="136", type="Request"
 		public void ProcessEntranceTransmition(MessageForm message)
 		{
+			var msg = (MyMessage)message;
+			msg.Addressee = MyAgent.FindAssistant(msg.Patient.ArrivedByAmbulance ? SimId.EntryAmbulancePatient : SimId.EntryWalkInPatient);
+
+			msg.Code = Mc.Start;
+			StartContinualAssistant(msg);
 		}
 
 		//meta! sender="AgentEDepartment", id="138", type="Request"

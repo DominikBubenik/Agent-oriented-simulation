@@ -34,9 +34,8 @@ namespace Agents.AgentEDepartment
 		public void ProcessTreatPatient(MessageForm message)
 		{
 			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
-			MyAgent.EnqueuePatientEntry(myMsg);
-			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
-			myMsg.Code = Mc.EntryExamResources;
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
+			myMsg.Code = Mc.EntranceTransmition;
 			Request(myMsg);
 		}
 		
@@ -69,11 +68,6 @@ namespace Agents.AgentEDepartment
 			}
 		}
 
-		//meta! userInfo="Removed from model"
-		public void ProcessMedicalTreatTransition(MessageForm message)
-		{
-		}
-
 		//meta! sender="AgentTransition", id="111", type="Response"
 		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
@@ -82,6 +76,11 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="136", type="Response"
 		public void ProcessEntranceTransmition(MessageForm message)
 		{
+			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			MyAgent.EnqueuePatientEntry(myMsg);
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
+			myMsg.Code = Mc.EntryExamResources;
+			Request(myMsg);
 		}
 
 		//meta! sender="AgentTransition", id="138", type="Response"
