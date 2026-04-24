@@ -27,8 +27,14 @@ namespace Simulation
 		public int InitNurseCount { get; set; } = 10;
 		public int InitRoomACount { get; set; } = 5;
 		public int InitRoomBCount { get; set; } = 7;
-		public MySimulation()
+		
+		public Random Seeder {get; private set;}
+		private readonly int _seed;
+		
+		public MySimulation(int seed)
 		{
+			_seed = seed;
+			Seeder = new Random(_seed);
 			Init();
 		}
 
@@ -49,7 +55,6 @@ namespace Simulation
 			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
 
 			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
-			
 		}
 
 		override public void PrepareReplication()
@@ -83,6 +88,8 @@ namespace Simulation
 
 			Console.WriteLine("Simulation finished");
 		}
+
+		public int NextSeed() => Seeder.Next();
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

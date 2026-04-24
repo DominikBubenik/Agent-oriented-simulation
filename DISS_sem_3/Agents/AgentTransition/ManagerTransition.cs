@@ -44,6 +44,9 @@ namespace Agents.AgentTransition
 		//meta! sender="EntryPatient", id="129", type="Finish"
 		public void ProcessFinishEntryPatient(MessageForm message)
 		{
+			var myMsg =  (MyMessage)message;
+			myMsg.Code = Mc.EntranceTransmition;
+			Response(myMsg);
 		}
 
 		//meta! sender="ExitDepartment", id="133", type="Finish"
