@@ -19,8 +19,7 @@ namespace Simulation
 		public const int ManagerTransition = 119;
 		public const int ManagerMedicalTeat = 112;
 		public const int ManagerEDepartment = 106;
-		public const int EntryWalkInPatient = 1015;
-		public const int EntryAmbulancePatient = 1016;
+		public const int EntryPatient = 1015;
 		public const int ExitDepartment = 1017;
 		public const int AmbulancePatient = 1001;
 		public const int AllocateEntryExamRes = 1011;

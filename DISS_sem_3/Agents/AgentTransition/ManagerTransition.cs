@@ -41,8 +41,8 @@ namespace Agents.AgentTransition
 		{
 		}
 
-		//meta! sender="EntryWalkInPatient", id="129", type="Finish"
-		public void ProcessFinishEntryWalkInPatient(MessageForm message)
+		//meta! sender="EntryPatient", id="129", type="Finish"
+		public void ProcessFinishEntryPatient(MessageForm message)
 		{
 		}
 
@@ -51,17 +51,11 @@ namespace Agents.AgentTransition
 		{
 		}
 
-		//meta! sender="EntryAmbulancePatient", id="131", type="Finish"
-		public void ProcessFinishEntryAmbulancePatient(MessageForm message)
-		{
-		}
-
 		//meta! sender="AgentEDepartment", id="136", type="Request"
 		public void ProcessEntranceTransmition(MessageForm message)
 		{
 			var msg = (MyMessage)message;
-			msg.Addressee = MyAgent.FindAssistant(msg.Patient.ArrivedByAmbulance ? SimId.EntryAmbulancePatient : SimId.EntryWalkInPatient);
-
+			msg.Addressee = MyAgent.FindAssistant(SimId.EntryPatient);
 			msg.Code = Mc.Start;
 			StartContinualAssistant(msg);
 		}
@@ -83,8 +77,8 @@ namespace Agents.AgentTransition
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
-				case SimId.EntryWalkInPatient:
-					ProcessFinishEntryWalkInPatient(message);
+				case SimId.EntryPatient:
+					ProcessFinishEntryPatient(message);
 				break;
 
 				case SimId.AllRoomTransfer:
@@ -93,10 +87,6 @@ namespace Agents.AgentTransition
 
 				case SimId.ExitDepartment:
 					ProcessFinishExitDepartment(message);
-				break;
-
-				case SimId.EntryAmbulancePatient:
-					ProcessFinishEntryAmbulancePatient(message);
 				break;
 				}
 			break;

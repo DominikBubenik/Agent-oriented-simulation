@@ -25,8 +25,7 @@ namespace Agents.AgentTransition
 			new ManagerTransition(SimId.ManagerTransition, MySim, this);
 			new ExitDepartment(SimId.ExitDepartment, MySim, this);
 			new AllRoomTransfer(SimId.AllRoomTransfer, MySim, this);
-			new EntryWalkInPatient(SimId.EntryWalkInPatient, MySim, this);
-			new EntryAmbulancePatient(SimId.EntryAmbulancePatient, MySim, this);
+			new EntryPatient(SimId.EntryPatient, MySim, this);
 			AddOwnMessage(Mc.EntranceTransmition);
 			AddOwnMessage(Mc.ExitTransmition);
 			AddOwnMessage(Mc.BetweenAmbulanceTransition);
