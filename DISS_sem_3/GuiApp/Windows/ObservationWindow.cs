@@ -15,7 +15,7 @@ namespace Airport_GUI
     public partial class ObservationWindow : Form
     {
         public DataGridView? EntryQueue { get; set; }
-
+        private Dictionary<int, DataGridView> _roomGrids = new Dictionary<int, DataGridView>();
         // Small labels displayed near tables for per-lane stats
         public Label? EntryStatsLabel { get; set; }
         public Label? DetectorStatsLabel { get; set; }
@@ -45,7 +45,7 @@ namespace Airport_GUI
                     }
                 }
             };
-
+            
             this.FormClosing += LaneWindow_FormClosing;
         }
 
@@ -53,6 +53,7 @@ namespace Airport_GUI
         public ObservationWindow(StartSimulationArgs args) : this()
         {
             SetParameters(args);
+            InitializeLayout(args);
         }
 
         public void SetParameters(StartSimulationArgs args)
@@ -234,6 +235,29 @@ namespace Airport_GUI
             lblSleepPeriodValue.Text = seconds.ToString("F2");
             OnSleepPeriodChanged?.Invoke(seconds);
         }
+        private void InitializeLayout(StartSimulationArgs args)
+        {
+            flpLanes.Controls.Clear();
+            _roomGrids.Clear();
+
+            // 1. Setup Entry Queue (Waiting Room)
+            EntryQueue = CreatePatientQueueGrid();
+            flpLanes.Controls.Add(WrapInPanel("Waiting Room Queue", EntryQueue, 150));
+
+            // 2. Pre-render Room A Grids
+            // Assuming SecurityLanesCount or similar maps to your Room counts
+            for (int i = 0; i < args.SecurityLanesCount; i++) 
+            {
+                // We use a temporary ID or index to map them until the sim starts
+                CreateRoomGridPlaceholder(i, "Exam Room A");
+            }
+
+            // 3. Pre-render Room B Grids (example using another count from args)
+            for (int i = 0; i < args.BeforeDetectorCount; i++)
+            {
+                CreateRoomGridPlaceholder(100 + i, "Exam Room B");
+            }
+        }
 
         private void TrackRefreshRate_ValueChanged(object? sender, EventArgs e)
         {
@@ -279,7 +303,18 @@ namespace Airport_GUI
             
             UpdateSimulationTime(state.CurrentTime);
             UpdatePassengersGrid(EntryQueue, state.EntryQueue);
-            Console.WriteLine("refreshi");
+            
+            foreach (var room in state.ARooms.Concat(state.BRooms))
+            {
+                if (_roomGrids.TryGetValue(room.Id, out var dgv))
+                {
+                    dgv.Rows.Clear();
+                    dgv.Rows.Add(room.Id, 
+                        room.Patient?.ToString() ?? "Empty", 
+                        room.Nurse?.ToString() ?? "None", 
+                        room.Doctor?.ToString() ?? "None");
+                }
+            }
          }
 
         // Append a log message to the bottom log DataGridView (thread-safe)

@@ -14,7 +14,7 @@ public class ObservationController
     public void ShowWindow(StartSimulationArgs args)
     {
         _args = args;
-        _laneWindow = new ObservationWindow();
+        _laneWindow = new ObservationWindow(_args);
         _currentModel = new SimulationModel();
         
         _laneWindow.OnRunRequested += OnRunRequested;
