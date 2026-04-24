@@ -302,10 +302,10 @@ namespace Airport_GUI
             dgvPassengers.ReadOnly = true;
             dgvPassengers.AllowUserToAddRows = false;
             dgvPassengers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvPassengers.Columns.Add("id", "Passenger ID");
+            dgvPassengers.Columns.Add("id", "Patient ID");
             dgvPassengers.Columns.Add("arrival", "Arrival Time");
-            dgvPassengers.Columns.Add("lcount", "Luggage Count");
-            dgvPassengers.Columns.Add("lcur", "Currently Holding");
+            dgvPassengers.Columns.Add("priority", "Priority");
+            dgvPassengers.Columns.Add("Aambulance", "Arrived by Ambulance");
             return dgvPassengers;
         }
 

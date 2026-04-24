@@ -39,4 +39,24 @@ public class SimulationModel
         OnRefreshUI?.Invoke(state);
         Console.WriteLine($"{_core.GetType().Name} Len              dsfdsffffffff            dsffds t");
     }
+
+    public void PauseSimulation()
+    {
+        _core.PauseSimulation();
+    }
+
+    public void ResumeSimulation()
+    {
+        _core.ResumeSimulation();
+    }
+
+    public void StopSimulation()
+    {
+        _core.StopSimulation();
+    }
+    
+    public bool IsPaused()
+    {
+        return _core.IsPaused();
+    }
 }

@@ -18,6 +18,7 @@ public class ObservationController
         _currentModel = new SimulationModel();
         
         _laneWindow.OnRunRequested += OnRunRequested;
+        _laneWindow.OnPauseRequested += OnPauseRequested;
 
         _currentModel.OnRefreshUI += OnObservRefresh;
         
@@ -34,5 +35,17 @@ public class ObservationController
     private void OnObservRefresh(SimulationStateDto state)
     {
         _laneWindow?.RefreshView(state);
+    }
+
+    private void OnPauseRequested(object? sender, EventArgs e)
+    {
+        if (_currentModel.IsPaused())
+        {
+            _currentModel.ResumeSimulation();
+        }
+        else
+        {
+            _currentModel.PauseSimulation();
+        }
     }
 }

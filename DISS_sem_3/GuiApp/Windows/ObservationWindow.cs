@@ -400,9 +400,9 @@ namespace Airport_GUI
 
             if (patients == null) return;
 
-            foreach (var passenger in patients)
+            foreach (var patient in patients)
             {
-                dgv.Rows.Add(passenger.Id, passenger.ArrivalTime, passenger.Priority, passenger.ArrivedByAmbulance);
+                dgv.Rows.Add(patient.Name, patient.ArrivalTime, patient.Priority, patient.ArrivedByAmbulance);
             }
 
             dgv.AutoResizeColumns();
