@@ -43,4 +43,14 @@ public class StatPriorityQueue<T> : BaseStatQueue<T>
         base.Reset(currentTime);
         _items.Clear();
     }
+    
+    public List<T> GetAllItems()
+    {
+        int count = _items.Count;
+        if (count == 0) return new List<T>();
+        var result = new List<T>(count);
+
+        for (int i = 0; i < count; i++) result.Add(_items[i].Data);
+        return result;
+    }
 }

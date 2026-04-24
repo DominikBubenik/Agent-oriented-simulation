@@ -25,4 +25,5 @@ public class StatQueue<T> : BaseStatQueue<T>
     }
 
     public T Peek() => _queue.Peek();
+    public List<T> GetAllItems() => _queue.ToList();
 }

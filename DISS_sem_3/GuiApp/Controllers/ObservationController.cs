@@ -1,0 +1,38 @@
+﻿using Airport_GUI;
+using DISS_SEM_GUI;
+using DISS_SEM_GUI.EventsArguments;
+
+namespace DISS_sem_3;
+
+public class ObservationController
+{
+    private SimulationModel? _currentModel;
+    private StartSimulationArgs? _args;
+    private ObservationWindow? _laneWindow;
+    private volatile bool _isStarted = false;
+    
+    public void ShowWindow(StartSimulationArgs args)
+    {
+        _args = args;
+        _laneWindow = new ObservationWindow();
+        _currentModel = new SimulationModel();
+        
+        _laneWindow.OnRunRequested += OnRunRequested;
+
+        _currentModel.OnRefreshUI += OnObservRefresh;
+        
+        _laneWindow.Show();
+    }
+
+    private void OnRunRequested(object? sender, EventArgs e)
+    {
+        if (_args == null || _currentModel == null) return;
+
+        _currentModel.StartSimulation(_args);
+    }
+
+    private void OnObservRefresh(SimulationStateDto state)
+    {
+        _laneWindow?.RefreshView(state);
+    }
+}

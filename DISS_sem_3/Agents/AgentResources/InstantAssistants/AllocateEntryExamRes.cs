@@ -32,7 +32,7 @@ namespace Agents.AgentResources.InstantAssistants
 		private void Exp0FirstAvailable(MyMessage myMsg)
 		{
 			var nurses = MyAgent.Nurses;
-			var rooms = MyAgent.RoomsTypeB;
+			var rooms = MyAgent.FreeRoomsTypeB;
 			if (nurses.Count > 0 && rooms.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];

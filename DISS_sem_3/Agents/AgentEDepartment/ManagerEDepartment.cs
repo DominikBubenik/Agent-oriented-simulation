@@ -52,6 +52,7 @@ namespace Agents.AgentEDepartment
 			MyAgent.DequeuePatientEntry(myMsg);
 			
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
+			myMsg.Code = Mc.BetweenAmbulanceTransition;
 			Request(myMsg);
 		}
 

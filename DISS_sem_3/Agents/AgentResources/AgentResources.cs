@@ -10,8 +10,10 @@ namespace Agents.AgentResources
 	{
 		public List<Doctor>  Doctors { get; set; }
 		public List<Nurse> Nurses { get; set; }
-		public List<Room> RoomsTypeA { get; set; }
-		public List<Room> RoomsTypeB { get; set; }
+		public List<Room> FreeRoomsTypeA { get; set; }
+		public List<Room> AllRoomsTypeA { get; set; }
+		public List<Room> FreeRoomsTypeB { get; set; }
+		public List<Room> AllRoomsTypeB { get; set; }
 		
 		public Queue<MyMessage> WaitingForEntryExam { get; set; }
 		
@@ -36,15 +38,21 @@ namespace Agents.AgentResources
 			{
 				Nurses.Add(new Nurse(i, MySim));
 			}
-			RoomsTypeA = new List<Room>();
+			FreeRoomsTypeA = new List<Room>();
+			AllRoomsTypeA = new List<Room>();
 			for (int i = 0; i < MyCastSim().InitRoomACount; i++)
 			{
-				RoomsTypeA.Add(new Room(i, MySim, 'A'));
+				var room = new Room(i, MySim, 'A');
+				FreeRoomsTypeA.Add(room);
+				AllRoomsTypeA.Add(room);
 			}
-			RoomsTypeB = new List<Room>();
+			FreeRoomsTypeB = new List<Room>();
+			AllRoomsTypeB = new List<Room>();
 			for (int i = 0; i < MyCastSim().InitRoomBCount; i++)
 			{
-				RoomsTypeB.Add(new Room(i, MySim, 'B'));
+				var room = new Room(i, MySim, 'B');
+				FreeRoomsTypeB.Add(room);
+				AllRoomsTypeB.Add(room);
 			}
 			
 			WaitingForEntryExam = new Queue<MyMessage>();
