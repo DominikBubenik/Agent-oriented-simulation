@@ -51,6 +51,8 @@ namespace Agents.AgentEDepartment
 			//tuto ho zoberiem z radu lebo az teraz sa priradia resource
 			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
 			MyAgent.DequeuePatientEntry(myMsg);
+			
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
 			myMsg.Code = Mc.EntryExamTransition;
 			Request(myMsg);
 		}
