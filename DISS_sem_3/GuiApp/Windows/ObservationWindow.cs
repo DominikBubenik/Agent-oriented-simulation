@@ -15,17 +15,12 @@ namespace Airport_GUI
     public partial class ObservationWindow : Form
     {
         public DataGridView? EntryQueue { get; set; }
-        private Dictionary<int, DataGridView> _roomGrids = new Dictionary<int, DataGridView>();
-        // Small labels displayed near tables for per-lane stats
-        public Label? EntryStatsLabel { get; set; }
-        public Label? DetectorStatsLabel { get; set; }
-        public Label? WaitStatsLabel { get; set; }
+        private Dictionary<int, DataGridView> _roomAGrids = new Dictionary<int, DataGridView>();
+        private Dictionary<int, DataGridView> _roomBGrids = new Dictionary<int, DataGridView>();
         
         public event EventHandler? OnPauseRequested;
         public event EventHandler? OnStopRequested;
         public event EventHandler? OnRunRequested;
-        public event EventHandler? OnWindowClosed;
-        // Sleep control events: ms and period (seconds)
         public event Action<int>? OnSleepMsChanged;
         public event Action<double>? OnSleepPeriodChanged;
         // Refresh rate event (int 0..1000)
@@ -181,7 +176,7 @@ namespace Airport_GUI
         private void LaneWindow_FormClosing(object? sender, FormClosingEventArgs e)
         {
             // Notify listeners that the window is being closed so simulation can be stopped if desired
-            OnWindowClosed?.Invoke(this, EventArgs.Empty);
+            // OnWindowClosed?.Invoke(this, EventArgs.Empty);
         }
 
         // Controller will manage the paused state; this setter allows controller to update the UI
@@ -238,24 +233,25 @@ namespace Airport_GUI
         private void InitializeLayout(StartSimulationArgs args)
         {
             flpLanes.Controls.Clear();
-            _roomGrids.Clear();
+            // _roomGrids.Clear();
 
             // 1. Setup Entry Queue (Waiting Room)
             EntryQueue = CreatePatientQueueGrid();
-            flpLanes.Controls.Add(WrapInPanel("Waiting Room Queue", EntryQueue, 150));
-
             // 2. Pre-render Room A Grids
             // Assuming SecurityLanesCount or similar maps to your Room counts
-            for (int i = 0; i < args.SecurityLanesCount; i++) 
+            for (int i = 0; i < 5; i++) 
             {
-                // We use a temporary ID or index to map them until the sim starts
-                CreateRoomGridPlaceholder(i, "Exam Room A");
+                var dgv = CreateRoomGridPlaceholder(i, $"Exam Room A #{i}");
+                _roomAGrids.Add(i, dgv);
+                flpLanes.Controls.Add(dgv);
             }
 
             // 3. Pre-render Room B Grids (example using another count from args)
-            for (int i = 0; i < args.BeforeDetectorCount; i++)
+            for (int i = 0; i < 7; i++)
             {
-                CreateRoomGridPlaceholder(100 + i, "Exam Room B");
+                var dgv = CreateRoomGridPlaceholder(i, $"Exam Room B #{i}");
+                _roomBGrids.Add(i, dgv);
+                flpLanes.Controls.Add(dgv);
             }
         }
 
@@ -304,18 +300,34 @@ namespace Airport_GUI
             UpdateSimulationTime(state.CurrentTime);
             UpdatePassengersGrid(EntryQueue, state.EntryQueue);
             
-            foreach (var room in state.ARooms.Concat(state.BRooms))
+            foreach (var room in state.ARooms)
             {
-                if (_roomGrids.TryGetValue(room.Id, out var dgv))
-                {
-                    dgv.Rows.Clear();
-                    dgv.Rows.Add(room.Id, 
-                        room.Patient?.ToString() ?? "Empty", 
-                        room.Nurse?.ToString() ?? "None", 
-                        room.Doctor?.ToString() ?? "None");
-                }
+                UpdateOrCreateRoomGrid(room, "Room A");
+            }
+
+            // 3. Update Type B Rooms
+            foreach (var room in state.BRooms)
+            {
+                UpdateOrCreateRoomGrid(room, "Room B");
             }
          }
+        
+        private void UpdateOrCreateRoomGrid(Room room, string type)
+        {
+            // Determine which dictionary to look in
+            var dict = (type == "Room A") ? _roomAGrids : _roomBGrids;
+
+            if (dict.TryGetValue(room.Id, out var dgv))
+            {
+                dgv.Rows.Clear();
+                dgv.Rows.Add(
+                    room.Id,
+                    room.Patient?.ToString() ?? "Empty",
+                    room.Nurse?.ToString() ?? "---",
+                    room.Doctor?.ToString() ?? "---"
+                );
+            }
+        }
 
         // Append a log message to the bottom log DataGridView (thread-safe)
         // Keeps history bounded by maxEntries to avoid unlimited growth.

@@ -38,7 +38,6 @@ namespace Agents.AgentTransition.ContinualAssistants
 			switch (message.Code)
 			{
 				case Mc.Finish:
-					
 					var myMsg = (MyMessage)message;
 					myMsg.Addressee = MyAgent;
 					AssistantFinished(myMsg);

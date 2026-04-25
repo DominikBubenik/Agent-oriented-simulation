@@ -72,6 +72,10 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="111", type="Response"
 		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
+			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
+			myMsg.Code = Mc.EntryExamPatient;
+			Request(myMsg);
 		}
 
 		//meta! sender="AgentTransition", id="136", type="Response"

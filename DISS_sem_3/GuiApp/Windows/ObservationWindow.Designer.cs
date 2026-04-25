@@ -310,148 +310,19 @@ namespace Airport_GUI
             return dgvPassengers;
         }
         
-        private void CreateRoomGridPlaceholder(int roomId, string title)
+        private DataGridView CreateRoomGridPlaceholder(int roomId, string title)
         {
-            var dgv = CreateSimpleGrid();
+            var dgv = new DataGridView();
+            dgv.Width = 700;
+            dgv.Height = 240;
+            dgv.ReadOnly = true;
+            dgv.AllowUserToAddRows = false;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv.Columns.Add("RoomID", "ID");
             dgv.Columns.Add("Patient", "Patient");
             dgv.Columns.Add("Nurse", "Nurse");
             dgv.Columns.Add("Doctor", "Doctor");
-        
-            // Add "Empty" row so it doesn't look like a blank white box
-            dgv.Rows.Add(roomId, "Empty", "None", "None");
-            dgv.Height = 65;
-
-            var panel = WrapInPanel($"{title} #{roomId}", dgv, 90);
-            flpLanes.Controls.Add(panel);
-
-            _roomGrids.Add(roomId, dgv);
+            return dgv;
         }
-        
-        private Panel WrapInPanel(string title, DataGridView dgv, int height)
-        {
-            var p = new Panel 
-            { 
-                Width = flpLanes.Width - 50, 
-                Height = height,
-                Margin = new Padding(0, 0, 0, 10) 
-            };
-            var lbl = new Label 
-            { 
-                Text = title, 
-                Dock = DockStyle.Top, 
-                Height = 20, 
-                Font = new Font(this.Font, FontStyle.Bold) 
-            };
-            dgv.Dock = DockStyle.Fill;
-            p.Controls.Add(dgv);
-            p.Controls.Add(lbl);
-            return p;
-        }
-        
-        private void UpdateOrCreateRoomGrid(Room room, string groupLabel)
-        {
-            // If the grid doesn't exist for this room yet, create it
-            if (!_roomGrids.ContainsKey(room.Id))
-            {
-                var dgv = CreateSimpleGrid();
-                dgv.Columns.Add("RoomID", "ID");
-                dgv.Columns.Add("Patient", "Patient");
-                dgv.Columns.Add("Nurse", "Nurse");
-                dgv.Columns.Add("Doctor", "Doctor");
-                dgv.Height = 60; // Keep it small since it's just one room
-
-                // Wrap in a panel to force "New Row" layout in FlowLayoutPanel
-                var wrapper = new Panel();
-                wrapper.Width = flpLanes.Width - 40;
-                wrapper.Height = 85;
-                
-                var lbl = new Label { Text = $"{groupLabel} #{room.Id}", Dock = DockStyle.Top, Height = 20, Font = new Font(this.Font, FontStyle.Bold) };
-                dgv.Dock = DockStyle.Fill;
-                
-                wrapper.Controls.Add(dgv);
-                wrapper.Controls.Add(lbl);
-                flpLanes.Controls.Add(wrapper);
-
-                _roomGrids.Add(room.Id, dgv);
-            }
-
-            // Update the data in the grid
-            var grid = _roomGrids[room.Id];
-            grid.Rows.Clear();
-            grid.Rows.Add(
-                room.Id, 
-                room.Patient?.ToString() ?? "Empty", 
-                room.Nurse?.ToString() ?? "None", 
-                room.Doctor?.ToString() ?? "None"
-            );
-        }
-        
-        private DataGridView CreateSimpleGrid()
-        {
-            return new DataGridView
-            {
-                ReadOnly = true,
-                AllowUserToAddRows = false,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                RowHeadersVisible = false,
-                BackgroundColor = Color.White,
-                ScrollBars = ScrollBars.None
-            };
-        }
-        // public DataGridView CreateBeforeDetectorGrid()
-        // {
-        //     var dgvBefore = new DataGridView();
-        //     dgvBefore.Width = 600;
-        //     dgvBefore.Height = 240;
-        //     dgvBefore.ReadOnly = true;
-        //     dgvBefore.AllowUserToAddRows = false;
-        //     dgvBefore.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        //     dgvBefore.Columns.Add("id", "Luggage ID");
-        //     dgvBefore.Columns.Add("owner", "Owner ID");
-        //     return dgvBefore;
-        // }
-        //
-        // public DataGridView CreateDetectorGrid()
-        // {
-        //     var dgvDetector = new DataGridView();
-        //     dgvDetector.Width = 600;
-        //     dgvDetector.Height = 240;
-        //     dgvDetector.ReadOnly = true;
-        //     dgvDetector.AllowUserToAddRows = false;
-        //     dgvDetector.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        //     dgvDetector.Columns.Add("id", "Passenger ID");
-        //     dgvDetector.Columns.Add("arrival", "Arrival Time");
-        //     dgvDetector.Columns.Add("lcount", "Luggage Count");
-        //     return dgvDetector;
-        // }
-        //
-        // public DataGridView CreateLuggageInsideGrid()
-        // {
-        //     var dgv = new DataGridView();
-        //     dgv.Width = 600;
-        //     dgv.Height = 240;
-        //     dgv.ReadOnly = true;
-        //     dgv.AllowUserToAddRows = false;
-        //     dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        //     dgv.Columns.Add("id", "Luggage ID");
-        //     dgv.Columns.Add("owner", "Owner ID");
-        //     dgv.Columns.Add("scanstate", "State");
-        //     return dgv;
-        // }
-        //
-        // public DataGridView CreateAfterTraysGrid()
-        // {
-        //     var dgv = new DataGridView();
-        //     dgv.Width = 600;
-        //     dgv.Height = 240;
-        //     dgv.ReadOnly = true;
-        //     dgv.AllowUserToAddRows = false;
-        //     dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        //     dgv.Columns.Add("id", "Luggage ID");
-        //     dgv.Columns.Add("owner", "Owner ID");
-        //     dgv.Columns.Add("scantime", "Scan End Time");
-        //     return dgv;
-        // }
     }
 }

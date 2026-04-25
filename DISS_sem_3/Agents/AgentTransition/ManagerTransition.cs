@@ -26,6 +26,10 @@ namespace Agents.AgentTransition
 		//meta! sender="AgentEDepartment", id="111", type="Request"
 		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
+			var msg = (MyMessage)message;
+			msg.Addressee = MyAgent.FindAssistant(SimId.AllRoomTransfer);
+			msg.Code = Mc.Start;
+			StartContinualAssistant(msg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -39,6 +43,10 @@ namespace Agents.AgentTransition
 		//meta! sender="AllRoomTransfer", id="119", type="Finish"
 		public void ProcessFinishAllRoomTransfer(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Addressee = MyAgent.Parent;
+			myMsg.Code = Mc.BetweenAmbulanceTransition;
+			Response(myMsg);
 		}
 
 		//meta! sender="EntryPatient", id="129", type="Finish"
