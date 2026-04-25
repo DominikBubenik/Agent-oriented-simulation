@@ -2,12 +2,16 @@
 using Simulation;
 
 namespace DISS_sem_3;
-
+/**
+ * Kod upraveny s pomocou AI, zdokumentovane v kapitole 2
+ */
 public class SimulationModel
 {
     private MySimulation _core;
     
     public event Action<SimulationStateDto> OnRefreshUI;
+    private DateTime _lastRefreshTime = DateTime.MinValue;
+    private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60); // ~30 FPS
 
     public void StartSimulation(StartSimulationArgs args)
     {
@@ -17,13 +21,15 @@ public class SimulationModel
         _core.OnRefreshUI(UpdateGui);
         
         _core.SimulateAsync(args.Replications, args.EndSimulationTime);
-        
-        // _core.OnRefreshUI(OnRefreshUI);
     }
     
     // // public void OnRefreshUI(Simu)
     public void UpdateGui(OSPABA.Simulation Sim)
     {
+        if (DateTime.Now - _lastRefreshTime < _refreshInterval) 
+            return;
+
+        _lastRefreshTime = DateTime.Now;
         var mySim = (MySimulation)Sim;
         var state = new SimulationStateDto
         {

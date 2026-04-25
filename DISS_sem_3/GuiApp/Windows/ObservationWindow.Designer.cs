@@ -7,7 +7,7 @@ using DISS_sem_3.Entities;
  * Kod upraveny s pomocou AI, zdokumentovane v kapitole 9
  * Kod upraveny s pomocou AI, zdokumentovane v kapitole 22
  */
-namespace Airport_GUI
+namespace DISS_sem_3
 {
     partial class ObservationWindow
     {

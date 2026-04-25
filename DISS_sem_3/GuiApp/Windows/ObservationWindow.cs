@@ -5,12 +5,9 @@ using DISS_sem_3.Entities;
 using DISS_SEM_GUI.EventsArguments;
 
 /**
- * Kod vytvoreny s pomocou AI, zdokumentovane v kapitole 8
- * Kod upraveny s pomocou AI, zdokumentovane v kapitole 9
- * Kod upraveny s pomocou AI, zdokumentovane v kapitole 22
- * Kod upraveny s pomocou AI, zdokumentovane v kapitole 24
+ * Kod upraveny s pomocou AI, zdokumentovane v kapitole 2
  */
-namespace Airport_GUI
+namespace DISS_sem_3
 {
     public partial class ObservationWindow : Form
     {
@@ -296,36 +293,38 @@ namespace Airport_GUI
                 this.Invoke(() => RefreshView(state));
                 return;
             }
-            
-            UpdateSimulationTime(state.CurrentTime);
-            UpdatePassengersGrid(EntryQueue, state.EntryQueue);
-            
-            foreach (var room in state.ARooms)
-            {
-                UpdateOrCreateRoomGrid(room, "Room A");
+    
+            // LOCK THE UI LAYOUT
+            this.SuspendLayout(); 
+    
+            try {
+                UpdateSimulationTime(state.CurrentTime);
+                UpdatePassengersGrid(EntryQueue, state.EntryQueue);
+        
+                foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
+                foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
             }
-
-            // 3. Update Type B Rooms
-            foreach (var room in state.BRooms)
-            {
-                UpdateOrCreateRoomGrid(room, "Room B");
+            finally {
+                // UNLOCK AND PAINT EVERYTHING AT ONCE
+                this.ResumeLayout(); 
             }
-         }
+        }
         
         private void UpdateOrCreateRoomGrid(Room room, string type)
         {
-            // Determine which dictionary to look in
             var dict = (type == "Room A") ? _roomAGrids : _roomBGrids;
 
             if (dict.TryGetValue(room.Id, out var dgv))
             {
-                dgv.Rows.Clear();
-                dgv.Rows.Add(
-                    room.Id,
-                    room.Patient?.ToString() ?? "Empty",
-                    room.Nurse?.ToString() ?? "---",
-                    room.Doctor?.ToString() ?? "---"
-                );
+                if (dgv.Rows.Count == 0)
+                {
+                    dgv.Rows.Add(room.Id, "Empty", "---", "---");
+                }
+
+                var row = dgv.Rows[0];
+                UpdateCellIfChanged(row.Cells[1], room.Patient?.ToString() ?? "Empty");
+                UpdateCellIfChanged(row.Cells[2], room.Nurse?.ToString() ?? "---");
+                UpdateCellIfChanged(row.Cells[3], room.Doctor?.ToString() ?? "---");
             }
         }
 
@@ -441,20 +440,41 @@ namespace Airport_GUI
 
         private void UpdatePassengersGrid(DataGridView? dgv, List<Patient> patients)
         {
-            if (dgv == null) return;
+            if (dgv == null || patients == null) return;
 
-            dgv.Rows.Clear();
-
-            if (patients == null) return;
-
-            foreach (var patient in patients)
+            // 1. Synchronize row count (Add or Remove only what is necessary)
+            if (dgv.Rows.Count < patients.Count)
             {
-                dgv.Rows.Add(patient.Name, patient.ArrivalTime, patient.Priority, patient.ArrivedByAmbulance);
+                dgv.Rows.Add(patients.Count - dgv.Rows.Count);
+            }
+            else if (dgv.Rows.Count > patients.Count)
+            {
+                for (int i = dgv.Rows.Count - 1; i >= patients.Count; i--)
+                {
+                    dgv.Rows.RemoveAt(i);
+                }
             }
 
-            dgv.AutoResizeColumns();
-        }
+            // 2. Update cell values only
+            for (int i = 0; i < patients.Count; i++)
+            {
+                var p = patients[i];
+                var row = dgv.Rows[i];
 
+                // Tip: Only update if the value changed to reduce repaints
+                UpdateCellIfChanged(row.Cells[0], p.Name);
+                UpdateCellIfChanged(row.Cells[1], p.ArrivalTime.ToString("F2"));
+                UpdateCellIfChanged(row.Cells[2], p.Priority.ToString());
+                UpdateCellIfChanged(row.Cells[3], p.ArrivedByAmbulance.ToString());
+            }
+        }
+        private void UpdateCellIfChanged(DataGridViewCell cell, object newValue)
+        {
+            if (cell.Value == null || !cell.Value.Equals(newValue))
+            {
+                cell.Value = newValue;
+            }
+        }
         // Controller can call this to read current slider values
         public int GetSleepMs()
         {
