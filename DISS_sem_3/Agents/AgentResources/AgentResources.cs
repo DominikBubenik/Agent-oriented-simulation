@@ -56,8 +56,17 @@ namespace Agents.AgentResources
 		
 		public void FreeUpResources(MyMessage myMsg)
 		{
-			if (myMsg.Nurse != null) Nurses.Add(myMsg.Nurse);
-			if (myMsg.Doctor != null) Doctors.Add(myMsg.Doctor);
+			if (myMsg.Nurse != null)
+			{
+				myMsg.Nurse.IsWorking = false;
+				Nurses.Add(myMsg.Nurse);
+			}
+
+			if (myMsg.Doctor != null)
+			{
+				myMsg.Doctor.IsWorking = false;
+				Doctors.Add(myMsg.Doctor);
+			}
 			if (myMsg.Room != null)
 			{
 				if (myMsg.Room.Type == 'A')

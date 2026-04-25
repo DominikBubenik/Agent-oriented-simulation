@@ -48,8 +48,19 @@ namespace Agents.AgentEDepartment
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
 
-			// myMsg.Code = Mc.MedicalTreatResources;
+			//tu bude najskor medicaltreat a potom bude entry exam znovu
+			if (!MyAgent.EntryQueue.IsEmpty())
+			{
+				var initiateEntryExam = new MyMessage(MySim);
+				initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
+				initiateEntryExam.Code = Mc.EntryExamResources;
+				Request(initiateEntryExam);
+			}
 			
+			var initiateMTResources = new MyMessage(MySim);
+			initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
+			initiateMTResources.Code = Mc.MedicalTreatResources;
+			Request(initiateMTResources);
 		}
 
 		//meta! sender="AgentResources", id="44", type="Response"

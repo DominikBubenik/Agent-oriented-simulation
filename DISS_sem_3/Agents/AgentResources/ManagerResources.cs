@@ -44,7 +44,7 @@ namespace Agents.AgentResources
 
 			myMsg.Nurse = null;
 			myMsg.Room = null;
-			GlobalLogger.PrintLog(myMsg.Patient.ToString() + " looking for some resources", MySim.CurrentTime);
+			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
 			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);
 			if (myMsg.Nurse != null && myMsg.Room != null)
 			{
@@ -53,7 +53,7 @@ namespace Agents.AgentResources
 			}
 			else
 			{
-				GlobalLogger.PrintLog(myMsg.Patient.ToString() + " no resources", MySim.CurrentTime);
+				GlobalLogger.PrintLog( " no resources", MySim.CurrentTime);
 			}
 		}
 

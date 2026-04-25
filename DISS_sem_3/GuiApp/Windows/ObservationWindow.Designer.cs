@@ -310,6 +310,19 @@ namespace DISS_sem_3
             return dgvPassengers;
         }
         
+        public DataGridView CreateNurseListGrid()
+        {
+            var dgvPassengers = new DataGridView();
+            dgvPassengers.Width = 700;
+            dgvPassengers.Height = 240;
+            dgvPassengers.ReadOnly = true;
+            dgvPassengers.AllowUserToAddRows = false;
+            dgvPassengers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvPassengers.Columns.Add("id", "Nurse ID");
+            dgvPassengers.Columns.Add("IsWorking", "Is Working");
+            return dgvPassengers;
+        }
+        
         private DataGridView CreateRoomGridPlaceholder(int roomId, string title)
         {
             var dgv = new DataGridView();

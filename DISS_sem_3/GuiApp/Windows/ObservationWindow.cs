@@ -16,7 +16,8 @@ namespace DISS_sem_3
         public DataGridView? MedicalQueueB { get; set; }
         private Dictionary<int, DataGridView> _roomAGrids = new Dictionary<int, DataGridView>();
         private Dictionary<int, DataGridView> _roomBGrids = new Dictionary<int, DataGridView>();
-        
+        public DataGridView? FreeNurses { get; set; }
+
         public event EventHandler? OnPauseRequested;
         public event EventHandler? OnStopRequested;
         public event EventHandler? OnRunRequested;
@@ -238,6 +239,7 @@ namespace DISS_sem_3
             EntryQueue = CreatePatientQueueGrid();
             MedicalQueueA = CreatePatientQueueGrid();
             MedicalQueueA = CreatePatientQueueGrid();
+            FreeNurses = CreateNurseListGrid();
             // 2. Pre-render Room A Grids
             // Assuming SecurityLanesCount or similar maps to your Room counts
             for (int i = 0; i < 5; i++) 
@@ -306,6 +308,7 @@ namespace DISS_sem_3
                 UpdatePassengersGrid(EntryQueue, state.EntryQueue);
                 UpdatePassengersGrid(MedicalQueueA, state.MedicalTreatQueueA);
                 UpdatePassengersGrid(MedicalQueueB, state.MedicalTreatQueueB);
+                UpdateMedicalStuffsGrid(FreeNurses, state.FreeNurses.Cast<MedicalStaff>().ToList());
         
                 foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
                 foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
@@ -395,6 +398,7 @@ namespace DISS_sem_3
             EntryQueue = CreatePatientQueueGrid();
             MedicalQueueA = CreatePatientQueueGrid();
             MedicalQueueB = CreatePatientQueueGrid();
+            FreeNurses = CreateNurseListGrid();
 
             Panel MakeLabeledContainer(string labelText, DataGridView dgv)
             {
@@ -436,6 +440,7 @@ namespace DISS_sem_3
             var pEntryPatients = MakeLabeledContainer("EntryQueue", EntryQueue);
             var pMedicalPatientsA = MakeLabeledContainer("MedicalQueue A", MedicalQueueA);
             var pMedicalPatientsB = MakeLabeledContainer("MedicalQueue B", MedicalQueueB);
+            var pFreeNurses = MakeLabeledContainer("Free Nurses", FreeNurses);
 
 
             panel.Controls.Add(pEntryPatients);
@@ -455,6 +460,8 @@ namespace DISS_sem_3
                 panel.Controls.Add(pRoomB);
             }
 
+            panel.Controls.Add(pFreeNurses);
+            
             container.Controls.Add(panel);
 
             flpLanes.Controls.Add(container);
@@ -493,6 +500,37 @@ namespace DISS_sem_3
                 UpdateCellIfChanged(row.Cells[3], p.ArrivedByAmbulance.ToString());
             }
         }
+        
+        private void UpdateMedicalStuffsGrid(DataGridView? dgv, List<MedicalStaff> medic)
+        {
+            if (dgv == null || medic == null) return;
+
+            // 1. Synchronize row count (Add or Remove only what is necessary)
+            if (dgv.Rows.Count < medic.Count)
+            {
+                dgv.Rows.Add(medic.Count - dgv.Rows.Count);
+            }
+            else if (dgv.Rows.Count > medic.Count)
+            {
+                for (int i = dgv.Rows.Count - 1; i >= medic.Count; i--)
+                {
+                    dgv.Rows.RemoveAt(i);
+                }
+            }
+
+            // 2. Update cell values only
+            for (int i = 0; i < medic.Count; i++)
+            {
+                var p = medic[i];
+                var row = dgv.Rows[i];
+
+                // Tip: Only update if the value changed to reduce repaints
+                UpdateCellIfChanged(row.Cells[0], p.Id);
+                UpdateCellIfChanged(row.Cells[1], p.IsWorking);
+            }
+        }
+        
+        
         private void UpdateCellIfChanged(DataGridViewCell cell, object newValue)
         {
             if (cell.Value == null || !cell.Value.Equals(newValue))
