@@ -40,7 +40,7 @@ namespace Agents.AgentResources
 		//meta! sender="AgentEDepartment", id="44", type="Request"
 		public void ProcessEntryExamResources(MessageForm message)
 		{
-			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			var myMsg = (MyMessage)message;
 
 			myMsg.Nurse = null;
 			myMsg.Room = null;

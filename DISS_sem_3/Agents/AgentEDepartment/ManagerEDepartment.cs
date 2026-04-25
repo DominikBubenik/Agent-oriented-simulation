@@ -48,7 +48,7 @@ namespace Agents.AgentEDepartment
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
 
-			myMsg.Code = Mc.MedicalTreatResources;
+			// myMsg.Code = Mc.MedicalTreatResources;
 			
 		}
 
@@ -56,7 +56,7 @@ namespace Agents.AgentEDepartment
 		public void ProcessEntryExamResources(MessageForm message)
 		{
 			//tuto ho zoberiem z radu lebo az teraz sa priradia resource
-			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			var myMsg = (MyMessage)message;
 			MyAgent.DequeuePatientEntry(myMsg);
 			
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);

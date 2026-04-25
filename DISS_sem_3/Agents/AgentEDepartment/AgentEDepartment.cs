@@ -38,10 +38,8 @@ namespace Agents.AgentEDepartment
 		
 		public void DequeuePatientEntry(MyMessage myMsg)
 		{
-			var patient = myMsg.Patient;
-			patient.StopEntryWaiting();
-			var dequeue = EntryQueue.Dequeue(MySim.CurrentTime);
-			if (dequeue.Id != patient.Id) throw new Exception("Wrong patient dequeued");
+			myMsg.Patient = EntryQueue.Dequeue(MySim.CurrentTime);
+			myMsg.Patient.StopEntryWaiting();
 		}
 		
 		public void EnqueueAfterEntryExam(Patient patient)
