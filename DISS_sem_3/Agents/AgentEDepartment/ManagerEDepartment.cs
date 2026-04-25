@@ -43,7 +43,7 @@ namespace Agents.AgentEDepartment
 		public void ProcessEntryExamPatient(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			MyAgent.EnqueueAfterEntryExam(myMsg);
+			MyAgent.EnqueueAfterEntryExam(myMsg.Patient);
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);

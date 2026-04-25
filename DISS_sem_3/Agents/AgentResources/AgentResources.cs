@@ -15,8 +15,6 @@ namespace Agents.AgentResources
 		public List<Room> FreeRoomsTypeB { get; set; }
 		public List<Room> AllRoomsTypeB { get; set; }
 		
-		public Queue<MyMessage> WaitingForEntryExam { get; set; }
-		
 		public AgentResources(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
 		{
@@ -54,8 +52,6 @@ namespace Agents.AgentResources
 				FreeRoomsTypeB.Add(room);
 				AllRoomsTypeB.Add(room);
 			}
-			
-			WaitingForEntryExam = new Queue<MyMessage>();
 		}
 		
 		public void FreeUpResources(MyMessage myMsg)

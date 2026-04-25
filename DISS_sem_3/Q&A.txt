@@ -3,3 +3,7 @@ TODO 1) mame si nejako upravit tie svoje statisticke rady aby to boli priority q
 TODO 2) mam presunut tu logiku z manazerov do tych agentov
 
 TODO 3) ked po vstupnej prehliadke idu do tych radov kedy mam uvolnit zdroje a kedy maju ist do radu a ako posefit ten rad pred druhym vysetrenim
+
+TODO 4) komu priradit ambulanciu ked sa nejaka z B uvolni- tomu kto caka na prve vysetrenie alebo tomu kto chce byt vysetreny
+
+TODO 5) co ak chcem priradit resource ale nie je tam volne? Je vpohode tu spravu iba tak zahodit?

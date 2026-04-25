@@ -33,7 +33,7 @@ namespace Agents.AgentEDepartment
 			GlobalLogger.PrintLog(myMsg.Patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
 			var patient = myMsg.Patient;
 			patient.StartEntryQueueWait();
-			EntryQueue.Enqueue(patient, patient.Priority, MySim.CurrentTime);
+			EntryQueue.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
 		}
 		
 		public void DequeuePatientEntry(MyMessage myMsg)
@@ -44,10 +44,17 @@ namespace Agents.AgentEDepartment
 			if (dequeue.Id != patient.Id) throw new Exception("Wrong patient dequeued");
 		}
 		
-		public void EnqueueAfterEntryExam(MyMessage myMsg)
+		public void EnqueueAfterEntryExam(Patient patient)
 		{
-			// if (myMsg.Patient)
- 		}
+			if (patient.Priority < 3)
+			{
+				MedicalTreatQueueA.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
+			}
+			else
+			{
+				MedicalTreatQueueB.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
+			}
+		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

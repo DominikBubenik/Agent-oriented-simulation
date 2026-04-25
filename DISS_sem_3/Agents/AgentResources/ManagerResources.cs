@@ -54,7 +54,6 @@ namespace Agents.AgentResources
 			else
 			{
 				GlobalLogger.PrintLog(myMsg.Patient.ToString() + " no resources", MySim.CurrentTime);
-				MyAgent.WaitingForEntryExam.Enqueue(myMsg);
 			}
 		}
 
