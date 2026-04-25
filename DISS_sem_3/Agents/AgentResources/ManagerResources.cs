@@ -28,6 +28,8 @@ namespace Agents.AgentResources
 		//meta! sender="AgentEDepartment", id="79", type="Notice"
 		public void ProcessFreeUpResources(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			MyAgent.FreeUpResources(myMsg);
 		}
 
 		//meta! sender="AgentEDepartment", id="49", type="Request"

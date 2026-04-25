@@ -57,6 +57,30 @@ namespace Agents.AgentResources
 			
 			WaitingForEntryExam = new Queue<MyMessage>();
 		}
+		
+		public void FreeUpResources(MyMessage myMsg)
+		{
+			if (myMsg.Nurse != null) Nurses.Add(myMsg.Nurse);
+			if (myMsg.Doctor != null) Doctors.Add(myMsg.Doctor);
+			if (myMsg.Room != null)
+			{
+				if (myMsg.Room.Type == 'A')
+				{
+					FreeRoomsTypeA.Add(myMsg.Room);
+				}
+				else
+				{
+					FreeRoomsTypeB.Add(myMsg.Room);
+				}
+				myMsg.Room.Nurse = null;
+				myMsg.Room.Doctor = null;
+				myMsg.Room.Patient = null;
+			}
+			
+			myMsg.Nurse = null;
+			myMsg.Room = null;
+			myMsg.Doctor = null;
+		}
 
 		private MySimulation MyCastSim() => (MySimulation)MySim; 
 

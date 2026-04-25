@@ -1,3 +1,5 @@
 TODO 1) mame si nejako upravit tie svoje statisticke rady aby to boli priority queue s nejakou prioritov?
 
 TODO 2) mam presunut tu logiku z manazerov do tych agentov
+
+TODO 3) ked po vstupnej prehliadke idu do tych radov kedy mam uvolnit zdroje a kedy maju ist do radu a ako posefit ten rad pred druhym vysetrenim

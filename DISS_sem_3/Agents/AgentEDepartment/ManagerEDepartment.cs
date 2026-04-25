@@ -42,6 +42,14 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentEntryExam", id="47", type="Response"
 		public void ProcessEntryExamPatient(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			MyAgent.EnqueueAfterEntryExam(myMsg);
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
+			myMsg.Code = Mc.FreeUpResources;
+			Notice(myMsg);
+
+			myMsg.Code = Mc.MedicalTreatResources;
+			
 		}
 
 		//meta! sender="AgentResources", id="44", type="Response"

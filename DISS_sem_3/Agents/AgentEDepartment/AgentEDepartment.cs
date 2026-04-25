@@ -9,6 +9,8 @@ namespace Agents.AgentEDepartment
 	public class AgentEDepartment : OSPABA.Agent
 	{
 		public StatPriorityQueue<Patient> EntryQueue;
+		public StatPriorityQueue<Patient> MedicalTreatQueueA;
+		public StatPriorityQueue<Patient> MedicalTreatQueueB;
 		
 		public AgentEDepartment(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
@@ -22,7 +24,8 @@ namespace Agents.AgentEDepartment
 			// Setup component for the next replication
 			
 			EntryQueue = new StatPriorityQueue<Patient>(MySim.CurrentTime);
-			
+			MedicalTreatQueueA = new StatPriorityQueue<Patient>(MySim.CurrentTime);
+			MedicalTreatQueueB = new StatPriorityQueue<Patient>(MySim.CurrentTime);
 		}
 		
 		public void EnqueuePatientEntry(MyMessage myMsg)
@@ -40,6 +43,11 @@ namespace Agents.AgentEDepartment
 			var dequeue = EntryQueue.Dequeue(MySim.CurrentTime);
 			if (dequeue.Id != patient.Id) throw new Exception("Wrong patient dequeued");
 		}
+		
+		public void EnqueueAfterEntryExam(MyMessage myMsg)
+		{
+			// if (myMsg.Patient)
+ 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

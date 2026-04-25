@@ -41,7 +41,9 @@ namespace Agents.AgentEntryExam
 		public void ProcessFinish(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			myMsg.Room.
+			myMsg.Code = Mc.EntryExamPatient;
+			myMsg.Addressee = MyAgent.Parent;
+			Response(myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
