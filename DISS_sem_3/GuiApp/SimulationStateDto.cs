@@ -16,6 +16,10 @@ public class SimulationStateDto
     public double CurrentTime { get; set; }
     public List<Patient> EntryQueue { get; set; }
     public double EntryQueueAvgLength { get; set; }
+    public List<Patient> MedicalTreatQueueA { get; set; }
+    public double MedicalQueueAvgLengthA { get; set; }
+    public List<Patient> MedicalTreatQueueB { get; set; }
+    public double MedicalQueueAvgLengthB { get; set; }
     public List<Doctor> FreeDoctors { get; set; }
     public List<Nurse> FreeNurses { get; set; }
     public List<Room> ARooms { get; set; }

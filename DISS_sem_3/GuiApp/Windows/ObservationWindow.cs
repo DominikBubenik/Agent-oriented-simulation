@@ -12,6 +12,8 @@ namespace DISS_sem_3
     public partial class ObservationWindow : Form
     {
         public DataGridView? EntryQueue { get; set; }
+        public DataGridView? MedicalQueueA { get; set; }
+        public DataGridView? MedicalQueueB { get; set; }
         private Dictionary<int, DataGridView> _roomAGrids = new Dictionary<int, DataGridView>();
         private Dictionary<int, DataGridView> _roomBGrids = new Dictionary<int, DataGridView>();
         
@@ -234,21 +236,23 @@ namespace DISS_sem_3
 
             // 1. Setup Entry Queue (Waiting Room)
             EntryQueue = CreatePatientQueueGrid();
+            MedicalQueueA = CreatePatientQueueGrid();
+            MedicalQueueA = CreatePatientQueueGrid();
             // 2. Pre-render Room A Grids
             // Assuming SecurityLanesCount or similar maps to your Room counts
             for (int i = 0; i < 5; i++) 
             {
                 var dgv = CreateRoomGridPlaceholder(i, $"Exam Room A #{i}");
                 _roomAGrids.Add(i, dgv);
-                flpLanes.Controls.Add(dgv);
+                // flpLanes.Controls.Add(dgv);
             }
-
+            
             // 3. Pre-render Room B Grids (example using another count from args)
             for (int i = 0; i < 7; i++)
             {
                 var dgv = CreateRoomGridPlaceholder(i, $"Exam Room B #{i}");
                 _roomBGrids.Add(i, dgv);
-                flpLanes.Controls.Add(dgv);
+                // flpLanes.Controls.Add(dgv);
             }
         }
 
@@ -300,6 +304,8 @@ namespace DISS_sem_3
             try {
                 UpdateSimulationTime(state.CurrentTime);
                 UpdatePassengersGrid(EntryQueue, state.EntryQueue);
+                UpdatePassengersGrid(MedicalQueueA, state.MedicalTreatQueueA);
+                UpdatePassengersGrid(MedicalQueueB, state.MedicalTreatQueueB);
         
                 foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
                 foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
@@ -377,7 +383,7 @@ namespace DISS_sem_3
             var container = new GroupBox();
             container.Text = $"Lane";
             container.Width = flpLanes.ClientSize.Width - 25;
-            container.Height = 600;
+            container.Height = 1200;
             container.Padding = new Padding(6);
 
             var panel = new FlowLayoutPanel();
@@ -387,6 +393,8 @@ namespace DISS_sem_3
             panel.AutoScroll = true;
 
             EntryQueue = CreatePatientQueueGrid();
+            MedicalQueueA = CreatePatientQueueGrid();
+            MedicalQueueB = CreatePatientQueueGrid();
 
             Panel MakeLabeledContainer(string labelText, DataGridView dgv)
             {
@@ -425,17 +433,34 @@ namespace DISS_sem_3
             }
 
             // create containers and keep references so we can extract their stats labels
-            var pPassengers = MakeLabeledContainer("EntryQueue", EntryQueue);
+            var pEntryPatients = MakeLabeledContainer("EntryQueue", EntryQueue);
+            var pMedicalPatientsA = MakeLabeledContainer("MedicalQueue A", MedicalQueueA);
+            var pMedicalPatientsB = MakeLabeledContainer("MedicalQueue B", MedicalQueueB);
 
 
-            panel.Controls.Add(pPassengers);
+            panel.Controls.Add(pEntryPatients);
+            panel.Controls.Add(pMedicalPatientsA);
+            panel.Controls.Add(pMedicalPatientsB);
+            
+            foreach (var entry in _roomAGrids)
+            {
+                var pRoomA = MakeLabeledContainer($"Exam Room A #{entry.Key}", entry.Value);
+                panel.Controls.Add(pRoomA);
+            }
+
+            // 3. Add Room B Grids from Dictionary
+            foreach (var entry in _roomBGrids)
+            {
+                var pRoomB = MakeLabeledContainer($"Exam Room B #{entry.Key}", entry.Value);
+                panel.Controls.Add(pRoomB);
+            }
 
             container.Controls.Add(panel);
 
             flpLanes.Controls.Add(container);
 
             // extract stats labels (they are the second control in each panel)
-            Label? passengersStats = pPassengers.Controls.OfType<Label>().Skip(1).FirstOrDefault();
+            Label? passengersStats = pEntryPatients.Controls.OfType<Label>().Skip(1).FirstOrDefault();
         }
 
         private void UpdatePassengersGrid(DataGridView? dgv, List<Patient> patients)

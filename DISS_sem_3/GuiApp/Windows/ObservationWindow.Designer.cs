@@ -314,7 +314,7 @@ namespace DISS_sem_3
         {
             var dgv = new DataGridView();
             dgv.Width = 700;
-            dgv.Height = 240;
+            dgv.Height = 140;
             dgv.ReadOnly = true;
             dgv.AllowUserToAddRows = false;
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
