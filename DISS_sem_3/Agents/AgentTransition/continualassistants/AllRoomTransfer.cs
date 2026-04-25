@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentTransition;
+using DISS_sem_3.Entities;
 using MainLogic;
 
 namespace Agents.AgentTransition.ContinualAssistants
@@ -8,11 +9,9 @@ namespace Agents.AgentTransition.ContinualAssistants
 	//meta! id="118"
 	public class AllRoomTransfer : OSPABA.Process
 	{
-		private TriangularGenerator _transitionDuration;
 		public AllRoomTransfer(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-			_transitionDuration = new TriangularGenerator(MyCastSim().NextSeed(), 15, 45, 20);
 		}
 
 		override public void PrepareReplication()
@@ -26,7 +25,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Code = Mc.Finish;
-			Hold(_transitionDuration.Generate(), myMsg);
+			if (myMsg.Nurse != null) myMsg.Nurse.Activity = StaffActivity.Moving;
+			Hold(MyAgent.GetAllRoomTransferDuration(), myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -64,6 +64,5 @@ namespace Agents.AgentTransition.ContinualAssistants
 				return (AgentTransition)base.MyAgent;
 			}
 		}
-		private MySimulation MyCastSim() => (MySimulation)MySim;
 	}
 }

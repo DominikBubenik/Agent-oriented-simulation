@@ -1,5 +1,6 @@
 using Agents.AgentResources;
 using DISS_sem_3;
+using DISS_sem_3.Entities;
 using MainLogic;
 using OSPABA;
 using Simulation;
@@ -37,6 +38,7 @@ namespace Agents.AgentResources.InstantAssistants
 			{
 				myMsg.Nurse = nurses[0];
 				myMsg.Nurse.IsWorking = true;
+				myMsg.Nurse.Activity = StaffActivity.Working;
 				nurses.RemoveAt(0);
 				myMsg.Room = rooms[0];
 				rooms.RemoveAt(0);

@@ -319,7 +319,7 @@ namespace DISS_sem_3
             dgvPassengers.AllowUserToAddRows = false;
             dgvPassengers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvPassengers.Columns.Add("id", "Nurse ID");
-            dgvPassengers.Columns.Add("IsWorking", "Is Working");
+            dgvPassengers.Columns.Add("Activity", "Current Activity");
             return dgvPassengers;
         }
         

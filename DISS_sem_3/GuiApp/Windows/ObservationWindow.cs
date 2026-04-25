@@ -308,7 +308,7 @@ namespace DISS_sem_3
                 UpdatePassengersGrid(EntryQueue, state.EntryQueue);
                 UpdatePassengersGrid(MedicalQueueA, state.MedicalTreatQueueA);
                 UpdatePassengersGrid(MedicalQueueB, state.MedicalTreatQueueB);
-                UpdateMedicalStuffsGrid(FreeNurses, state.FreeNurses.Cast<MedicalStaff>().ToList());
+                UpdateMedicalStuffsGrid(FreeNurses, state.AllNurses.Cast<MedicalStaff>().ToList());
         
                 foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
                 foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
@@ -526,7 +526,7 @@ namespace DISS_sem_3
 
                 // Tip: Only update if the value changed to reduce repaints
                 UpdateCellIfChanged(row.Cells[0], p.Id);
-                UpdateCellIfChanged(row.Cells[1], p.IsWorking);
+                UpdateCellIfChanged(row.Cells[1], p.Activity.ToString());
             }
         }
         

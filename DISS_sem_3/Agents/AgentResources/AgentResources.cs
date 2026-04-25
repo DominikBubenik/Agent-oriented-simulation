@@ -10,6 +10,7 @@ namespace Agents.AgentResources
 	{
 		public List<Doctor>  Doctors { get; set; }
 		public List<Nurse> Nurses { get; set; }
+		public List<Nurse> AllNurses { get; set; }
 		public List<Room> FreeRoomsTypeA { get; set; }
 		public List<Room> AllRoomsTypeA { get; set; }
 		public List<Room> FreeRoomsTypeB { get; set; }
@@ -32,9 +33,12 @@ namespace Agents.AgentResources
 			}
 
 			Nurses = new List<Nurse>();
+			AllNurses = new List<Nurse>();
 			for (int i = 0; i < MyCastSim().InitNurseCount; i++)
 			{
-				Nurses.Add(new Nurse(i, MySim));
+				var nurse = new Nurse(i, MySim); 
+				Nurses.Add(nurse);
+				AllNurses.Add(nurse);
 			}
 			FreeRoomsTypeA = new List<Room>();
 			AllRoomsTypeA = new List<Room>();
@@ -58,13 +62,13 @@ namespace Agents.AgentResources
 		{
 			if (myMsg.Nurse != null)
 			{
-				myMsg.Nurse.IsWorking = false;
+				myMsg.Nurse.Activity = StaffActivity.Not_Working;
 				Nurses.Add(myMsg.Nurse);
 			}
 
 			if (myMsg.Doctor != null)
 			{
-				myMsg.Doctor.IsWorking = false;
+				myMsg.Doctor.Activity = StaffActivity.Not_Working;
 				Doctors.Add(myMsg.Doctor);
 			}
 			if (myMsg.Room != null)
