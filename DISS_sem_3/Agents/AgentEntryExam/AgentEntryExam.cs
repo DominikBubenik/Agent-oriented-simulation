@@ -75,6 +75,5 @@ namespace Agents.AgentEntryExam
 		//meta! tag="end"
 		
 		private MySimulation MyCastSim() => (MySimulation)MySim;
-		
 	}
 }

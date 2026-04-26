@@ -21,6 +21,14 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 		//meta! sender="AgentMedicalTeat", id="56", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Room.Nurse = myMsg.Nurse;
+			myMsg.Room.Patient = myMsg.Patient;
+			myMsg.Room.Doctor = myMsg.Doctor;
+			
+			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
+			myMsg.Code = Mc.Finish;
+			Hold(duration, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +36,11 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					var myMsg = (MyMessage)message;
+					myMsg.Addressee = MyAgent;
+					AssistantFinished(myMsg);
+					break;
 			}
 		}
 

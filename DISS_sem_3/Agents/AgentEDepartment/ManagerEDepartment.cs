@@ -87,6 +87,7 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"
 		public void ProcessMedicalTreatPatient(MessageForm message)
 		{
+			//TODO tu som skoncil
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -100,9 +101,17 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="111", type="Response"
 		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
-			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
-			myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
-			myMsg.Code = Mc.EntryExamPatient;
+			var myMsg = (MyMessage)message; //odstranil som copy
+			if (myMsg.Doctor == null)
+			{
+				myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
+				myMsg.Code = Mc.EntryExamPatient;
+			}
+			else
+			{
+				myMsg.Addressee = MySim.FindAgent(SimId.AgentMedicalTeat);
+				myMsg.Code = Mc.MedicalTreatPatient;
+			}
 			Request(myMsg);
 		}
 

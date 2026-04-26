@@ -26,6 +26,7 @@ namespace Agents.AgentTransition.ContinualAssistants
 			var myMsg = (MyMessage)message;
 			myMsg.Code = Mc.Finish;
 			if (myMsg.Nurse != null) myMsg.Nurse.Activity = StaffActivity.Moving;
+			if (myMsg.Doctor != null) myMsg.Doctor.Activity = StaffActivity.Moving;
 			Hold(MyAgent.GetAllRoomTransferDuration(), myMsg);
 		}
 

@@ -31,12 +31,7 @@ namespace Agents.AgentEntryExam
 			myMsg.Addressee = MyAgent.FindAssistant(SimId.ProcessEntryExam);
 			StartContinualAssistant(myMsg);
 		}
-
-		//meta! userInfo="Removed from model"
-		public void ProcessFinishProcessEntryFinished(MessageForm message)
-		{
-		}
-
+		
 		//meta! sender="ProcessEntryExam", id="53", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
