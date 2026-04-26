@@ -88,9 +88,15 @@ namespace Agents.AgentEDepartment
 		public void ProcessMedicalTreatPatient(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			myMsg.Code = Mc.ExitTransmition;
-			Request(myMsg);
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
+			myMsg.Code = Mc.FreeUpResources;
+			Notice(myMsg);
+			
+			var exitMsg = new  MyMessage(MySim);
+			exitMsg.Patient = myMsg.Patient;
+			exitMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
+			exitMsg.Code = Mc.ExitTransmition;
+			Request(exitMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

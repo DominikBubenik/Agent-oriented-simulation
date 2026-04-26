@@ -6,6 +6,7 @@ public class Room : Entity
 {
     public char Type { get; set; }
     public double OccupancyTime { get; set; }
+    public RoomStatus CurrentStatus { get; set; } =  RoomStatus.Empty;
     public Patient? Patient { get; set; }
     public Nurse? Nurse { get; set; }
     public Doctor? Doctor { get; set; }

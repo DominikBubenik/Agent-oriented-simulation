@@ -41,6 +41,7 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Nurse.Activity = StaffActivity.Working;
 				nurses.RemoveAt(0);
 				myMsg.Room = rooms[0];
+				myMsg.Room.CurrentStatus = RoomStatus.Occupied;
 				rooms.RemoveAt(0);
 				GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
 			}
