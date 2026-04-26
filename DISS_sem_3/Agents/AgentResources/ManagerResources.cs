@@ -35,6 +35,22 @@ namespace Agents.AgentResources
 		//meta! sender="AgentEDepartment", id="49", type="Request"
 		public void ProcessMedicalTreatResources(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+
+			myMsg.Nurse = null;
+			myMsg.Room = null;
+			myMsg.Doctor = null;
+			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+			((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(myMsg);
+			if (myMsg.Nurse != null && myMsg.Room != null && myMsg.Doctor != null)
+			{
+				myMsg.Code = Mc.MedicalTreatResources;
+				Response(myMsg);
+			}
+			else
+			{
+				GlobalLogger.PrintLog( " no resources for medical treat", MySim.CurrentTime);
+			}
 		}
 
 		//meta! sender="AgentEDepartment", id="44", type="Request"
@@ -43,6 +59,7 @@ namespace Agents.AgentResources
 			var myMsg = (MyMessage)message;
 
 			myMsg.Nurse = null;
+			myMsg.Doctor = null;
 			myMsg.Room = null;
 			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
 			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);

@@ -8,8 +8,10 @@ public class Patient : Entity
     public bool ArrivedByAmbulance { get; set; }
     public int Priority { get; set; } = int.MaxValue;
     private double _entryQueueStartWait;
+    private double _medicalQueueStartWait;
     public string Name { get; set; }
     public double EntryQueueWaitingTime { get; private set; }
+    public double MedicalQueueWaitingTime { get; private set; }
     public Patient(OSPABA.Simulation mySim, double arrivalTime, bool arrivedByAmbulance) : base(mySim)
     {
         ArrivalTime = arrivalTime;
@@ -50,9 +52,19 @@ public class Patient : Entity
     {
         _entryQueueStartWait = MySim.CurrentTime;
     }
+    
+    public void StartMedicalQueueWait()
+    {
+        _medicalQueueStartWait = MySim.CurrentTime;
+    }
 
     public void StopEntryWaiting()
     {
         EntryQueueWaitingTime = MySim.CurrentTime - _entryQueueStartWait;
+    }
+    
+    public void StopMedicalQueueWaiting()
+    {
+        MedicalQueueWaitingTime = MySim.CurrentTime - _medicalQueueStartWait;
     }
 }

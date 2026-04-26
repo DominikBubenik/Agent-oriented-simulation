@@ -19,6 +19,8 @@ public class StatPriorityQueue<T> : BaseStatQueue<T>
 
     public override int Count => _items.Count;
 
+    public T Pop() => _items[0].Data;
+
     public void Enqueue(T item, int priority, double arrival, double currentTime)
     {
         UpdateStats(currentTime);

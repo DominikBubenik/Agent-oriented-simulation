@@ -28,6 +28,13 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentResources", id="49", type="Response"
 		public void ProcessMedicalTreatResources(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			MyAgent.DequeuePatientMedicalTreat(myMsg);
+			
+			//tu treba pridat ten request response aby bolo jednoznacne odkial idu 
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
+			myMsg.Code = Mc.BetweenAmbulanceTransition;
+			Request(myMsg);
 		}
 
 		//meta! sender="AgentBoss", id="23", type="Request"
@@ -44,6 +51,7 @@ namespace Agents.AgentEDepartment
 		{
 			var myMsg = (MyMessage)message;
 			MyAgent.EnqueueAfterEntryExam(myMsg.Patient);
+			var patient = MyAgent.GetWaitingPatientForMedicalTreat(myMsg.Patient);
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
@@ -58,6 +66,7 @@ namespace Agents.AgentEDepartment
 			}
 			
 			var initiateMTResources = new MyMessage(MySim);
+			initiateMTResources.Patient = patient;
 			initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
 			initiateMTResources.Code = Mc.MedicalTreatResources;
 			Request(initiateMTResources);
@@ -101,7 +110,7 @@ namespace Agents.AgentEDepartment
 		public void ProcessEntranceTransmition(MessageForm message)
 		{
 			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
-			MyAgent.EnqueuePatientEntry(myMsg);
+			MyAgent.EnqueuePatientEntry(myMsg.Patient);
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.EntryExamResources;
 			Request(myMsg);

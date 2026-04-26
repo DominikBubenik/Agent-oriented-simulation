@@ -28,10 +28,9 @@ namespace Agents.AgentEDepartment
 			MedicalTreatQueueB = new StatPriorityQueue<Patient>(MySim.CurrentTime);
 		}
 		
-		public void EnqueuePatientEntry(MyMessage myMsg)
+		public void EnqueuePatientEntry(Patient patient)
 		{
-			GlobalLogger.PrintLog(myMsg.Patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
-			var patient = myMsg.Patient;
+			GlobalLogger.PrintLog(patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
 			patient.StartEntryQueueWait();
 			EntryQueue.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
 		}
@@ -42,8 +41,22 @@ namespace Agents.AgentEDepartment
 			myMsg.Patient.StopEntryWaiting();
 		}
 		
+		public void DequeuePatientMedicalTreat(MyMessage myMsg)
+		{
+			if (myMsg.Patient.Priority < 3)
+			{
+				myMsg.Patient = MedicalTreatQueueA.Dequeue(MySim.CurrentTime);
+			}
+			else
+			{
+				myMsg.Patient = MedicalTreatQueueB.Dequeue(MySim.CurrentTime);
+			}
+			myMsg.Patient.StopMedicalQueueWaiting();
+		}
+		
 		public void EnqueueAfterEntryExam(Patient patient)
 		{
+			patient.StartMedicalQueueWait();
 			if (patient.Priority < 3)
 			{
 				MedicalTreatQueueA.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
@@ -52,6 +65,11 @@ namespace Agents.AgentEDepartment
 			{
 				MedicalTreatQueueB.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
 			}
+		}
+		
+		public Patient GetWaitingPatientForMedicalTreat(Patient patient)
+		{
+			return patient.Priority < 3 ? MedicalTreatQueueA.Pop() : MedicalTreatQueueB.Pop();
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
