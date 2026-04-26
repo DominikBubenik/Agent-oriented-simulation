@@ -87,7 +87,10 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"
 		public void ProcessMedicalTreatPatient(MessageForm message)
 		{
-			//TODO tu som skoncil
+			var myMsg = (MyMessage)message;
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
+			myMsg.Code = Mc.ExitTransmition;
+			Request(myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -128,6 +131,9 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="138", type="Response"
 		public void ProcessExitTransmition(MessageForm message)
 		{
+			message.Code = Mc.TreatPatient;
+			message.Addressee = MyAgent.Parent;
+			Response(message);
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

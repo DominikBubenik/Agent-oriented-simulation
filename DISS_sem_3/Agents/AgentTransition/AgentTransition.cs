@@ -10,12 +10,17 @@ namespace Agents.AgentTransition
 	public class AgentTransition : OSPABA.Agent
 	{
 		private TriangularGenerator _allRoomTransitGenerator;
-		
+		private TriangularGenerator _walkInDuration;
+		private Random _ambulanceDuration;
+		private Random _exitSystemDuration;
 		public AgentTransition(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
 		{
 			Init();
+			_walkInDuration = new TriangularGenerator(MyCastSim().NextSeed(), 120, 300, 150);
+			_ambulanceDuration = new Random(MyCastSim().NextSeed());
 			_allRoomTransitGenerator = new TriangularGenerator(MyCastSim().NextSeed(), 15, 45, 20);
+			_exitSystemDuration = new Random(MyCastSim().NextSeed());
 		}
 
 		public List<Nurse> MovingNurses { get; set; }
@@ -26,7 +31,10 @@ namespace Agents.AgentTransition
 			// Setup component for the next replication
 		}
 
+		public double EntranceWalkInPatientDuration() => _walkInDuration.Generate();
+		public double EntranceAmbulancePatientDuration() => _ambulanceDuration.NextDouble() * (200 - 90) + 90;
 		public double GetAllRoomTransferDuration() => _allRoomTransitGenerator.Generate();
+		public double ExitSystemDuration() => _exitSystemDuration.NextDouble() * (240 - 150) + 150;
 		
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

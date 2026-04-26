@@ -26,6 +26,17 @@ namespace Agents.AgentEnviroment
 		//meta! sender="AgentBoss", id="15", type="Notice"
 		public void ProcessPatientExit(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			var patient = myMsg.Patient; 
+			if (patient.ArrivedByAmbulance)
+			{
+				MyAgent.TimeInSystemAmbulancePatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+			}
+			else
+			{
+				MyAgent.TimeInSystemWalkInPatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+			}
+			
 			MyAgent.TreatedPatientsCount++;
 		}
 

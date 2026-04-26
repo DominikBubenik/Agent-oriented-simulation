@@ -60,6 +60,9 @@ namespace Agents.AgentTransition
 		//meta! sender="ExitDepartment", id="133", type="Finish"
 		public void ProcessFinishExitDepartment(MessageForm message)
 		{
+			var myMsg =  (MyMessage)message;
+			myMsg.Code = Mc.ExitTransmition;
+			Response(myMsg);
 		}
 
 		//meta! sender="AgentEDepartment", id="136", type="Request"
@@ -74,6 +77,10 @@ namespace Agents.AgentTransition
 		//meta! sender="AgentEDepartment", id="138", type="Request"
 		public void ProcessExitTransmition(MessageForm message)
 		{
+			var msg = (MyMessage)message;
+			msg.Addressee = MyAgent.FindAssistant(SimId.ExitDepartment);
+			msg.Code = Mc.Start;
+			StartContinualAssistant(msg);
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

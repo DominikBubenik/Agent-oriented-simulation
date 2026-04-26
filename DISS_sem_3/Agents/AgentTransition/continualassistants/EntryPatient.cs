@@ -8,13 +8,9 @@ namespace Agents.AgentTransition.ContinualAssistants
 	//meta! id="128"
 	public class EntryPatient : OSPABA.Process
 	{
-		private TriangularGenerator _walkInDuration;
-		private ContinuousGenerator _ambulanceDuration;
 		public EntryPatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-			_walkInDuration = new TriangularGenerator(MyCastSim().NextSeed(), 120, 300, 150);
-			_ambulanceDuration = new ContinuousGenerator(new Random(MyCastSim().NextSeed()), [new GenSpec(1, 90, 200)]);
 		}
 
 		override public void PrepareReplication()
@@ -27,7 +23,7 @@ namespace Agents.AgentTransition.ContinualAssistants
 		public void ProcessStart(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			var duration = myMsg.Patient.ArrivedByAmbulance ? _ambulanceDuration.Sample() : _walkInDuration.Generate();
+			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.EntranceAmbulancePatientDuration() : MyAgent.EntranceWalkInPatientDuration();
 			myMsg.Code = Mc.Finish;
 			Hold(duration, myMsg);
 		}
