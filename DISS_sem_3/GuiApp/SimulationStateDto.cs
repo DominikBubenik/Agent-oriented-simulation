@@ -2,15 +2,6 @@
 
 namespace DISS_sem_3;
 
-public class OneStat((double avg, double lowerBound, double upperBound) item)
-{
-    public double Avg { get; set; } = item.avg;
-    public double LowerBound { get; set; } = item.lowerBound;
-    public double UpperBound { get; set; } = item.upperBound;
-}
-
-
-
 public class SimulationStateDto
 {
     public double CurrentTime { get; set; }

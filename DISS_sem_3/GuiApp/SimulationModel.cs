@@ -10,19 +10,60 @@ public class SimulationModel
     private MySimulation _core;
     
     public event Action<SimulationStateDto> OnRefreshUI;
+    public event Action<SimulationStatsDto> OnTurboUI;
     private DateTime _lastRefreshTime = DateTime.MinValue;
     private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60); // ~30 FPS
 
     public void StartSimulation(StartSimulationArgs args)
     {
         _core = new MySimulation(args.Seed);
-        
-        _core.SetSimSpeed(1.0, 0.05);
-        _core.OnRefreshUI(UpdateGui);
+        args.TurboMode = true;
+        args.ObservationMode = false;
+        if (args.ObservationMode)
+        {
+            _core.SetSimSpeed(1.0, 0.05);
+            _core.OnRefreshUI(UpdateGui);   
+        }
+        else if (args.TurboMode)
+        {
+            _core.OnReplicationDidFinish(UpdateTurboWindow);   
+            _core.SetMaxSimSpeed();
+        }
         
         _core.SimulateAsync(args.Replications, args.EndSimulationTime);
     }
-    
+
+    private void UpdateTurboWindow(OSPABA.Simulation Sim)
+    {
+        var mySim = (MySimulation)Sim;
+        var dto = new SimulationStatsDto { Replication = mySim.CurrentReplication };
+
+        var totalPInSystem = mySim.TotalPatientCount;
+        var totalWalkinPInSystem = mySim.TotalWalkInPatientCount;
+        var totalAmbulancedPInSystem = mySim.TotalAmbulancePatientCount;
+        var totalTimeInSystem = mySim.TotalTimeInSystem;
+        var totalTimeInSystemWalkInPatient = mySim.TotalTimeInSystemWalkInPatient;
+        var totalTimeInSystemAmbulancePatient = mySim.TotalTimeInSystemAmbulancePatient;
+        var totalTimeInSystemPriority1 = mySim.TotalTimeInSystemPriority1;
+        var totalTimeInSystemPriority2 = mySim.TotalTimeInSystemPriority2;
+        var totalTimeInSystemPriority3 = mySim.TotalTimeInSystemPriority3;
+        var totalTimeInSystemPriority4 = mySim.TotalTimeInSystemPriority4;
+        var totalTimeInSystemPriority5 = mySim.TotalTimeInSystemPriority5;
+        var entryQueueLength = mySim.TotalEntryQueueLength;
+        var entryQueueWaitingTime = mySim.TotalEntryWaitingTime;
+        var entryQueueWaitingTimeWalkIn = mySim.TotalEntryWaitingTimeWalkInP;
+        var entryQueueWaitingTimeAmbulance = mySim.TotalEntryWaitingTimeAmbulanceP;
+        
+        dto.Stats["TotalPatientsInSystem"] = new OneStat(totalPInSystem.GetConfidenceInterval());
+        dto.Stats["TotalWalkInInSystem"] = new OneStat(totalWalkinPInSystem.GetConfidenceInterval());
+        dto.Stats["TotalAmbulancedInSystem"] = new OneStat(totalAmbulancedPInSystem.GetConfidenceInterval());
+        dto.Stats["TotalTimeInSystem"] = new OneStat(totalTimeInSystem.GetConfidenceInterval());
+        dto.Stats["TotalTimeInSystemWalkIn"] = new OneStat(totalTimeInSystemWalkInPatient.GetConfidenceInterval());
+        dto.Stats["TotalTimeInSystemAmbulanced"] = new OneStat(totalTimeInSystemAmbulancePatient.GetConfidenceInterval());
+        
+        OnTurboUI?.Invoke(dto);
+    }
+
     // // public void OnRefreshUI(Simu)
     public void UpdateGui(OSPABA.Simulation Sim)
     {
@@ -47,7 +88,6 @@ public class SimulationModel
         };
         
         OnRefreshUI?.Invoke(state);
-        Console.WriteLine($"{_core.GetType().Name} Len              dsfdsffffffff            dsffds t");
     }
 
     public void PauseSimulation()

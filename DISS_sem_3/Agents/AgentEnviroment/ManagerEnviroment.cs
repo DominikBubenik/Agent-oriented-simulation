@@ -48,7 +48,7 @@ namespace Agents.AgentEnviroment
 			Notice(message);
 			
 			var newMessage = (MyMessage)message.CreateCopy();
-			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
+			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! sender="RegularPatient", id="20", type="Finish"
@@ -59,7 +59,7 @@ namespace Agents.AgentEnviroment
 			Notice(message);
 			
 			var newMessage = (MyMessage)message.CreateCopy();
-			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
+			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

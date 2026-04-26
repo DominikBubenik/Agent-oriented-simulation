@@ -13,12 +13,21 @@ namespace Simulation
 {
 	public class MySimulation : OSPABA.Simulation
 	{
-		public SimpleStat TotalTimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TotalPatientCount { get; private set; }
+		public SimpleStat TotalWalkInPatientCount { get; private set; }
+		public SimpleStat TotalAmbulancePatientCount { get; private set; }
+		public SimpleStat TotalTimeInSystem { get; private set; }
 		public SimpleStat TotalTimeInSystemWalkInPatient { get; private set; }
-		public SimpleStat TotalEntranceWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat TotalEntranceWaitingTimeWalkInP { get; private set; }
-		public SimpleStat TotalEntryExamWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat TotalEntryExamWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalTimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority1 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority2 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority3 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority4 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority5 { get; private set; }
+		public SimpleStat TotalEntryQueueLength { get; private set; }
+		public SimpleStat TotalEntryWaitingTime { get; private set; }
+		public SimpleStat TotalEntryWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalEntryWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeWalkInP { get; private set; }
 		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
@@ -42,14 +51,16 @@ namespace Simulation
 		{
 			base.PrepareSimulation();
 			// Create global statistcis
+			TotalPatientCount = new SimpleStat();
+			TotalWalkInPatientCount = new SimpleStat();
+			TotalAmbulancePatientCount = new SimpleStat();
+			TotalTimeInSystem = new SimpleStat();
+			
 			TotalTimeInSystemAmbulancePatient = new SimpleStat();
 			TotalTimeInSystemWalkInPatient = new SimpleStat();
 
-			TotalEntranceWaitingTimeAmbulanceP = new SimpleStat();
-			TotalEntranceWaitingTimeWalkInP = new SimpleStat();
-
-			TotalEntryExamWaitingTimeAmbulanceP = new SimpleStat();
-			TotalEntryExamWaitingTimeWalkInP = new SimpleStat();
+			TotalEntryWaitingTimeAmbulanceP = new SimpleStat();
+			TotalEntryWaitingTimeWalkInP = new SimpleStat();
 
 			TotalMedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
 			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
@@ -77,11 +88,8 @@ namespace Simulation
 			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
 			TotalTimeInSystemWalkInPatient.AddSample(AgentEnviroment.TimeInSystemWalkInPatient.GetAverage());
 
-			TotalEntranceWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
-			TotalEntranceWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
-
-			TotalEntryExamWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntryExamWaitingTimeAmbulanceP.GetAverage());
-			TotalEntryExamWaitingTimeWalkInP.AddSample(AgentEnviroment.EntryExamWaitingTimeWalkInP.GetAverage());
+			TotalEntryWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
+			TotalEntryWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
 
 			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
 			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());

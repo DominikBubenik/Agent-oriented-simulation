@@ -64,12 +64,15 @@ namespace Agents.AgentEDepartment
 				initiateEntryExam.Code = Mc.EntryExamResources;
 				Request(initiateEntryExam);
 			}
-			
-			var initiateMTResources = new MyMessage(MySim);
-			initiateMTResources.Patient = patient;
-			initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
-			initiateMTResources.Code = Mc.MedicalTreatResources;
-			Request(initiateMTResources);
+		
+			if (!MyAgent.MedicalTreatQueueA.IsEmpty() || !MyAgent.MedicalTreatQueueB.IsEmpty())
+			{
+				var initiateMTResources = new MyMessage(MySim);
+				initiateMTResources.Patient = patient;
+				initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
+				initiateMTResources.Code = Mc.MedicalTreatResources;
+				Request(initiateMTResources);	
+			}
 		}
 
 		//meta! sender="AgentResources", id="44", type="Response"

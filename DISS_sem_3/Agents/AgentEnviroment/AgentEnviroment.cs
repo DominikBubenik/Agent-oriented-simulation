@@ -16,9 +16,6 @@ namespace Agents.AgentEnviroment
 		public SimpleStat EntranceWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat EntranceWaitingTimeWalkInP { get; private set; }
 
-		public SimpleStat EntryExamWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat EntryExamWaitingTimeWalkInP { get; private set; }
-
 		public SimpleStat MedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat MedicalTreatWaitingTimeWalkInP { get; private set; }
 
@@ -40,9 +37,6 @@ namespace Agents.AgentEnviroment
 
 			EntranceWaitingTimeAmbulanceP = new SimpleStat();
 			EntranceWaitingTimeWalkInP = new SimpleStat();
-
-			EntryExamWaitingTimeAmbulanceP = new SimpleStat();
-			EntryExamWaitingTimeWalkInP = new SimpleStat();
 
 			MedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
 			MedicalTreatWaitingTimeWalkInP = new SimpleStat();
