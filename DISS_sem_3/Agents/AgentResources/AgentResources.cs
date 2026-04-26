@@ -8,7 +8,8 @@ namespace Agents.AgentResources
 	//meta! id="34"
 	public class AgentResources : OSPABA.Agent
 	{
-		public List<Doctor>  Doctors { get; set; }
+		public List<Doctor> Doctors { get; set; }
+		public List<Doctor> AllDoctors { get; set; }
 		public List<Nurse> Nurses { get; set; }
 		public List<Nurse> AllNurses { get; set; }
 		public List<Room> FreeRoomsTypeA { get; set; }
@@ -27,9 +28,12 @@ namespace Agents.AgentResources
 			base.PrepareReplication();
 			// Setup component for the next replication
 			Doctors = new List<Doctor>();
+			AllDoctors = new List<Doctor>();
 			for (int i = 0; i < MyCastSim().InitDoctorCount; i++)
 			{
-				Doctors.Add(new Doctor(i, MySim));
+				var doctor = new Doctor(i, MySim); 
+				Doctors.Add(doctor);
+				AllDoctors.Add(doctor);
 			}
 
 			Nurses = new List<Nurse>();

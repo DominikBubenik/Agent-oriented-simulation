@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentMedicalTeat;
+using DISS_sem_3.Entities;
 
 namespace Agents.AgentMedicalTeat.ContinualAssistants
 {
@@ -25,6 +26,8 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 			myMsg.Room.Nurse = myMsg.Nurse;
 			myMsg.Room.Patient = myMsg.Patient;
 			myMsg.Room.Doctor = myMsg.Doctor;
+			myMsg.Nurse.Activity = StaffActivity.Working;
+			myMsg.Doctor.Activity = StaffActivity.Working;
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -39,6 +42,8 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
 					myMsg.Addressee = MyAgent;
+					myMsg.Nurse.Activity = StaffActivity.Not_Working;
+					myMsg.Doctor.Activity = StaffActivity.Not_Working;
 					AssistantFinished(myMsg);
 					break;
 			}

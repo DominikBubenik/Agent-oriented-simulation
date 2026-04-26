@@ -14,10 +14,10 @@ public class GlobalLogger
 
     public static string FormatTime(double time, char measurement = 's')
     {
-        return measurement switch
-        {
-            's' => TimeSpan.FromSeconds(time).ToString(@"hh\:mm\:ss"),
-            _ => TimeSpan.FromMinutes(time).ToString(@"hh\:mm\:ss")
-        };
+        var ts = measurement == 's'
+            ? TimeSpan.FromSeconds(time)
+            : TimeSpan.FromMinutes(time);
+
+        return $"{ts.Days} day {ts:hh\\:mm\\:ss}";
     }
 }

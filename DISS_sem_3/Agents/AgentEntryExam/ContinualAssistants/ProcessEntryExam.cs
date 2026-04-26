@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentEntryExam;
+using DISS_sem_3.Entities;
 using MainLogic;
 
 namespace Agents.AgentEntryExam.ContinualAssistants
@@ -24,6 +25,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Room.Nurse = myMsg.Nurse;
+			myMsg.Nurse.Activity = StaffActivity.Working;
 			myMsg.Room.Patient = myMsg.Patient;
 			MyAgent.AssignPriority(myMsg.Patient);
 			
@@ -40,6 +42,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
 					myMsg.Addressee = MyAgent;
+					myMsg.Nurse.Activity = StaffActivity.Not_Working;
 					AssistantFinished(myMsg);
 					break;
 			}

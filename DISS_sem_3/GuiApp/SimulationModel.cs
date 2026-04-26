@@ -40,7 +40,7 @@ public class SimulationModel
             MedicalQueueAvgLengthA = mySim.AgentEDepartment.MedicalTreatQueueA.GetAverageQueueLength(mySim.CurrentTime),
             MedicalTreatQueueB =  mySim.AgentEDepartment.MedicalTreatQueueB.GetAllItems(),
             MedicalQueueAvgLengthB = mySim.AgentEDepartment.MedicalTreatQueueB.GetAverageQueueLength(mySim.CurrentTime),
-            FreeDoctors = mySim.AgentResources.Doctors.ToList(),
+            AllDoctors = mySim.AgentResources.AllDoctors.ToList(),
             AllNurses = mySim.AgentResources.AllNurses.ToList(),
             ARooms = mySim.AgentResources.AllRoomsTypeA.ToList(),
             BRooms = mySim.AgentResources.AllRoomsTypeB.ToList(),

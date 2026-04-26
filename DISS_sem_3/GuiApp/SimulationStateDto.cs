@@ -20,7 +20,7 @@ public class SimulationStateDto
     public double MedicalQueueAvgLengthA { get; set; }
     public List<Patient> MedicalTreatQueueB { get; set; }
     public double MedicalQueueAvgLengthB { get; set; }
-    public List<Doctor> FreeDoctors { get; set; }
+    public List<Doctor> AllDoctors { get; set; }
     public List<Nurse> AllNurses { get; set; }
     public List<Room> ARooms { get; set; }
     public List<Room> BRooms { get; set; }

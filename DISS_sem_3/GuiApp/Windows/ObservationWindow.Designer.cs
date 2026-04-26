@@ -306,19 +306,23 @@ namespace DISS_sem_3
             dgvPassengers.Columns.Add("id", "Patient ID");
             dgvPassengers.Columns.Add("arrival", "Arrival Time");
             dgvPassengers.Columns.Add("priority", "Priority");
-            dgvPassengers.Columns.Add("Aambulance", "Arrived by Ambulance");
+            dgvPassengers.Columns.Add("Aambulance", "Ambulanced");
+            dgvPassengers.Columns["id"].FillWeight = 40;
+            dgvPassengers.Columns["arrival"].FillWeight = 20;
+            dgvPassengers.Columns["priority"].FillWeight = 10;
+            dgvPassengers.Columns["Aambulance"].FillWeight = 10;
             return dgvPassengers;
         }
         
-        public DataGridView CreateNurseListGrid()
+        public DataGridView CreateMedicalStaffListGrid(string header)
         {
             var dgvPassengers = new DataGridView();
-            dgvPassengers.Width = 700;
+            dgvPassengers.Width = 500;
             dgvPassengers.Height = 240;
             dgvPassengers.ReadOnly = true;
             dgvPassengers.AllowUserToAddRows = false;
             dgvPassengers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvPassengers.Columns.Add("id", "Nurse ID");
+            dgvPassengers.Columns.Add("id", header);
             dgvPassengers.Columns.Add("Activity", "Current Activity");
             return dgvPassengers;
         }
@@ -327,7 +331,7 @@ namespace DISS_sem_3
         {
             var dgv = new DataGridView();
             dgv.Width = 700;
-            dgv.Height = 140;
+            dgv.Height = 90;
             dgv.ReadOnly = true;
             dgv.AllowUserToAddRows = false;
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
