@@ -75,7 +75,9 @@ public class TurboController
          }
 
          // Send the complete history to the window
+         _turboWindow?.UpdateStats(st);
          _turboWindow?.UpdateDashboard(st.Replication, _history);
+        
          // xs.Add(st.Replication);
          
         //  // helper to safely extract avg and CI bounds

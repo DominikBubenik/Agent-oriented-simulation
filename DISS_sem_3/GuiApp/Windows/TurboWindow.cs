@@ -52,7 +52,6 @@ public partial class TurboWindow : Form
         }
 
         txtTurboReplication.Text = replication.ToString();
-
         // Efficiently update only the stats we have plots for
         foreach (var mapping in _plotMapping)
         {
