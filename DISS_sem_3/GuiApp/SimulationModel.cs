@@ -26,8 +26,8 @@ public class SimulationModel
     // // public void OnRefreshUI(Simu)
     public void UpdateGui(OSPABA.Simulation Sim)
     {
-        if (DateTime.Now - _lastRefreshTime < _refreshInterval) 
-            return;
+        // if (DateTime.Now - _lastRefreshTime < _refreshInterval) 
+        //     return;
 
         _lastRefreshTime = DateTime.Now;
         var mySim = (MySimulation)Sim;
