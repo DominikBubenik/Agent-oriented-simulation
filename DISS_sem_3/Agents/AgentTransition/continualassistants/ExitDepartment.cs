@@ -21,6 +21,10 @@ namespace Agents.AgentTransition.ContinualAssistants
 		//meta! sender="AgentTransition", id="133", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			var duration = MyAgent.ExitSystemDuration();
+			myMsg.Code = Mc.Finish;
+			Hold(duration, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +32,11 @@ namespace Agents.AgentTransition.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					var myMsg = (MyMessage)message;
+					myMsg.Addressee = MyAgent;
+					AssistantFinished(myMsg);
+					break;
 			}
 		}
 

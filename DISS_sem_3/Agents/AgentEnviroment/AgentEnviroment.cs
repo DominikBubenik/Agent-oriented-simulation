@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentEnviroment.ContinualAssistants;
+using DISS_sem_3.Entities;
 using MainLogic;
 
 namespace Agents.AgentEnviroment
@@ -8,8 +9,9 @@ namespace Agents.AgentEnviroment
 	//meta! id="5"
 	public class AgentEnviroment : OSPABA.Agent
 	{
-		public SimpleStat TimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TimeInSystem { get; private set; }
 		public SimpleStat TimeInSystemWalkInPatient { get; private set; }
+		public SimpleStat TimeInSystemAmbulancePatient { get; private set; }
 
 		public int TreatedPatientsCount { get; set; }
 
@@ -29,9 +31,9 @@ namespace Agents.AgentEnviroment
 		{
 			base.PrepareReplication();
 			// Setup component for the next replication
-
-			TimeInSystemAmbulancePatient = new SimpleStat();
+			TimeInSystem = new SimpleStat();
 			TimeInSystemWalkInPatient = new SimpleStat();
+			TimeInSystemAmbulancePatient = new SimpleStat();
 
 			TreatedPatientsCount = 0;
 
@@ -55,6 +57,21 @@ namespace Agents.AgentEnviroment
 			message.Addressee = FindAssistant(SimId.AmbulancePatient);
 			message.Code = Mc.Start;
 			MyManager.StartContinualAssistant(message);
+		}
+		
+		public void PatientExit(Patient patient)
+		{
+			TimeInSystem.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+			if (patient.ArrivedByAmbulance)
+			{
+				TimeInSystemAmbulancePatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+			}
+			else
+			{
+				TimeInSystemWalkInPatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+			}
+			
+			TreatedPatientsCount++;
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

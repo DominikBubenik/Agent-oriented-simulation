@@ -78,21 +78,22 @@ namespace Simulation
 		{
 			// Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
-		}
 
-		override public void SimulationFinished()
-		{
-			// Display simulation results
-			base.SimulationFinished();
-
-			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
+			TotalTimeInSystem.AddSample(AgentEnviroment.TimeInSystem.GetAverage());
 			TotalTimeInSystemWalkInPatient.AddSample(AgentEnviroment.TimeInSystemWalkInPatient.GetAverage());
+			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
 
 			TotalEntryWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
 			TotalEntryWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
 
 			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
 			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());
+		}
+
+		override public void SimulationFinished()
+		{
+			// Display simulation results
+			base.SimulationFinished();
 
 			Console.WriteLine("Simulation finished");
 		}

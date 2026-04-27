@@ -62,6 +62,7 @@ namespace Agents.AgentTransition
 		{
 			var myMsg =  (MyMessage)message;
 			myMsg.Code = Mc.ExitTransmition;
+			myMsg.Addressee = MyAgent.Parent;
 			Response(myMsg);
 		}
 

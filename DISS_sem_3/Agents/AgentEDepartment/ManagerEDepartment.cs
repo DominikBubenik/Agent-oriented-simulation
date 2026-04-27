@@ -59,7 +59,7 @@ namespace Agents.AgentEDepartment
 			//tu bude najskor medicaltreat a potom bude entry exam znovu
 			if (!MyAgent.EntryQueue.IsEmpty())
 			{
-				var initiateEntryExam = new MyMessage(MySim);
+				var initiateEntryExam = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
 				initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
 				initiateEntryExam.Code = Mc.EntryExamResources;
 				Request(initiateEntryExam);
@@ -67,7 +67,7 @@ namespace Agents.AgentEDepartment
 		
 			if (!MyAgent.MedicalTreatQueueA.IsEmpty() || !MyAgent.MedicalTreatQueueB.IsEmpty())
 			{
-				var initiateMTResources = new MyMessage(MySim);
+				var initiateMTResources = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
 				initiateMTResources.Patient = patient;
 				initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
 				initiateMTResources.Code = Mc.MedicalTreatResources;
@@ -95,7 +95,7 @@ namespace Agents.AgentEDepartment
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
 			
-			var exitMsg = new  MyMessage(MySim);
+			var exitMsg = (MyMessage)myMsg.CreateCopy();
 			exitMsg.Patient = myMsg.Patient;
 			exitMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
 			exitMsg.Code = Mc.ExitTransmition;
