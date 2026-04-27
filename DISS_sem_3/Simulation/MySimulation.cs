@@ -7,7 +7,9 @@ using Agents.AgentMedicalTeat;
 using Agents.AgentTransition;
 using Agents.AgentEDepartment;
 using DISS_sem_3;
+using DISS_sem_3.Entities;
 using MainLogic;
+using OSPAnimator;
 
 namespace Simulation
 {
@@ -31,6 +33,13 @@ namespace Simulation
 		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeWalkInP { get; private set; }
 		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
+		
+		public AnimTextItem SimTimeAnimObject { get; set;}
+		public AnimTextItem ObjednavokAnimObject { get; set; }
+		public AnimTextItem KucharovPracAnimObject { get; set; }
+		public AnimTextItem KucharovNepracAnimObject { get; set; }
+		public AnimTextItem CasnikovPracAnimObject { get; set; }
+		public AnimTextItem CasnikovNepracAnimObject { get; set; }
 
 		public int InitDoctorCount { get; set; } = 5;
 		public int InitNurseCount { get; set; } = 10;
@@ -72,6 +81,8 @@ namespace Simulation
 		{
 			base.PrepareReplication();
 			// Reset entities, queues, local statistics, etc...
+			
+			InitAnimator();
 		}
 
 		override public void ReplicationFinished()
@@ -99,6 +110,40 @@ namespace Simulation
 		}
 
 		public int NextSeed() => Seeder.Next();
+		
+		
+		private void InitAnimator()
+		{
+			if (!AnimatorExists) return;
+
+			UsporiadajSkupinu(AgentResources.AllDoctors.Cast<MedicalStaff>().ToList(), new PointF(107, 1674));
+
+			// Config.Gui.SetSimSpeed();
+		}
+		
+		void UsporiadajSkupinu(List<MedicalStaff> skupina, PointF startPozicia)
+		{
+			int poradie = 0;
+			foreach (MedicalStaff pracovnik in skupina)
+			{
+				PointF pozicia = new PointF(startPozicia.X, startPozicia.Y);
+				pozicia.X = pozicia.X + poradie * 50;
+
+				if (AnimatorExists) pracovnik.AnimObject.SetPosition(pozicia);
+				poradie++;
+			}
+		}
+		
+		// private AnimTextItem CreateTextAnimObject(PointF pos, string text, OSPAnimator. AnimTypeface font, int size)
+		// {
+		// 	AnimTextItem animObject = new AnimTextItem(text);
+		//
+		// 	animObject.Font = (font);
+		// 	animObject.Size = (size);
+		// 	animObject.SetPosition(pos);
+		// 	return animObject;
+		// }
+
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

@@ -22,6 +22,7 @@ namespace DISS_sem_3
         public event EventHandler? OnPauseRequested;
         public event EventHandler? OnStopRequested;
         public event EventHandler? OnRunRequested;
+        public event EventHandler? OnOpenAnimatorRequested;
         public event Action<int>? OnSleepMsChanged;
         public event Action<double>? OnSleepPeriodChanged;
         // Refresh rate event (int 0..1000)
@@ -571,6 +572,11 @@ namespace DISS_sem_3
                 return (int)this.Invoke(new Func<int>(() => GetRefreshRate()));
             }
             try { return trackRefreshRate?.Value ?? 0; } catch { return 0; }
+        }
+
+        private void btnOpenAnimator_Click(object? sender, EventArgs e)
+        {
+            OnOpenAnimatorRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 }

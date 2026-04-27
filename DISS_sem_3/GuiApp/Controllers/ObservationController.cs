@@ -1,4 +1,5 @@
 ﻿using DISS_sem_3;
+using DISS_sem_3.GuiApp.Windows;
 using DISS_SEM_GUI;
 using DISS_SEM_GUI.EventsArguments;
 
@@ -9,6 +10,7 @@ public class ObservationController
     private SimulationModel? _currentModel;
     private StartSimulationArgs? _args;
     private ObservationWindow? _laneWindow;
+    private AnimatorWindow _animatorWindow;
     private volatile bool _isStarted = false;
     
     public void ShowWindow(StartSimulationArgs args)
@@ -19,6 +21,7 @@ public class ObservationController
         
         _laneWindow.OnRunRequested += OnRunRequested;
         _laneWindow.OnPauseRequested += OnPauseRequested;
+        _laneWindow.OnOpenAnimatorRequested += OnOpenAnimatorRequested;
 
         _currentModel.OnRefreshUI += OnObservRefresh;
         
@@ -46,6 +49,21 @@ public class ObservationController
         else
         {
             _currentModel.PauseSimulation();
+        }
+    }
+    
+    private void OnOpenAnimatorRequested(object? sender, EventArgs e)
+    {
+        var animator = _currentModel.CreateAnimator();
+        if (animator != null)
+        {
+            _animatorWindow = new AnimatorWindow();
+            
+            _animatorWindow.Show();
+        }
+        else
+        {
+            throw new Exception("No animator found");
         }
     }
 }

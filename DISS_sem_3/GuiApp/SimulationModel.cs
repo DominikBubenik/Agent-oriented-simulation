@@ -1,4 +1,5 @@
 ﻿using DISS_SEM_GUI.EventsArguments;
+using OSPAnimator;
 using Simulation;
 
 namespace DISS_sem_3;
@@ -31,6 +32,14 @@ public class SimulationModel
         }
         
         _core.SimulateAsync(args.Replications, args.EndSimulationTime);
+    }
+
+    public Animator CreateAnimator()
+    {
+        _core = new MySimulation(0);
+        var animator = new Animator(_core);
+        _core.Animator = animator;
+        return animator;
     }
 
     private void UpdateTurboWindow(OSPABA.Simulation Sim)

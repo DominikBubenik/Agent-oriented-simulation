@@ -15,6 +15,7 @@ namespace DISS_sem_3
         private System.Windows.Forms.FlowLayoutPanel flpLanes;
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnRun;
+        private System.Windows.Forms.Button btnOpenAnimator;
         private System.Windows.Forms.Label lblCurrentTime;
         private System.Windows.Forms.TextBox txtCurrentTime;
 
@@ -63,6 +64,7 @@ namespace DISS_sem_3
             this.flpLanes = new System.Windows.Forms.FlowLayoutPanel();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnRun = new System.Windows.Forms.Button();
+            this.btnOpenAnimator = new System.Windows.Forms.Button();
             this.lblCurrentTime = new System.Windows.Forms.Label();
             this.txtCurrentTime = new System.Windows.Forms.TextBox();
 
@@ -150,6 +152,7 @@ namespace DISS_sem_3
             this.lblSleepPeriodValue.AutoSize = false;
             this.lblSleepPeriodValue.Width = 60; this.lblSleepPeriodValue.Height = 22;
             this.btnRun.Click += new System.EventHandler(this.BtnRun_Click);
+            this.btnOpenAnimator.Click += new System.EventHandler(this.btnOpenAnimator_Click);
 
             //Run button
             this.btnRun.Text = "Run Simulation";
@@ -158,6 +161,14 @@ namespace DISS_sem_3
             this.btnRun.Left = 230; // Position it next to your Stop button
             this.btnRun.Top = 8;
             this.btnRun.BackColor = System.Drawing.Color.LightGreen;
+            
+            //OpenAnimator button
+            this.btnOpenAnimator.Text = "Animator";
+            this.btnOpenAnimator.Width = 100;
+            this.btnOpenAnimator.Height = 30;
+            this.btnOpenAnimator.Left = 400; // Position it next to your Stop button
+            this.btnOpenAnimator.Top = 8;
+            this.btnOpenAnimator.BackColor = System.Drawing.Color.Yellow;
             
             // Add parameter controls to top panel
             this.topPanel.Controls.Add(lblSeed); this.topPanel.Controls.Add(txtSeed);
@@ -281,6 +292,7 @@ namespace DISS_sem_3
             // add top panel and pause + current time within it
             this.topPanel.Controls.Add(this.btnPause);
             this.topPanel.Controls.Add(this.btnRun);
+            this.topPanel.Controls.Add(this.btnOpenAnimator);
             this.topPanel.Controls.Add(btnStop);
             this.topPanel.Controls.Add(this.lblCurrentTime);
             this.topPanel.Controls.Add(this.txtCurrentTime);
