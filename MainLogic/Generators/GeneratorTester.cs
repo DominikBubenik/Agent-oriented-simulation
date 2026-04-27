@@ -67,6 +67,19 @@ public class GeneratorTester
         File.WriteAllLines("exponential_samples.txt", _samplesContinuous.Select(s => s.ToString()));
     }
     
+    public void TestGammaGenerator(int replications)
+    {
+        SeedGenerator = new Random(DateTime.Now.Microsecond);
+        var gammaGen = new GammaGenerator(SeedGenerator.Next(), 7.041, 0.831);
+        for (int i = 0; i < replications; i++)
+        {
+            var sample = gammaGen.Generate();
+            _samplesContinuous.Add(sample);
+        }
+
+        File.WriteAllLines("gamma_samples.txt", _samplesContinuous.Select(s => s.ToString()));
+    }
+    
     public void TestTriangularGenerator(int replications)
     {
         SeedGenerator = new Random(DateTime.Now.Microsecond);

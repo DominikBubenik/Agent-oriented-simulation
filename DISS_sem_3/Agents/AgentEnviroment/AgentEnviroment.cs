@@ -21,10 +21,15 @@ namespace Agents.AgentEnviroment
 		public SimpleStat MedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat MedicalTreatWaitingTimeWalkInP { get; private set; }
 
+		private ExponentionalGenerator _walkInGenerator;
+		private GammaGenerator _ambulanceGenerator;
+
 		public AgentEnviroment(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
 		{
 			Init();
+			_walkInGenerator = new ExponentionalGenerator(MyCastSim().Seeder.Next(), 1.0 / (9.57 * 60));
+			_ambulanceGenerator = new GammaGenerator(MyCastSim().Seeder.Next(), 7.041, (0.831 * 60));
 		}
 
 		override public void PrepareReplication()
@@ -74,6 +79,9 @@ namespace Agents.AgentEnviroment
 			TreatedPatientsCount++;
 		}
 
+		public double GetNextWalkIn() => _walkInGenerator.Generate();
+		public double GetNextAmbulance() => _ambulanceGenerator.Generate();
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()
 		{
@@ -83,5 +91,7 @@ namespace Agents.AgentEnviroment
 			AddOwnMessage(Mc.PatientExit);
 		}
 		//meta! tag="end"
+		
+		private MySimulation MyCastSim() => (MySimulation)MySim;
 	}
 }

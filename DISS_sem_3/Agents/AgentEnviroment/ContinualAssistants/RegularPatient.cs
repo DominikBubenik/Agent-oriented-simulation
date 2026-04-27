@@ -28,7 +28,7 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			var myMsg = (MyMessage)message;
 			myMsg.Code = Mc.Finish;
 			
-			Hold(TOTO_BUDE_NEJAKY_GEN, myMsg);
+			Hold(MyAgent.GetNextWalkIn(), myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -37,7 +37,7 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			switch (message.Code)
 			{
 				case Mc.Finish:
-					Hold(TOTO_BUDE_NEJAKY_GEN, message.CreateCopy());
+					Hold(MyAgent.GetNextWalkIn(), message.CreateCopy());
 					
 					var myMsg = (MyMessage)message;
 					myMsg.Patient = new Patient(patientCounter, MySim, MySim.CurrentTime, false);
