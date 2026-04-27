@@ -54,11 +54,11 @@ public class ObservationController
     
     private void OnOpenAnimatorRequested(object? sender, EventArgs e)
     {
-        var animator = _currentModel.CreateAnimator();
+        var animator = _currentModel.CreateAnimator(_args);
         if (animator != null)
         {
             _animatorWindow = new AnimatorWindow();
-            
+            _animatorWindow.SetAnimator(animator);
             _animatorWindow.Show();
         }
         else

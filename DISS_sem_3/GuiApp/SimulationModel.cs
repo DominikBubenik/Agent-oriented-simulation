@@ -8,7 +8,7 @@ namespace DISS_sem_3;
  */
 public class SimulationModel
 {
-    private MySimulation _core;
+    private MySimulation? _core;
     
     public event Action<SimulationStateDto> OnRefreshUI;
     public event Action<SimulationStatsDto> OnTurboUI;
@@ -17,7 +17,7 @@ public class SimulationModel
 
     public void StartSimulation(StartSimulationArgs args)
     {
-        _core = new MySimulation(args.Seed);
+        _core ??= new MySimulation(args.Seed);
         args.TurboMode = true;
         args.ObservationMode = false;
         if (args.ObservationMode)
@@ -34,11 +34,12 @@ public class SimulationModel
         _core.SimulateAsync(args.Replications, args.EndSimulationTime);
     }
 
-    public Animator CreateAnimator()
+    public Animator CreateAnimator(StartSimulationArgs args)
     {
-        _core = new MySimulation(0);
+        _core ??= new MySimulation(args.Seed);
         var animator = new Animator(_core);
         _core.Animator = animator;
+        animator.SetBackgroundImage(Config.BACKGROUND_IMG);
         return animator;
     }
 
