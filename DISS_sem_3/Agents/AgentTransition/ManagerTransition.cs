@@ -53,7 +53,7 @@ namespace Agents.AgentTransition
 		public void ProcessFinishEntryPatient(MessageForm message)
 		{
 			var myMsg =  (MyMessage)message;
-			myMsg.Code = Mc.EntranceTransmition;
+			myMsg.Code = Mc.EntranceTransition;
 			Response(myMsg);
 		}
 
@@ -61,13 +61,13 @@ namespace Agents.AgentTransition
 		public void ProcessFinishExitDepartment(MessageForm message)
 		{
 			var myMsg =  (MyMessage)message;
-			myMsg.Code = Mc.ExitTransmition;
+			myMsg.Code = Mc.ExitTransition;
 			myMsg.Addressee = MyAgent.Parent;
 			Response(myMsg);
 		}
 
 		//meta! sender="AgentEDepartment", id="136", type="Request"
-		public void ProcessEntranceTransmition(MessageForm message)
+		public void ProcessEntranceTransition(MessageForm message)
 		{
 			var msg = (MyMessage)message;
 			msg.Addressee = MyAgent.FindAssistant(SimId.EntryPatient);
@@ -76,7 +76,7 @@ namespace Agents.AgentTransition
 		}
 
 		//meta! sender="AgentEDepartment", id="138", type="Request"
-		public void ProcessExitTransmition(MessageForm message)
+		public void ProcessExitTransition(MessageForm message)
 		{
 			var msg = (MyMessage)message;
 			msg.Addressee = MyAgent.FindAssistant(SimId.ExitDepartment);
@@ -100,26 +100,26 @@ namespace Agents.AgentTransition
 					ProcessFinishEntryPatient(message);
 				break;
 
-				case SimId.AllRoomTransfer:
-					ProcessFinishAllRoomTransfer(message);
-				break;
-
 				case SimId.ExitDepartment:
 					ProcessFinishExitDepartment(message);
+				break;
+
+				case SimId.AllRoomTransfer:
+					ProcessFinishAllRoomTransfer(message);
 				break;
 				}
 			break;
 
-			case Mc.EntranceTransmition:
-				ProcessEntranceTransmition(message);
-			break;
-
-			case Mc.ExitTransmition:
-				ProcessExitTransmition(message);
-			break;
-
 			case Mc.BetweenAmbulanceTransition:
 				ProcessBetweenAmbulanceTransition(message);
+			break;
+
+			case Mc.ExitTransition:
+				ProcessExitTransition(message);
+			break;
+
+			case Mc.EntranceTransition:
+				ProcessEntranceTransition(message);
 			break;
 
 			default:

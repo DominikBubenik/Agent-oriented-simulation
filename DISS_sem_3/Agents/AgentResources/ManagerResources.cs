@@ -91,16 +91,16 @@ namespace Agents.AgentResources
 		{
 			switch (message.Code)
 			{
+			case Mc.MedicalTreatResources:
+				ProcessMedicalTreatResources(message);
+			break;
+
 			case Mc.EntryExamResources:
 				ProcessEntryExamResources(message);
 			break;
 
 			case Mc.FreeUpResources:
 				ProcessFreeUpResources(message);
-			break;
-
-			case Mc.MedicalTreatResources:
-				ProcessMedicalTreatResources(message);
 			break;
 
 			default:

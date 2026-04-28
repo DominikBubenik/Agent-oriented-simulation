@@ -41,8 +41,8 @@ namespace Agents.AgentEnviroment
 			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
-		//meta! sender="RegularPatient", id="20", type="Finish"
-		public void ProcessFinishRegularPatient(MessageForm message)
+		//meta! sender="WalkInPatient", id="20", type="Finish"
+		public void ProcessFinishWalkInPatient(MessageForm message)
 		{
 			message.Addressee = MyAgent.Parent;
 			message.Code = Mc.PatientArrival;
@@ -69,6 +69,10 @@ namespace Agents.AgentEnviroment
 		{
 			switch (message.Code)
 			{
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
+			break;
+
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -76,14 +80,10 @@ namespace Agents.AgentEnviroment
 					ProcessFinishAmbulancePatient(message);
 				break;
 
-				case SimId.RegularPatient:
-					ProcessFinishRegularPatient(message);
+				case SimId.WalkInPatient:
+					ProcessFinishWalkInPatient(message);
 				break;
 				}
-			break;
-
-			case Mc.PatientExit:
-				ProcessPatientExit(message);
 			break;
 
 			default:

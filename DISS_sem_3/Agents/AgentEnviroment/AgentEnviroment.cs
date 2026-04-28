@@ -56,7 +56,7 @@ namespace Agents.AgentEnviroment
 		private void SchedulePatientArrivals()
 		{
 			var message = new MyMessage(MySim);
-			message.Addressee = FindAssistant(SimId.RegularPatient);
+			message.Addressee = FindAssistant(SimId.WalkInPatient);
 			message.Code = Mc.Start;
 			MyManager.StartContinualAssistant(message);
 			
@@ -90,8 +90,8 @@ namespace Agents.AgentEnviroment
 		private void Init()
 		{
 			new ManagerEnviroment(SimId.ManagerEnviroment, MySim, this);
-			new RegularPatient(SimId.RegularPatient, MySim, this);
 			new AmbulancePatient(SimId.AmbulancePatient, MySim, this);
+			new WalkInPatient(SimId.WalkInPatient, MySim, this);
 			AddOwnMessage(Mc.PatientExit);
 		}
 		//meta! tag="end"

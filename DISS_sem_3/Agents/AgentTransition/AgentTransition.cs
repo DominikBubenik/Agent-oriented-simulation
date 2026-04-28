@@ -1,8 +1,8 @@
 using Agents.AgentTransition.ContinualAssistants;
-using DISS_sem_3.Entities;
-using MainLogic;
 using OSPABA;
 using Simulation;
+using DISS_sem_3.Entities;
+using MainLogic;
 
 namespace Agents.AgentTransition
 {
@@ -41,11 +41,11 @@ namespace Agents.AgentTransition
 		{
 			new ManagerTransition(SimId.ManagerTransition, MySim, this);
 			new ExitDepartment(SimId.ExitDepartment, MySim, this);
-			new AllRoomTransfer(SimId.AllRoomTransfer, MySim, this);
 			new EntryPatient(SimId.EntryPatient, MySim, this);
-			AddOwnMessage(Mc.EntranceTransmition);
-			AddOwnMessage(Mc.ExitTransmition);
+			new AllRoomTransfer(SimId.AllRoomTransfer, MySim, this);
+			AddOwnMessage(Mc.EntranceTransition);
 			AddOwnMessage(Mc.BetweenAmbulanceTransition);
+			AddOwnMessage(Mc.ExitTransition);
 		}
 		//meta! tag="end"
 	

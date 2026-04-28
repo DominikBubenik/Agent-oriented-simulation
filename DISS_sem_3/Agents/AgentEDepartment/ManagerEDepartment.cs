@@ -42,7 +42,7 @@ namespace Agents.AgentEDepartment
 		{
 			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			myMsg.Code = Mc.EntranceTransmition;
+			myMsg.Code = Mc.EntranceTransition;
 			Request(myMsg);
 		}
 		
@@ -98,7 +98,7 @@ namespace Agents.AgentEDepartment
 			var exitMsg = (MyMessage)myMsg.CreateCopy();
 			exitMsg.Patient = myMsg.Patient;
 			exitMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			exitMsg.Code = Mc.ExitTransmition;
+			exitMsg.Code = Mc.ExitTransition;
 			Request(exitMsg);
 		}
 
@@ -128,7 +128,7 @@ namespace Agents.AgentEDepartment
 		}
 
 		//meta! sender="AgentTransition", id="136", type="Response"
-		public void ProcessEntranceTransmition(MessageForm message)
+		public void ProcessEntranceTransition(MessageForm message)
 		{
 			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
 			MyAgent.EnqueuePatientEntry(myMsg.Patient);
@@ -138,7 +138,7 @@ namespace Agents.AgentEDepartment
 		}
 
 		//meta! sender="AgentTransition", id="138", type="Response"
-		public void ProcessExitTransmition(MessageForm message)
+		public void ProcessExitTransition(MessageForm message)
 		{
 			message.Code = Mc.TreatPatient;
 			message.Addressee = MyAgent.Parent;
@@ -154,8 +154,28 @@ namespace Agents.AgentEDepartment
 		{
 			switch (message.Code)
 			{
+			case Mc.BetweenAmbulanceTransition:
+				ProcessBetweenAmbulanceTransition(message);
+			break;
+
 			case Mc.EntryExamResources:
 				ProcessEntryExamResources(message);
+			break;
+
+			case Mc.ExitTransition:
+				ProcessExitTransition(message);
+			break;
+
+			case Mc.EntranceTransition:
+				ProcessEntranceTransition(message);
+			break;
+
+			case Mc.MedicalTreatResources:
+				ProcessMedicalTreatResources(message);
+			break;
+
+			case Mc.EntryExamPatient:
+				ProcessEntryExamPatient(message);
 			break;
 
 			case Mc.TreatPatient:
@@ -164,26 +184,6 @@ namespace Agents.AgentEDepartment
 
 			case Mc.MedicalTreatPatient:
 				ProcessMedicalTreatPatient(message);
-			break;
-
-			case Mc.EntryExamPatient:
-				ProcessEntryExamPatient(message);
-			break;
-
-			case Mc.EntranceTransmition:
-				ProcessEntranceTransmition(message);
-			break;
-
-			case Mc.BetweenAmbulanceTransition:
-				ProcessBetweenAmbulanceTransition(message);
-			break;
-
-			case Mc.MedicalTreatResources:
-				ProcessMedicalTreatResources(message);
-			break;
-
-			case Mc.ExitTransmition:
-				ProcessExitTransmition(message);
 			break;
 
 			default:
