@@ -18,13 +18,13 @@ namespace Agents.AgentMedicalTeat
 
 			var specs = new List<GenSpec>()
 			{
-				new(0.1,10,12),
-				new(0.6,12,14),
-				new(0.3,14,18)
+				new(0.1,10 * 60,12 * 60),
+				new(0.6,12 * 60,14 * 60),
+				new(0.3,14 * 60,18 * 60)
 			};
 			_walkInPatientDuration = new ContinuousGenerator(new Random(MyCastSim().Seeder.Next()), specs);
 			_ambulancedPatientDuration = new ContinuousGenerator(new Random(MyCastSim().Seeder.Next()),
-				[new(1, 15, 30)]);
+				[new(1, 15 * 60, 30 * 60)]);
 		}
 
 		override public void PrepareReplication()

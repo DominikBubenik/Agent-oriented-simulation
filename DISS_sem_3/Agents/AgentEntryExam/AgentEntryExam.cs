@@ -23,11 +23,11 @@ namespace Agents.AgentEntryExam
 			
 			var specsWalkIn = new List<GenSpec>()
 			{
-				new GenSpec(0.6, 3, 5),
-				new GenSpec(0.4, 5, 9)
+				new GenSpec(0.6, 3 * 60, 5 * 60),
+				new GenSpec(0.4, 5 * 60, 9 * 60)
 			};
 			_entryExamWalkInDuration = new ContinuousGenerator(new Random(MyCastSim().NextSeed()), specsWalkIn);
-			_entryAmbulanceInDuration = new DiscreteGenerator(new  Random(MyCastSim().NextSeed()), new (){new (1,4,9)});//9 lebo <4, 8>
+			_entryAmbulanceInDuration = new DiscreteGenerator(new  Random(MyCastSim().NextSeed()), new (){new (1,4 * 60, 481)});//9 lebo <4, 8>
 			_walkInPriority = new Random(MyCastSim().NextSeed());
 			_ambulancePriority = new Random(MyCastSim().NextSeed());
 		}
