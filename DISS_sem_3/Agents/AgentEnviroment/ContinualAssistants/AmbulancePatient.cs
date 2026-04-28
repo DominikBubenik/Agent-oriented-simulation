@@ -8,7 +8,6 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 	//meta! id="17"
 	public class AmbulancePatient : OSPABA.Scheduler
 	{
-		public readonly int TOTO_BUDE_NEJAKY_GEN = 600;
 		private int patientCounter;
 		public AmbulancePatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
@@ -41,6 +40,8 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 					
 					var myMsg = (MyMessage)message;
 					myMsg.Patient = new Patient(patientCounter, MySim, MySim.CurrentTime, true);
+					MyAgent.PatientEntered(myMsg.Patient);
+					myMsg.Patient.PatientStatus = PatientStatus.Entering;
 					myMsg.Addressee = MyAgent;
 					patientCounter++;
 					AssistantFinished(myMsg);

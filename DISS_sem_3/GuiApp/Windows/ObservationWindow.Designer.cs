@@ -319,10 +319,12 @@ namespace DISS_sem_3
             dgvPassengers.Columns.Add("arrival", "Arrival Time");
             dgvPassengers.Columns.Add("priority", "Priority");
             dgvPassengers.Columns.Add("Aambulance", "Ambulanced");
+            dgvPassengers.Columns.Add("Status", "Status");
             dgvPassengers.Columns["id"].FillWeight = 40;
             dgvPassengers.Columns["arrival"].FillWeight = 20;
             dgvPassengers.Columns["priority"].FillWeight = 10;
             dgvPassengers.Columns["Aambulance"].FillWeight = 10;
+            dgvPassengers.Columns["Status"].FillWeight = 30;
             return dgvPassengers;
         }
         

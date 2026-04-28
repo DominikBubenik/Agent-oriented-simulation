@@ -12,6 +12,7 @@ public class Patient : Entity
     public string Name { get; set; }
     public double EntryQueueWaitingTime { get; private set; }
     public double MedicalQueueWaitingTime { get; private set; }
+    public PatientStatus PatientStatus { get; set; }
     public Patient(OSPABA.Simulation mySim, double arrivalTime, bool arrivedByAmbulance) : base(mySim)
     {
         ArrivalTime = arrivalTime;
@@ -19,11 +20,11 @@ public class Patient : Entity
         if (arrivedByAmbulance)
         {
             Priority = 0;
-            Name = "ambulanced-patient-" + Id;
+            Name = "am-patient-" + Id;
         }
         else
         {
-            Name = "walkIn-patient-" + Id;
+            Name = "wa-patient-" + Id;
         }
     }
 
@@ -34,11 +35,11 @@ public class Patient : Entity
         if (arrivedByAmbulance)
         {
             Priority = 0;
-            Name = "ambulanced-patient-" + Id;
+            Name = "am-patient-" + Id;
         }
         else
         {
-            Name = "walkIn-patient-" + Id;
+            Name = "wa-patient-" + Id;
         }
     }
 

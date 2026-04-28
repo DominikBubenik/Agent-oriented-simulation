@@ -14,6 +14,7 @@ namespace Agents.AgentEnviroment
 		public SimpleStat TimeInSystemAmbulancePatient { get; private set; }
 
 		public int TreatedPatientsCount { get; set; }
+		public Dictionary<string, Patient> AllPatientsInSystem { get; private set; }
 
 		public SimpleStat EntranceWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat EntranceWaitingTimeWalkInP { get; private set; }
@@ -47,7 +48,8 @@ namespace Agents.AgentEnviroment
 
 			MedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
 			MedicalTreatWaitingTimeWalkInP = new SimpleStat();
-
+			
+			AllPatientsInSystem = new Dictionary<string, Patient>();
 			SchedulePatientArrivals();
 		}
 
@@ -63,7 +65,9 @@ namespace Agents.AgentEnviroment
 			message.Code = Mc.Start;
 			MyManager.StartContinualAssistant(message);
 		}
-		
+
+		public void PatientEntered(Patient patient) => AllPatientsInSystem.Add(patient.Name, patient);
+
 		public void PatientExit(Patient patient)
 		{
 			TimeInSystem.AddSample(MySim.CurrentTime - patient.ArrivalTime);
@@ -75,7 +79,7 @@ namespace Agents.AgentEnviroment
 			{
 				TimeInSystemWalkInPatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
 			}
-			
+			AllPatientsInSystem.Remove(patient.Name);
 			TreatedPatientsCount++;
 		}
 

@@ -18,6 +18,7 @@ namespace DISS_sem_3
         private Dictionary<int, DataGridView> _roomBGrids = new Dictionary<int, DataGridView>();
         public DataGridView? AllNurses { get; set; }
         public DataGridView? AllDoctors { get; set; }
+        public DataGridView? AllPatients { get; set; }
 
         public event EventHandler? OnPauseRequested;
         public event EventHandler? OnStopRequested;
@@ -243,6 +244,7 @@ namespace DISS_sem_3
             MedicalQueueA = CreatePatientQueueGrid();
             AllNurses = CreateMedicalStaffListGrid("Nurse ID");
             AllDoctors = CreateMedicalStaffListGrid("Doctor ID");
+            AllPatients = CreatePatientQueueGrid();
             // 2. Pre-render Room A Grids
             // Assuming SecurityLanesCount or similar maps to your Room counts
             for (int i = 0; i < 5; i++) 
@@ -313,7 +315,8 @@ namespace DISS_sem_3
                 UpdatePassengersGrid(MedicalQueueB, state.MedicalTreatQueueB);
                 UpdateMedicalStuffsGrid(AllNurses, state.AllNurses.Cast<MedicalStaff>().ToList());
                 UpdateMedicalStuffsGrid(AllDoctors, state.AllDoctors.Cast<MedicalStaff>().ToList());
-        
+                UpdatePassengersGrid(AllPatients, state.AllPatients);
+
                 foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
                 foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
             }
@@ -404,6 +407,7 @@ namespace DISS_sem_3
             MedicalQueueB = CreatePatientQueueGrid();
             AllNurses = CreateMedicalStaffListGrid("Nurse ID");
             AllDoctors = CreateMedicalStaffListGrid("Doctor ID");
+            AllPatients = CreatePatientQueueGrid();
 
             Panel MakeLabeledContainer(string labelText, DataGridView dgv)
             {
@@ -447,6 +451,7 @@ namespace DISS_sem_3
             var pMedicalPatientsB = MakeLabeledContainer("MedicalQueue B", MedicalQueueB);
             var pNurses = MakeLabeledContainer("All Nurses", AllNurses);
             var pDoctors = MakeLabeledContainer("All Doctors", AllDoctors);
+            var pAllPatients = MakeLabeledContainer("All Patients", AllPatients);
 
 
             panel.Controls.Add(pEntryPatients);
@@ -468,6 +473,7 @@ namespace DISS_sem_3
 
             panel.Controls.Add(pNurses);
             panel.Controls.Add(pDoctors);
+            panel.Controls.Add(pAllPatients);
             
             container.Controls.Add(panel);
 
@@ -505,6 +511,7 @@ namespace DISS_sem_3
                 UpdateCellIfChanged(row.Cells[1], GlobalLogger.FormatTime(p.ArrivalTime));
                 UpdateCellIfChanged(row.Cells[2], p.Priority.ToString());
                 UpdateCellIfChanged(row.Cells[3], p.ArrivedByAmbulance.ToString());
+                UpdateCellIfChanged(row.Cells[4], p.PatientStatus.ToString());
             }
         }
         

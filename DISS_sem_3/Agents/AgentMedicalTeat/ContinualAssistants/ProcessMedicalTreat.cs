@@ -28,6 +28,7 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 			myMsg.Room.Doctor = myMsg.Doctor;
 			myMsg.Nurse.Activity = StaffActivity.Working;
 			myMsg.Doctor.Activity = StaffActivity.Working;
+			myMsg.Patient.PatientStatus = PatientStatus.MedicalExam;
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -44,6 +45,7 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 					myMsg.Addressee = MyAgent;
 					myMsg.Nurse.Activity = StaffActivity.Not_Working;
 					myMsg.Doctor.Activity = StaffActivity.Not_Working;
+					myMsg.Patient.PatientStatus = PatientStatus.Exiting;
 					AssistantFinished(myMsg);
 					break;
 			}

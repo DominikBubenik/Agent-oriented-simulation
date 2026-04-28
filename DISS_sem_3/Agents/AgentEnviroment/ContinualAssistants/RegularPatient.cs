@@ -41,6 +41,8 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 					
 					var myMsg = (MyMessage)message;
 					myMsg.Patient = new Patient(patientCounter, MySim, MySim.CurrentTime, false);
+					MyAgent.PatientEntered(myMsg.Patient);
+					myMsg.Patient.PatientStatus = PatientStatus.Entering;
 					myMsg.Addressee = MyAgent;
 					patientCounter++;
 					AssistantFinished(myMsg);
