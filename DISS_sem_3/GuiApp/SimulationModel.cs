@@ -18,8 +18,6 @@ public class SimulationModel
     public void StartSimulation(StartSimulationArgs args)
     {
         _core ??= new MySimulation(args.Seed);
-        args.TurboMode = true;
-        args.ObservationMode = false;
         if (args.ObservationMode)
         {
             _core.SetSimSpeed(1.0, 0.05);

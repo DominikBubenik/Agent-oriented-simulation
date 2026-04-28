@@ -37,6 +37,8 @@ public class TurboController
     {
         if (_args == null || _currentModel == null) return;
         InitBeforeRun();
+        _args.ObservationMode = false;
+        _args.TurboMode = true;
         _currentModel.StartSimulation(_args);
         try { _turboWindow?.SetStatus("Running"); } catch { }
     }

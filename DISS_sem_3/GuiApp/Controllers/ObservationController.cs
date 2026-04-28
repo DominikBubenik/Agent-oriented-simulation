@@ -31,7 +31,7 @@ public class ObservationController
     private void OnRunRequested(object? sender, EventArgs e)
     {
         if (_args == null || _currentModel == null) return;
-
+        _args.ObservationMode = true;
         _currentModel.StartSimulation(_args);
     }
 
