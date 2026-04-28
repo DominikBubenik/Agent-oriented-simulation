@@ -5,8 +5,8 @@ public class StartSimulationArgs(
     int replications,
     bool observationMode,
     double endSimulationTime,
-    int securityLanesCount,
-    int beforeDetectorCount,
+    int nursesCount,
+    int doctorsCount,
     int afterDetectorCount,
     double timeIntervalSeconds,
     int systemCapacity,
@@ -29,10 +29,9 @@ public class StartSimulationArgs(
     public int Seed { get; set; } = seed;
     public int Replications { get; set; } = replications;
     public bool ObservationMode { get; set; } = observationMode;
-    public double EndSimulationTime { get; set; } = endSimulationTime;
-    public int SecurityLanesCount { get; set; } = securityLanesCount;
-    public int BeforeDetectorCount { get; set; } = beforeDetectorCount;
-    public int AfterDetectorCount { get; set; } = afterDetectorCount;
+    public double EndSimulationTime { get; set; } = endSimulationTime; //v hodinach
+    public int NursesCount { get; set; } = nursesCount;
+    public int DoctorsCount { get; set; } = doctorsCount;
     public double TimeIntervalSeconds { get; set; } = timeIntervalSeconds;
     public int SystemCapacity { get; set; } = systemCapacity;
     public int RefreshRate { get; set; } = refreshRate;

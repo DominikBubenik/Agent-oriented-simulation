@@ -72,9 +72,8 @@ namespace DISS_sem_3
                 }
                 catch { txtEndSimulationTime.Text = args.EndSimulationTime.ToString("F2"); }
 
-                txtSecurityLanes.Text = args.SecurityLanesCount.ToString();
-                txtBeforeDetectors.Text = args.BeforeDetectorCount.ToString();
-                txtAfterDetectors.Text = args.AfterDetectorCount.ToString();
+                txtNurses.Text = args.NursesCount.ToString();
+                txtDoctors.Text = args.DoctorsCount.ToString();
             }
             catch
             {
@@ -84,15 +83,7 @@ namespace DISS_sem_3
         
         private void BtnRun_Click(object? sender, EventArgs e)
         {
-            try
-            {
-                if (btnRun != null && !btnRun.IsDisposed)
-                {
-                    btnRun.Enabled = false;
-                    btnRun.Text = "Running...";
-                }
-            }
-            catch { }
+            SetRunRunning(true);
 
             Console.WriteLine("ObservationWindow: Run button clicked");
             CreateLaneTables();
@@ -102,12 +93,7 @@ namespace DISS_sem_3
         
         private void BtnStop_Click(object? sender, EventArgs e)
         {
-            OnStopRequested?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void StopSimulation()
-        {
-            // kept for backward compatibility but not used by designer's Stop button now
+            SetRunRunning(false);
             OnStopRequested?.Invoke(this, EventArgs.Empty);
         }
 

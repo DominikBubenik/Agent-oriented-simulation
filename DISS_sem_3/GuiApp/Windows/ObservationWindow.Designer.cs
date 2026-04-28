@@ -27,18 +27,13 @@ namespace DISS_sem_3
         private System.Windows.Forms.TextBox txtReplications;
         private System.Windows.Forms.Label lblObservation;
         private System.Windows.Forms.TextBox txtObservation;
-        private System.Windows.Forms.Label lblStartSimulationTime;
-        private System.Windows.Forms.TextBox txtStartSimulationTime;
         private System.Windows.Forms.Label lblEndSimulationTime;
         private System.Windows.Forms.TextBox txtEndSimulationTime;
-        private System.Windows.Forms.Label lblSecurityLanes;
-        private System.Windows.Forms.TextBox txtSecurityLanes;
-        private System.Windows.Forms.Label lblBeforeDetectors;
-        private System.Windows.Forms.TextBox txtBeforeDetectors;
-        private System.Windows.Forms.Label lblAfterDetectors;
-        private System.Windows.Forms.TextBox txtAfterDetectors;
-        private System.Windows.Forms.Label lblLambda;
-        private System.Windows.Forms.TextBox txtLambda;
+        private System.Windows.Forms.Label lblNurses;
+        private System.Windows.Forms.TextBox txtNurses;
+        private System.Windows.Forms.Label lblDoctors;
+        private System.Windows.Forms.TextBox txtDoctors;
+        
         // Logger panel at the bottom
         private System.Windows.Forms.Panel panelLog;
         private System.Windows.Forms.DataGridView dgvLog;
@@ -73,12 +68,9 @@ namespace DISS_sem_3
             this.lblSeed = new System.Windows.Forms.Label(); this.txtSeed = new System.Windows.Forms.TextBox();
             this.lblReplications = new System.Windows.Forms.Label(); this.txtReplications = new System.Windows.Forms.TextBox();
             this.lblObservation = new System.Windows.Forms.Label(); this.txtObservation = new System.Windows.Forms.TextBox();
-            this.lblStartSimulationTime = new System.Windows.Forms.Label(); this.txtStartSimulationTime = new System.Windows.Forms.TextBox();
             this.lblEndSimulationTime = new System.Windows.Forms.Label(); this.txtEndSimulationTime = new System.Windows.Forms.TextBox();
-            this.lblSecurityLanes = new System.Windows.Forms.Label(); this.txtSecurityLanes = new System.Windows.Forms.TextBox();
-            this.lblBeforeDetectors = new System.Windows.Forms.Label(); this.txtBeforeDetectors = new System.Windows.Forms.TextBox();
-            this.lblAfterDetectors = new System.Windows.Forms.Label(); this.txtAfterDetectors = new System.Windows.Forms.TextBox();
-            this.lblLambda = new System.Windows.Forms.Label(); this.txtLambda = new System.Windows.Forms.TextBox();
+            this.lblNurses = new System.Windows.Forms.Label(); this.txtNurses = new System.Windows.Forms.TextBox();
+            this.lblDoctors = new System.Windows.Forms.Label(); this.txtDoctors = new System.Windows.Forms.TextBox();
 
             this.SuspendLayout();
             // 
@@ -109,12 +101,9 @@ namespace DISS_sem_3
             ConfigureParam(lblSeed, txtSeed, "Seed:");
             ConfigureParam(lblReplications, txtReplications, "Replications:");
             ConfigureParam(lblObservation, txtObservation, "Observation:");
-            ConfigureParam(lblStartSimulationTime, txtStartSimulationTime, "Start Time:");
             ConfigureParam(lblEndSimulationTime, txtEndSimulationTime, "End Time:");
-            ConfigureParam(lblSecurityLanes, txtSecurityLanes, "Lanes:");
-            ConfigureParam(lblBeforeDetectors, txtBeforeDetectors, "Before Det:");
-            ConfigureParam(lblAfterDetectors, txtAfterDetectors, "After Det:");
-            ConfigureParam(lblLambda, txtLambda, "Lambda:");
+            ConfigureParam(lblNurses, txtNurses, "Lanes:");
+            ConfigureParam(lblDoctors, txtDoctors, "Before Det:");
 
             // Sleep controls: TrackBars and value labels
             this.trackSleepMs = new TrackBar();
@@ -174,12 +163,9 @@ namespace DISS_sem_3
             this.topPanel.Controls.Add(lblSeed); this.topPanel.Controls.Add(txtSeed);
             this.topPanel.Controls.Add(lblReplications); this.topPanel.Controls.Add(txtReplications);
             this.topPanel.Controls.Add(lblObservation); this.topPanel.Controls.Add(txtObservation);
-            this.topPanel.Controls.Add(lblStartSimulationTime); this.topPanel.Controls.Add(txtStartSimulationTime);
             this.topPanel.Controls.Add(lblEndSimulationTime); this.topPanel.Controls.Add(txtEndSimulationTime);
-            this.topPanel.Controls.Add(lblSecurityLanes); this.topPanel.Controls.Add(txtSecurityLanes);
-            this.topPanel.Controls.Add(lblBeforeDetectors); this.topPanel.Controls.Add(txtBeforeDetectors);
-            this.topPanel.Controls.Add(lblAfterDetectors); this.topPanel.Controls.Add(txtAfterDetectors);
-            this.topPanel.Controls.Add(lblLambda); this.topPanel.Controls.Add(txtLambda);
+            this.topPanel.Controls.Add(lblNurses); this.topPanel.Controls.Add(txtNurses);
+            this.topPanel.Controls.Add(lblDoctors); this.topPanel.Controls.Add(txtDoctors);
 
             // Add sleep controls to top panel (labels + trackbars + value labels)
             this.topPanel.Controls.Add(lblSleepMs); this.topPanel.Controls.Add(this.trackSleepMs); this.topPanel.Controls.Add(this.lblSleepMsValue);

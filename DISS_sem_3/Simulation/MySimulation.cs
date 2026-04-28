@@ -116,7 +116,7 @@ namespace Simulation
 		{
 			if (!AnimatorExists) return;
 
-			UsporiadajSkupinu(AgentResources.AllDoctors.Cast<MedicalStaff>().ToList(), new PointF(107, 1674));
+			UsporiadajSkupinu(AgentResources.AllDoctors.Cast<MedicalStaff>().ToList(), Config.BASE_POSITION_DOCTORS);
 
 			// Config.Gui.SetSimSpeed();
 		}

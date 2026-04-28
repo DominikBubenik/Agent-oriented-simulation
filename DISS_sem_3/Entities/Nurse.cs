@@ -1,4 +1,7 @@
-﻿namespace DISS_sem_3.Entities;
+﻿using OSPAnimator;
+using Simulation;
+
+namespace DISS_sem_3.Entities;
 
 public class Nurse : MedicalStaff
 {
@@ -8,6 +11,8 @@ public class Nurse : MedicalStaff
 
     public Nurse(int id, OSPABA.Simulation mySim) : base(id, mySim)
     {
+        AnimObject = new AnimImageItem(Config.NURSE_IMG);
+        if (MySim.AnimatorExists) MySim.Animator.Register(AnimObject);
     }
 
     public override string ToString()

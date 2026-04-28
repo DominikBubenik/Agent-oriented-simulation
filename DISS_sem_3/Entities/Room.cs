@@ -10,6 +10,7 @@ public class Room : Entity
     public Patient? Patient { get; set; }
     public Nurse? Nurse { get; set; }
     public Doctor? Doctor { get; set; }
+    public PointF[] PathFreeDoctorToRoom { get; set; } = new PointF[] { };
     public Room(OSPABA.Simulation mySim, char type) : base(mySim)
     {
         Type = type;

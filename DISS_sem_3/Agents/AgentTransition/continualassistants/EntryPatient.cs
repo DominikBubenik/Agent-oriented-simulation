@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentTransition;
+using DISS_sem_3.Entities;
 using MainLogic;
 
 namespace Agents.AgentTransition.ContinualAssistants
@@ -25,6 +26,15 @@ namespace Agents.AgentTransition.ContinualAssistants
 			var myMsg = (MyMessage)message;
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.EntranceAmbulancePatientDuration() : MyAgent.EntranceWalkInPatientDuration();
 			myMsg.Code = Mc.Finish;
+			if (myMsg.Patient != null)
+			{
+				myMsg.Patient.PatientStatus = PatientStatus.Entering;
+				if (MySim.AnimatorExists)
+				{
+					var config = myMsg.Patient.ArrivedByAmbulance ? Config.PATH_AMBULANCE_ENTRY_TO_QUEUE : Config.PATH_WALK_IN_ENTRY_TO_QUEUE;
+					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
+				}
+			}
 			Hold(duration, myMsg);
 		}
 

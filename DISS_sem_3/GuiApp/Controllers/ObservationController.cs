@@ -22,10 +22,17 @@ public class ObservationController
         _laneWindow.OnRunRequested += OnRunRequested;
         _laneWindow.OnPauseRequested += OnPauseRequested;
         _laneWindow.OnOpenAnimatorRequested += OnOpenAnimatorRequested;
+        _laneWindow.OnStopRequested += OnStopRequested;
 
         _currentModel.OnRefreshUI += OnObservRefresh;
         
         _laneWindow.Show();
+    }
+
+    private void OnStopRequested(object? sender, EventArgs e)
+    {
+        if (_currentModel == null) return;
+        _currentModel.StopSimulation();
     }
 
     private void OnRunRequested(object? sender, EventArgs e)

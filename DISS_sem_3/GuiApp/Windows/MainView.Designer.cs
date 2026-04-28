@@ -22,7 +22,7 @@
         private System.Windows.Forms.Label lblReplications = null!;
         private System.Windows.Forms.TextBox txtReplications = null!;
         private System.Windows.Forms.Label lblSystemCapacity = null!;
-        private System.Windows.Forms.TextBox txtSystemCapacity = null!;
+        private System.Windows.Forms.ComboBox cmbSystemCapacity = null!;
         private System.Windows.Forms.CheckBox chkObservationMode = null!;
         private System.Windows.Forms.Label lblEndTime = null!;
         private System.Windows.Forms.TextBox txtEndTime = null!;
@@ -30,12 +30,10 @@
         private System.Windows.Forms.TextBox txtTimeInterval = null!;
         private System.Windows.Forms.Label lblCurrentTime = null!;
         private System.Windows.Forms.TextBox txtCurrentTime = null!;
-        private System.Windows.Forms.Label lblSecurityLanes = null!;
-        private System.Windows.Forms.TextBox txtSecurityLanes = null!;
-        private System.Windows.Forms.Label lblBeforeDetectors = null!;
-        private System.Windows.Forms.TextBox txtBeforeDetectors = null!;
-        private System.Windows.Forms.Label lblAfterDetectors = null!;
-        private System.Windows.Forms.TextBox txtAfterDetectors = null!;
+        private System.Windows.Forms.Label lblNurses = null!;
+        private System.Windows.Forms.TextBox txtNurses = null!;
+        private System.Windows.Forms.Label lblDoctors = null!;
+        private System.Windows.Forms.TextBox txtDoctors = null!;
         // Sensitivity controls
          private System.Windows.Forms.GroupBox grpSensitivity = null!;
          private System.Windows.Forms.Label lblSensCapacity = null!;
@@ -133,7 +131,7 @@
     // INIT CONTROLS
     lblSeed = new Label(); txtSeed = new TextBox();
     lblReplications = new Label(); txtReplications = new TextBox();
-    lblSystemCapacity = new Label(); txtSystemCapacity = new TextBox();
+    lblSystemCapacity = new Label(); cmbSystemCapacity = new ComboBox();
     chkObservationMode = new CheckBox();
     chkObservationMode.Checked = true;
 
@@ -142,9 +140,8 @@
     lblCurrentTime = new Label(); txtCurrentTime = new TextBox();
 
     // Initialize resource inputs (were declared earlier)
-    lblSecurityLanes = new Label(); txtSecurityLanes = new TextBox();
-    lblBeforeDetectors = new Label(); txtBeforeDetectors = new TextBox();
-    lblAfterDetectors = new Label(); txtAfterDetectors = new TextBox();
+    lblNurses = new Label(); txtNurses = new TextBox();
+    lblDoctors = new Label(); txtDoctors = new TextBox();
 
     // Sensibility init
     grpSensitivity = new GroupBox();
@@ -277,7 +274,18 @@
 
     StyleInput(lblSeed, txtSeed, "Seed", "12345");
     StyleInput(lblReplications, txtReplications, "Replications", "1000");
-    StyleInput(lblSystemCapacity, txtSystemCapacity, "System Capacity", "5760");
+    lblSystemCapacity.Text = "Experiment Variant";
+    lblSystemCapacity.AutoSize = false;
+    lblSystemCapacity.Width = 260;
+    lblSystemCapacity.TextAlign = ContentAlignment.MiddleLeft;
+    lblSystemCapacity.Anchor = AnchorStyles.Left;
+    lblSystemCapacity.Margin = new Padding(5);
+
+    cmbSystemCapacity.Width = 250;
+    cmbSystemCapacity.Anchor = AnchorStyles.Left;
+    cmbSystemCapacity.Margin = new Padding(5);
+    cmbSystemCapacity.DropDownStyle = ComboBoxStyle.DropDownList;
+    
     chkObservationMode.Text = "Observation";
 
     // Put seed textbox and random checkbox next to each other
@@ -291,7 +299,7 @@
     simTable.Controls.Add(lblReplications, 0, 1);
     simTable.Controls.Add(txtReplications, 1, 1);
     simTable.Controls.Add(lblSystemCapacity, 0, 2);
-    simTable.Controls.Add(txtSystemCapacity, 1, 2);
+    simTable.Controls.Add(cmbSystemCapacity, 1, 2);
     simTable.Controls.Add(chkObservationMode, 1, 3);
 
     grpSimulation.Controls.Add(simTable);
@@ -330,16 +338,13 @@
 
     SetupTable(resTable);
 
-    StyleInput(lblSecurityLanes, txtSecurityLanes, "Lanes", "2");
-    StyleInput(lblBeforeDetectors, txtBeforeDetectors, "Before Det.", "4");
-    StyleInput(lblAfterDetectors, txtAfterDetectors, "After Det.", "5");
+    StyleInput(lblNurses, txtNurses, "Nurses", "10");
+    StyleInput(lblDoctors, txtDoctors, "Doctors", "5");
 
-    resTable.Controls.Add(lblSecurityLanes, 0, 0);
-    resTable.Controls.Add(txtSecurityLanes, 1, 0);
-    resTable.Controls.Add(lblBeforeDetectors, 0, 1);
-    resTable.Controls.Add(txtBeforeDetectors, 1, 1);
-    resTable.Controls.Add(lblAfterDetectors, 0, 2);
-    resTable.Controls.Add(txtAfterDetectors, 1, 2);
+    resTable.Controls.Add(lblNurses, 0, 0);
+    resTable.Controls.Add(txtNurses, 1, 0);
+    resTable.Controls.Add(lblDoctors, 0, 1);
+    resTable.Controls.Add(txtDoctors, 1, 1);
 
     grpResources.Controls.Add(resTable);
 

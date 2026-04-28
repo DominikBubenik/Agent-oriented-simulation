@@ -112,6 +112,7 @@ public class SimulationModel
     public void StopSimulation()
     {
         _core.StopSimulation();
+        _core = null;
     }
     
     public bool IsPaused()

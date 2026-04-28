@@ -155,11 +155,11 @@ public partial class MainView : Form
         int replications = 1;
         bool observation;
         double startTime = 0;
-        double endTime = 600;
-        int lanes = 3;
-        int before = 2;
+        double endTime = 627;
+        int nursesCount = 3;
+        int doctorsCount = 2;
         int after = 2;
-        int systemCapacity = 1000;
+        int experimentVariant = 1000;
         double lambda = 0.08;
         double intervalSeconds = 0;
         int warmUp = 15000; // default warm-up in milliseconds (or whatever unit the simulation expects)
@@ -219,14 +219,15 @@ public partial class MainView : Form
             // }
         }
 
-        if (!string.IsNullOrWhiteSpace(txtSecurityLanes.Text) && int.TryParse(txtSecurityLanes.Text, out var lVal))
-            lanes = lVal;
-        if (!string.IsNullOrWhiteSpace(txtBeforeDetectors.Text) && int.TryParse(txtBeforeDetectors.Text, out var bVal))
-            before = bVal;
-        if (!string.IsNullOrWhiteSpace(txtAfterDetectors.Text) && int.TryParse(txtAfterDetectors.Text, out var aVal))
-            after = aVal;
-        if (!string.IsNullOrWhiteSpace(txtSystemCapacity.Text) && int.TryParse(txtSystemCapacity.Text, out var capVal))
-            systemCapacity = capVal;
+        if (!string.IsNullOrWhiteSpace(txtNurses.Text) && int.TryParse(txtNurses.Text, out var lVal))
+            nursesCount = lVal;
+        if (!string.IsNullOrWhiteSpace(txtDoctors.Text) && int.TryParse(txtDoctors.Text, out var bVal))
+            doctorsCount = bVal;
+        if (cmbSystemCapacity.SelectedItem != null &&
+            int.TryParse(cmbSystemCapacity.SelectedItem.ToString(), out var capVal))
+        {
+            experimentVariant = capVal;
+        }
 
         // Read warmUp from UI if provided
         if (!string.IsNullOrWhiteSpace(txtWarmUp?.Text) && int.TryParse(txtWarmUp.Text, out var wu))
@@ -278,11 +279,11 @@ public partial class MainView : Form
             replications: replications,
             observationMode: observation,
             endSimulationTime: endTime,
-            securityLanesCount: lanes,
-            beforeDetectorCount: before,
+            nursesCount: nursesCount,
+            doctorsCount: doctorsCount,
             afterDetectorCount: after,
             timeIntervalSeconds: intervalSeconds,
-            systemCapacity: systemCapacity,
+            systemCapacity: experimentVariant,
             refreshRate: refreshRate,
             warmUpProof: chkWarmUpProof.Checked,
             warmUp: warmUp,
