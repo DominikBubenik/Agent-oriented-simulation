@@ -99,27 +99,6 @@ namespace DISS_sem_3
             OnStopRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        // //Kod vytvoreny s pomocou AI, zdokumentovane v kapitole 10
-        // public void SetSleepControls(int sleepMs, double sleepPeriodSeconds)
-        // {
-        //     if (this.InvokeRequired)
-        //     {
-        //         this.Invoke(() => SetSleepControls(sleepMs, sleepPeriodSeconds));
-        //         return;
-        //     }
-        //
-        //     // trackSleepMs expects milliseconds directly
-        //     trackInterval.Minimum = Math.Min(trackInterval.Minimum, sleepMs);
-        //     trackInterval.Value = Math.Clamp(sleepMs, trackInterval.Minimum, trackInterval.Maximum);
-        //     lblIntervalValue.Text = trackInterval.Value.ToString();
-        //
-        //     // trackSleepPeriodSec stores centiseconds (0.01s) — convert seconds to centiseconds
-        //     int csPeriod = (int)Math.Round(sleepPeriodSeconds * 100.0);
-        //     trackDuration.Minimum = Math.Min(trackDuration.Minimum, csPeriod);
-        //     trackDuration.Value = Math.Clamp(csPeriod, trackDuration.Minimum, trackDuration.Maximum);
-        //     lblDurationValue.Text = (trackDuration.Value / 100.0).ToString("F2");
-        // }
-
         // Controller can call this to toggle the Run button state and label (thread-safe)
         public void SetRunRunning(bool running)
         {
@@ -154,8 +133,35 @@ namespace DISS_sem_3
 
         private void LaneWindow_FormClosing(object? sender, FormClosingEventArgs e)
         {
-            // Notify listeners that the window is being closed so simulation can be stopped if desired
-            // OnWindowClosed?.Invoke(this, EventArgs.Empty);
+            OnPauseRequested = null;
+            OnStopRequested = null;
+            OnRunRequested = null;
+            OnOpenAnimatorRequested = null;
+            OnSleepMsChanged = null;
+            OnSleepPeriodChanged = null;
+            OnRefreshRateChanged = null;
+            OnChangeSpeed = null;
+
+            trackInterval.ValueChanged -= TrackInterval_ValueChanged;
+            trackDuration.ValueChanged -= TrackDuration_ValueChanged;
+
+            btnPause.Click -= BtnPause_Click;
+            btnRun.Click -= BtnRun_Click;
+            btnOpenAnimator.Click -= btnOpenAnimator_Click;
+
+            flpLanes.Controls.Clear();
+
+            _roomAGrids.Clear();
+            _roomBGrids.Clear();
+
+            EntryQueue = null;
+            MedicalQueueA = null;
+            MedicalQueueB = null;
+            AllNurses = null;
+            AllDoctors = null;
+            AllPatients = null;
+            
+            dgvLog?.Rows.Clear();
         }
 
         // Controller will manage the paused state; this setter allows controller to update the UI
@@ -262,6 +268,15 @@ namespace DISS_sem_3
 
         public void RefreshView(SimulationStateDto state)
         {
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             if (this.InvokeRequired)
             {
                 this.Invoke(() => RefreshView(state));
@@ -523,16 +538,6 @@ namespace DISS_sem_3
                 return (int)this.Invoke(new Func<int>(() => GetSleepMs()));
             }
             try { return trackInterval?.Value ?? 100; } catch { return 100; }
-        }
-
-        // trackSleepPeriodSec stores centiseconds (0.01s) — convert to seconds
-        public double GetSleepPeriodSeconds()
-        {
-            if (this.InvokeRequired)
-            {
-                return (double)this.Invoke(new Func<double>(() => GetSleepPeriodSeconds()));
-            }
-            try { return (trackDuration?.Value ?? 80) / 100.0; } catch { return 0.8; }
         }
 
         private void btnOpenAnimator_Click(object? sender, EventArgs e)

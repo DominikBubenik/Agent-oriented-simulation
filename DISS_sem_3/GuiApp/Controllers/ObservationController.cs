@@ -26,6 +26,7 @@ public class ObservationController
         _observWindow.OnChangeSpeed += OnChangeSpeed;
         _currentModel.OnRefreshUI += OnObservRefresh;
         
+        _observWindow.FormClosed += OnWindowClosed;
         _observWindow.Show();
     }
 
@@ -44,7 +45,14 @@ public class ObservationController
 
     private void OnObservRefresh(SimulationStateDto state)
     {
-        _observWindow?.RefreshView(state);
+        if (_observWindow == null || _observWindow.IsDisposed) return;
+        try
+        {
+            _observWindow?.RefreshView(state);
+        }
+        catch 
+        {
+        }
     }
 
     private void OnPauseRequested(object? sender, EventArgs e)
@@ -77,5 +85,35 @@ public class ObservationController
     private void OnChangeSpeed(double interval, double duration)
     {
         _currentModel.SetSimulationSpeed(interval, duration);
+    }
+    
+    private void OnWindowClosed(object? sender, FormClosedEventArgs e)
+    {
+        try
+        {
+            _currentModel?.StopSimulation();
+            if (_currentModel != null)
+            {
+                _currentModel.OnRefreshUI -= OnObservRefresh;
+            }
+            if (_observWindow != null)
+            {
+                _observWindow.OnRunRequested -= OnRunRequested;
+                _observWindow.OnPauseRequested -= OnPauseRequested;
+                _observWindow.OnOpenAnimatorRequested -= OnOpenAnimatorRequested;
+                _observWindow.OnStopRequested -= OnStopRequested;
+                _observWindow.OnChangeSpeed -= OnChangeSpeed;
+
+                _observWindow.FormClosed -= OnWindowClosed;
+            }
+            
+            _observWindow = null;
+            _currentModel = null;
+            _args = null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Controller cleanup failed: " + ex.Message);
+        }
     }
 }
