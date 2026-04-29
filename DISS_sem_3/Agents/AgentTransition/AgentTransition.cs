@@ -40,8 +40,8 @@ namespace Agents.AgentTransition
 		private void Init()
 		{
 			new ManagerTransition(SimId.ManagerTransition, MySim, this);
-			new ExitDepartment(SimId.ExitDepartment, MySim, this);
 			new EntryPatient(SimId.EntryPatient, MySim, this);
+			new ExitDepartment(SimId.ExitDepartment, MySim, this);
 			new AllRoomTransfer(SimId.AllRoomTransfer, MySim, this);
 			AddOwnMessage(Mc.EntranceTransition);
 			AddOwnMessage(Mc.BetweenAmbulanceTransition);

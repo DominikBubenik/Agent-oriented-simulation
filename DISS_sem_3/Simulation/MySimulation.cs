@@ -1,5 +1,5 @@
-using Agents.AgentResources;
 using Agents.AgentBoss;
+using Agents.AgentResources;
 using OSPABA;
 using Agents.AgentEntryExam;
 using Agents.AgentEnviroment;

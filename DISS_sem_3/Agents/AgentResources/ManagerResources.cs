@@ -32,8 +32,8 @@ namespace Agents.AgentResources
 			MyAgent.FreeUpResources(myMsg);
 		}
 
-		//meta! sender="AgentEDepartment", id="49", type="Request"
-		public void ProcessMedicalTreatResources(MessageForm message)
+		//meta! sender="AgentEDepartment", id="49", type="Notice"
+		public void ProcessGetMedicalTreatResources(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
 
@@ -44,8 +44,9 @@ namespace Agents.AgentResources
 			((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(myMsg);
 			if (myMsg.Nurse != null && myMsg.Room != null && myMsg.Doctor != null)
 			{
-				myMsg.Code = Mc.MedicalTreatResources;
-				Response(myMsg);
+				myMsg.Code = Mc.SendMedicalTreatResources;
+				myMsg.Addressee = MyAgent.Parent;
+				Notice(myMsg);
 			}
 			else
 			{
@@ -53,8 +54,8 @@ namespace Agents.AgentResources
 			}
 		}
 
-		//meta! sender="AgentEDepartment", id="44", type="Request"
-		public void ProcessEntryExamResources(MessageForm message)
+		//meta! sender="AgentEDepartment", id="44", type="Notice"
+		public void ProcessGetEntryExamResources(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
 
@@ -65,8 +66,9 @@ namespace Agents.AgentResources
 			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);
 			if (myMsg.Nurse != null && myMsg.Room != null)
 			{
-				myMsg.Code = Mc.EntryExamResources;
-				Response(myMsg);
+				myMsg.Code = Mc.SendEntryExamResources;
+				myMsg.Addressee = MyAgent.Parent;
+				Notice(myMsg);
 			}
 			else
 			{
@@ -91,12 +93,12 @@ namespace Agents.AgentResources
 		{
 			switch (message.Code)
 			{
-			case Mc.MedicalTreatResources:
-				ProcessMedicalTreatResources(message);
+			case Mc.GetMedicalTreatResources:
+				ProcessGetMedicalTreatResources(message);
 			break;
 
-			case Mc.EntryExamResources:
-				ProcessEntryExamResources(message);
+			case Mc.GetEntryExamResources:
+				ProcessGetEntryExamResources(message);
 			break;
 
 			case Mc.FreeUpResources:

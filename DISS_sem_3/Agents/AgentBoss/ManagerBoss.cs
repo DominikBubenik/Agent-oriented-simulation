@@ -28,15 +28,13 @@ namespace Agents.AgentBoss
 		{
 			message.Code = Mc.TreatPatient;
 			message.Addressee = MySimInstance.FindAgent(SimId.AgentEDepartment);
-			Request(message);
+			Notice(message);
 		}
 
-		//meta! sender="AgentEDepartment", id="23", type="Response"
+		//meta! userInfo="Removed from model"
 		public void ProcessTreatPatient(MessageForm message)
 		{
-			message.Code = Mc.PatientExit;
-			message.Addressee = MySimInstance.YellowPages.FindFirstAgent(Mc.PatientExit);
-			Notice(message);
+			
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -45,6 +43,14 @@ namespace Agents.AgentBoss
 			switch (message.Code)
 			{
 			}
+		}
+
+		//meta! sender="AgentEDepartment", id="179", type="Notice"
+		public void ProcessPatientTreated(MessageForm message)
+		{
+			message.Code = Mc.PatientExit;
+			message.Addressee = MySimInstance.YellowPages.FindFirstAgent(Mc.PatientExit);
+			Notice(message);
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -60,8 +66,8 @@ namespace Agents.AgentBoss
 				ProcessPatientArrival(message);
 			break;
 
-			case Mc.TreatPatient:
-				ProcessTreatPatient(message);
+			case Mc.PatientTreated:
+				ProcessPatientTreated(message);
 			break;
 
 			default:

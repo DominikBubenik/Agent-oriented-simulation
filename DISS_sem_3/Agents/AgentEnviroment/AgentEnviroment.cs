@@ -90,8 +90,8 @@ namespace Agents.AgentEnviroment
 		private void Init()
 		{
 			new ManagerEnviroment(SimId.ManagerEnviroment, MySim, this);
-			new AmbulancePatient(SimId.AmbulancePatient, MySim, this);
 			new WalkInPatient(SimId.WalkInPatient, MySim, this);
+			new AmbulancePatient(SimId.AmbulancePatient, MySim, this);
 			AddOwnMessage(Mc.PatientExit);
 		}
 		//meta! tag="end"

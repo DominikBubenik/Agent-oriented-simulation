@@ -105,8 +105,8 @@ namespace Agents.AgentResources
 			new AllocateMedicalTreatRes(SimId.AllocateMedicalTreatRes, MySim, this);
 			new AllocateEntryExamRes(SimId.AllocateEntryExamRes, MySim, this);
 			AddOwnMessage(Mc.FreeUpResources);
-			AddOwnMessage(Mc.MedicalTreatResources);
-			AddOwnMessage(Mc.EntryExamResources);
+			AddOwnMessage(Mc.GetMedicalTreatResources);
+			AddOwnMessage(Mc.GetEntryExamResources);
 		}
 		//meta! tag="end"
 	}
