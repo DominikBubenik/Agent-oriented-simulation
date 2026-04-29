@@ -55,24 +55,23 @@ namespace Agents.AgentEDepartment
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
-
+			//TODO premyslet
+			var initiateMTResources = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
+			initiateMTResources.Patient = patient;
+			initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
+			initiateMTResources.Code = Mc.MedicalTreatResources;
+			Request(initiateMTResources);
+			
 			//tu bude najskor medicaltreat a potom bude entry exam znovu
-			if (!MyAgent.EntryQueue.IsEmpty())
-			{
-				var initiateEntryExam = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
-				initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
-				initiateEntryExam.Code = Mc.EntryExamResources;
-				Request(initiateEntryExam);
-			}
+			// if (!MyAgent.EntryQueue.IsEmpty())
+			// {
+			// 	var initiateEntryExam = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
+			// 	initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
+			// 	initiateEntryExam.Code = Mc.EntryExamResources;
+			// 	Request(initiateEntryExam);
+			// }
 		
-			if (!MyAgent.MedicalTreatQueueA.IsEmpty() || !MyAgent.MedicalTreatQueueB.IsEmpty())
-			{
-				var initiateMTResources = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
-				initiateMTResources.Patient = patient;
-				initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
-				initiateMTResources.Code = Mc.MedicalTreatResources;
-				Request(initiateMTResources);	
-			}
+			
 		}
 
 		//meta! sender="AgentResources", id="44", type="Response"
