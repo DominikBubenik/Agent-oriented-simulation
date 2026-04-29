@@ -24,6 +24,18 @@ namespace Agents.AgentTransition.ContinualAssistants
 			var myMsg = (MyMessage)message;
 			var duration = MyAgent.ExitSystemDuration();
 			myMsg.Code = Mc.Finish;
+			PointF[] config;
+			if (myMsg.Room != null)
+			{
+				var id = myMsg.Room.Id;
+				config = myMsg.Room.IsTypeA() ? Config.PATH_ROOM_A_EXIT[id] : Config.PATH_ROOM_B_EXIT[id];
+			}
+			else
+			{
+				config = new[]
+					{ myMsg.Patient.AnimObject.GetPosition(MySim.CurrentTime), Config.EXIT_ENTRANCE_POSITION };
+			}
+			myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
 			Hold(duration, myMsg);
 		}
 

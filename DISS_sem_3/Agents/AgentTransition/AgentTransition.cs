@@ -50,5 +50,19 @@ namespace Agents.AgentTransition
 		//meta! tag="end"
 	
 		private MySimulation MyCastSim() => (MySimulation)MySim;
+
+		public PointF[][] GetConfigForPatientTransfer(Room? room, Patient patient)
+		{
+			if (room == null) throw new Exception("Room is null");
+			if (patient.Priority < 3)
+			{
+				return Config.PATH_MEDICAL_A_QUEUE_TO_ROOM_A;
+			} 
+			if (patient.Priority < 5 && room.IsTypeA())
+			{
+				return Config.PATH_MEDICAL_B_QUEUE_TO_ROOM_A;
+			}
+			return Config.PATH_MEDICAL_B_QUEUE_TO_ROOM_B;
+		}
 	}
 }

@@ -21,6 +21,8 @@ public class Room : Entity
         Type = type;
     }
 
+    public bool IsTypeA() => Type == 'A';
+
     public override string ToString()
     {
         return "ID: " + Id + " Type: " + Type + " OccupancyTime: " + OccupancyTime + "Patient " + Patient?.ToString() + " Nurse " + Nurse?.ToString() + " Doctor " + Doctor?.ToString() ;

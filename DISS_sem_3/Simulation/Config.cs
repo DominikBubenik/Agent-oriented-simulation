@@ -29,13 +29,16 @@ public class Config
     public static readonly PointF AMBULANCE_ENTRANCE_POSITION = new PointF(655, 70);
     public static readonly PointF EXIT_ENTRANCE_POSITION = new PointF(655, 1200);
     public static readonly PointF BASE_POSITION_DOCTORS = new PointF(555, 70);
+    public static readonly PointF ENTRY_QUEUE_POSITION = new PointF(800, 550);
+    public static readonly PointF MEDICAL_QUEUE_A_POSITION = new PointF(800, 600);
+    public static readonly PointF MEDICAL_QUEUE_B_POSITION = new PointF(800, 650);
     public const float HALLWAY_Y = 500;
 
     public static readonly PointF[] PATH_AMBULANCE_ENTRY_TO_QUEUE = new PointF[]
     {
         AMBULANCE_ENTRANCE_POSITION, // Start
         new PointF(655, 550), // Enter Corridor
-        new PointF(800, 550)
+        ENTRY_QUEUE_POSITION
     };
     public static readonly PointF[] PATH_WALK_IN_ENTRY_TO_QUEUE = new PointF[]
     {
@@ -44,90 +47,291 @@ public class Config
         new PointF(800, 550)
     };
 
-    public static readonly PointF ROOM_B_0 = new PointF(266, 139);
+    public static readonly PointF ROOM_B_0 = new PointF(220, 140);
+    public static readonly PointF ROOM_B_1 = new PointF(1050, 140);
+    public static readonly PointF ROOM_B_2 = new PointF(1350, 140);
+    public static readonly PointF ROOM_B_3 = new PointF(1650, 140);
+    public static readonly PointF ROOM_B_4 = new PointF(1050, 995);
+    public static readonly PointF ROOM_B_5 = new PointF(1350, 995);
+    public static readonly PointF ROOM_B_6 = new PointF(1650, 995);
     
+    public static readonly PointF ROOM_A_0 = new PointF(220, 350);
+    public static readonly PointF ROOM_A_1 = new PointF(220, 560);
+    public static readonly PointF ROOM_A_2 = new PointF(220, 780);
+    public static readonly PointF ROOM_A_3 = new PointF(220, 995);
+    public static readonly PointF ROOM_A_4 = new PointF(220, 1210);
+    
+    public static readonly PointF[][] PATH_ROOM_B_EXIT = new PointF[][]
+    {
+        // ROOM B0
+        new PointF[]{ 
+            ROOM_B_0,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM B1
+        new PointF[]{ 
+            ROOM_B_1,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM B2
+        new PointF[]{ 
+            ROOM_B_2,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM B3
+        new PointF[]{
+            ROOM_B_3,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM B4
+        new PointF[]{ 
+            ROOM_B_4,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM B5
+        new PointF[]{
+            ROOM_B_5,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM B6
+        new PointF[]{
+            ROOM_B_6, 
+            EXIT_ENTRANCE_POSITION           
+        }
+    };
+    public static readonly PointF[][] PATH_ROOM_A_EXIT = new PointF[][]
+    {
+        // ROOM A0
+        new PointF[]{ 
+            ROOM_A_0,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM A1
+        new PointF[]{ 
+            ROOM_A_1,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM A2
+        new PointF[]{ 
+            ROOM_A_2,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM A3
+        new PointF[]{
+            ROOM_A_3,
+            EXIT_ENTRANCE_POSITION
+        },
+        //ROOM A4
+        new PointF[]{ 
+            ROOM_A_4,
+            EXIT_ENTRANCE_POSITION
+        }
+    };
     public static readonly PointF[][] PATH_ENTRY_QUEUE_TO_ROOM_B = new PointF[][]
     {
-        // IZBA B0
+        // ROOM B0
         new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION,         
+            ENTRY_QUEUE_POSITION,  
+            new PointF(655, 550),
+            new PointF(655, 140),
             ROOM_B_0            
         },
-        // IZBA A2
+        //ROOM B1
         new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION,                   // Start
-            new PointF(1161, HALLWAY_Y),       // Enter Corridor
-            new PointF(525, HALLWAY_Y),        // Move to Room A2 X-position
-            new PointF(525, 139)               // Enter Room A2
+            ENTRY_QUEUE_POSITION,  
+            new PointF(1050, 550),
+            ROOM_B_1            
         },
-        // IZBA A3
+        //ROOM B2
+        new PointF[]{ 
+            ENTRY_QUEUE_POSITION,  
+            new PointF(1350, 550),
+            ROOM_B_2            
+        },
+        //ROOM B3
+        new PointF[]{ 
+            ENTRY_QUEUE_POSITION,  
+            new PointF(1650, 550),
+            ROOM_B_3            
+        },
+        //ROOM B4
+        new PointF[]{ 
+            ENTRY_QUEUE_POSITION,  
+            new PointF(1050, 550),
+            ROOM_B_4            
+        },
+        //ROOM B5
+        new PointF[]{ 
+            ENTRY_QUEUE_POSITION,  
+            new PointF(1350, 550),
+            ROOM_B_5            
+        },
+        //ROOM B6
+        new PointF[]{ 
+            ENTRY_QUEUE_POSITION,  
+            new PointF(1650, 550),
+            ROOM_B_6            
+        }
+    };
+    public static readonly PointF[][] PATH_MEDICAL_STAFF_TO_ROOM_B = new PointF[][]
+    {
+        // Room B 0
+        new PointF[]{ 
+            AMBULANCE_ENTRANCE_POSITION,                
+            ROOM_B_0            
+        },
+        // Room B 1
+        new PointF[]{ 
+            AMBULANCE_ENTRANCE_POSITION,                  
+            new PointF(655, 550),      
+            ROOM_B_1           
+        },
+        // Room B 2
         new PointF[]{ 
             AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
+            new PointF(655, 550),      
+            ROOM_B_2  
         },new PointF[]{ 
             AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
+            new PointF(655, 550),      
+            ROOM_B_3  
         },new PointF[]{ 
             AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
-        },
-        // Add more rooms following the same pattern...
+            new PointF(655, 550),      
+            ROOM_B_4  
+        },new PointF[]{ 
+            AMBULANCE_ENTRANCE_POSITION, 
+            new PointF(655, 550),      
+            ROOM_B_5
+        },new PointF[]{ 
+            AMBULANCE_ENTRANCE_POSITION, 
+            new PointF(655, 550),      
+            ROOM_B_6  
+        }
     };
     
-    public static readonly PointF[][] PATH_MEDICAL_STAFF_TO_ROOM = new PointF[][]
+    public static readonly PointF[][] PATH_MEDICAL_STAFF_TO_ROOM_A = new PointF[][]
     {
-        // IZBA A1
         new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION,                   // Start
-            new PointF(1161, HALLWAY_Y),       // Enter Corridor
-            new PointF(266, HALLWAY_Y),        // Move to Room A1 X-position
-            new PointF(266, 139)               // Enter Room A1
+            AMBULANCE_ENTRANCE_POSITION,  
+            ROOM_A_0            
         },
-        // IZBA A2
         new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION,                   // Start
-            new PointF(1161, HALLWAY_Y),       // Enter Corridor
-            new PointF(525, HALLWAY_Y),        // Move to Room A2 X-position
-            new PointF(525, 139)               // Enter Room A2
+            AMBULANCE_ENTRANCE_POSITION,  
+            new PointF(655, 560),
+            ROOM_A_1            
         },
-        // IZBA A3
+        // ROOM A2
         new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
-        },new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
-        },new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
-        },new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
-        },new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
-        },new PointF[]{ 
-            AMBULANCE_ENTRANCE_POSITION, 
-            new PointF(1161, HALLWAY_Y), 
-            new PointF(783, HALLWAY_Y), 
-            new PointF(783, 139) 
+            AMBULANCE_ENTRANCE_POSITION,  
+            new PointF(655, 780),
+            ROOM_A_2            
         },
-        // Add more rooms following the same pattern...
+        // ROOM A3
+        new PointF[]{ 
+            AMBULANCE_ENTRANCE_POSITION,  
+            new PointF(655, 995),
+            ROOM_A_3            
+        },
+        // ROOM A4
+        new PointF[]{ 
+            AMBULANCE_ENTRANCE_POSITION,  
+            new PointF(655, 1210),
+            ROOM_A_4            
+        }
+    };
+    public static readonly PointF[][] PATH_MEDICAL_A_QUEUE_TO_ROOM_A = new PointF[][]
+    {
+        // ROOM A0
+        new PointF[]{ 
+            MEDICAL_QUEUE_A_POSITION,  
+            ROOM_A_0            
+        },
+        // ROOM A1
+        new PointF[]{ 
+            MEDICAL_QUEUE_A_POSITION,  
+            ROOM_A_1            
+        },
+        // ROOM A2
+        new PointF[]{ 
+            MEDICAL_QUEUE_A_POSITION,
+            ROOM_A_2            
+        },
+        // ROOM A3
+        new PointF[]{ 
+            MEDICAL_QUEUE_A_POSITION,
+            ROOM_A_3            
+        },
+        // ROOM A4
+        new PointF[]{ 
+            MEDICAL_QUEUE_A_POSITION,
+            ROOM_A_4            
+        }
+    };
+    public static readonly PointF[][] PATH_MEDICAL_B_QUEUE_TO_ROOM_A = new PointF[][]
+    {
+        // ROOM A0
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,  
+            ROOM_A_0            
+        },
+        // ROOM A1
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,  
+            ROOM_A_1            
+        },
+        // ROOM A2
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_A_2            
+        },
+        // ROOM A3
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_A_3            
+        },
+        // ROOM A4
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_A_4            
+        }
+    };
+    public static readonly PointF[][] PATH_MEDICAL_B_QUEUE_TO_ROOM_B = new PointF[][]
+    {
+        // ROOM B0
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,  
+            ROOM_B_0            
+        },
+        // ROOM B1
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,  
+            ROOM_B_1            
+        },
+        // ROOM B2
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_B_2            
+        },
+        // ROOM B3
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_B_3            
+        },
+        // ROOM B4
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_B_4            
+        },
+        // ROOM B5
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_B_5            
+        },
+        // ROOM B6
+        new PointF[]{ 
+            MEDICAL_QUEUE_B_POSITION,
+            ROOM_B_6            
+        }
     };
 }

@@ -31,7 +31,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 				myMsg.Patient.PatientStatus = PatientStatus.Moving;
 				if (MySim.AnimatorExists)
 				{
-					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, Config.PATH_ENTRY_QUEUE_TO_ROOM_B[myMsg.Room.Id]);
+					var config = MyAgent.GetConfigForPatientTransfer(myMsg.Room, myMsg.Patient);
+					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
 			if (myMsg.Nurse != null)
@@ -39,7 +40,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 				myMsg.Nurse.Activity = StaffActivity.Moving;
 				if (MySim.AnimatorExists)
 				{
-					myMsg.Nurse.AnimObject.StartAnim(MySim.CurrentTime, duration, Config.PATH_MEDICAL_STAFF_TO_ROOM[myMsg.Room.Id]);
+					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
+					myMsg.Nurse.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
 			if (myMsg.Doctor != null)
@@ -47,7 +49,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 				myMsg.Doctor.Activity = StaffActivity.Moving;
 				if (MySim.AnimatorExists)
 				{
-					myMsg.Doctor.AnimObject.StartAnim(MySim.CurrentTime, duration, Config.PATH_MEDICAL_STAFF_TO_ROOM[myMsg.Room.Id]);
+					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
+					myMsg.Doctor.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
 			Hold(duration, myMsg);
