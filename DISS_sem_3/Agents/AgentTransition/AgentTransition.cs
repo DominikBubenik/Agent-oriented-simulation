@@ -54,7 +54,7 @@ namespace Agents.AgentTransition
 		public PointF[][] GetConfigForPatientTransfer(Room? room, Patient patient)
 		{
 			if (room == null) throw new Exception("Room is null");
-			if (patient.Priority < 3)
+			if (patient.Priority < 3 && room.IsTypeA())
 			{
 				return Config.PATH_MEDICAL_A_QUEUE_TO_ROOM_A;
 			} 

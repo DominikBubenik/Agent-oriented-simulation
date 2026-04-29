@@ -11,3 +11,7 @@ TODO 5) co ak chcem priradit resource ale nie je tam volne? Je vpohode tu spravu
 TODO 6) opytat sa ci z ambulancie sa teleportuje sestricka na ten ich base
 
 TODO 7) ako s tymi dvomi radmi 
+
+TODO 8) response request ako ked to zahadzujem
+
+TODO 9) ako mam oznacovat kedy pracuju a kedy nie aby som ich vedel spravne vytazit

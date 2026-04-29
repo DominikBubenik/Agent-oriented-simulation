@@ -19,6 +19,8 @@ namespace DISS_sem_3
         public DataGridView? AllNurses { get; set; }
         public DataGridView? AllDoctors { get; set; }
         public DataGridView? AllPatients { get; set; }
+        
+        public Action<double, double> OnChangeSpeed { get; set; }
 
         public event EventHandler? OnPauseRequested;
         public event EventHandler? OnStopRequested;
@@ -97,38 +99,26 @@ namespace DISS_sem_3
             OnStopRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        //Kod vytvoreny s pomocou AI, zdokumentovane v kapitole 10
-        public void SetSleepControls(int sleepMs, double sleepPeriodSeconds)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(() => SetSleepControls(sleepMs, sleepPeriodSeconds));
-                return;
-            }
-
-            // trackSleepMs expects milliseconds directly
-            trackSleepMs.Minimum = Math.Min(trackSleepMs.Minimum, sleepMs);
-            trackSleepMs.Value = Math.Clamp(sleepMs, trackSleepMs.Minimum, trackSleepMs.Maximum);
-            lblSleepMsValue.Text = trackSleepMs.Value.ToString();
-
-            // trackSleepPeriodSec stores centiseconds (0.01s) — convert seconds to centiseconds
-            int csPeriod = (int)Math.Round(sleepPeriodSeconds * 100.0);
-            trackSleepPeriodSec.Minimum = Math.Min(trackSleepPeriodSec.Minimum, csPeriod);
-            trackSleepPeriodSec.Value = Math.Clamp(csPeriod, trackSleepPeriodSec.Minimum, trackSleepPeriodSec.Maximum);
-            lblSleepPeriodValue.Text = (trackSleepPeriodSec.Value / 100.0).ToString("F2");
-        }
-
-        public void SetRefreshRate(int rate)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(() => SetRefreshRate(rate));
-                return;
-            }
-
-            trackRefreshRate.Value = Math.Clamp(rate, trackRefreshRate.Minimum, trackRefreshRate.Maximum);
-            lblRefreshRateValue.Text = trackRefreshRate.Value.ToString();
-        }
+        // //Kod vytvoreny s pomocou AI, zdokumentovane v kapitole 10
+        // public void SetSleepControls(int sleepMs, double sleepPeriodSeconds)
+        // {
+        //     if (this.InvokeRequired)
+        //     {
+        //         this.Invoke(() => SetSleepControls(sleepMs, sleepPeriodSeconds));
+        //         return;
+        //     }
+        //
+        //     // trackSleepMs expects milliseconds directly
+        //     trackInterval.Minimum = Math.Min(trackInterval.Minimum, sleepMs);
+        //     trackInterval.Value = Math.Clamp(sleepMs, trackInterval.Minimum, trackInterval.Maximum);
+        //     lblIntervalValue.Text = trackInterval.Value.ToString();
+        //
+        //     // trackSleepPeriodSec stores centiseconds (0.01s) — convert seconds to centiseconds
+        //     int csPeriod = (int)Math.Round(sleepPeriodSeconds * 100.0);
+        //     trackDuration.Minimum = Math.Min(trackDuration.Minimum, csPeriod);
+        //     trackDuration.Value = Math.Clamp(csPeriod, trackDuration.Minimum, trackDuration.Maximum);
+        //     lblDurationValue.Text = (trackDuration.Value / 100.0).ToString("F2");
+        // }
 
         // Controller can call this to toggle the Run button state and label (thread-safe)
         public void SetRunRunning(bool running)
@@ -192,32 +182,32 @@ namespace DISS_sem_3
         }
 
         // Kod vytvoreny s pomocou AI, zdokumentovane v kapitole 10
-        private void TrackSleepMs_ValueChanged(object? sender, EventArgs e)
+        private void TrackInterval_ValueChanged(object? sender, EventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(() => TrackSleepMs_ValueChanged(sender, e));
+                this.Invoke(() => TrackInterval_ValueChanged(sender, e));
                 return;
             }
 
-            int value = trackSleepMs.Value;
-            lblSleepMsValue.Text = value.ToString();
-            OnSleepMsChanged?.Invoke(value);
+            var interval = trackInterval.Value;
+            lblIntervalValue.Text = interval.ToString();
+            var duration = trackDuration.Value;
+            OnChangeSpeed?.Invoke(interval, duration / 10.0);
         }
 
-        private void TrackSleepPeriodSec_ValueChanged(object? sender, EventArgs e)
+        private void TrackDuration_ValueChanged(object? sender, EventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(() => TrackSleepPeriodSec_ValueChanged(sender, e));
+                this.Invoke(() => TrackDuration_ValueChanged(sender, e));
                 return;
             }
 
-            // track value is in centiseconds (0.01s); convert to seconds when raising the event
-            int csValue = trackSleepPeriodSec.Value; // centiseconds
-            double seconds = csValue / 100.0;
-            lblSleepPeriodValue.Text = seconds.ToString("F2");
-            OnSleepPeriodChanged?.Invoke(seconds);
+            var interval = trackInterval.Value;
+            lblIntervalValue.Text = interval.ToString();
+            var duration = trackDuration.Value;
+            OnChangeSpeed?.Invoke(interval, duration / 10.0);
         }
         private void InitializeLayout(StartSimulationArgs args)
         {
@@ -247,19 +237,6 @@ namespace DISS_sem_3
                 _roomBGrids.Add(i, dgv);
                 // flpLanes.Controls.Add(dgv);
             }
-        }
-
-        private void TrackRefreshRate_ValueChanged(object? sender, EventArgs e)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(() => TrackRefreshRate_ValueChanged(sender, e));
-                return;
-            }
-
-            int value = trackRefreshRate.Value;
-            lblRefreshRateValue.Text = value.ToString();
-            OnRefreshRateChanged?.Invoke(value);
         }
 
         // Thread-safe method to update the current simulation time textbox.
@@ -545,7 +522,7 @@ namespace DISS_sem_3
             {
                 return (int)this.Invoke(new Func<int>(() => GetSleepMs()));
             }
-            try { return trackSleepMs?.Value ?? 100; } catch { return 100; }
+            try { return trackInterval?.Value ?? 100; } catch { return 100; }
         }
 
         // trackSleepPeriodSec stores centiseconds (0.01s) — convert to seconds
@@ -555,16 +532,7 @@ namespace DISS_sem_3
             {
                 return (double)this.Invoke(new Func<double>(() => GetSleepPeriodSeconds()));
             }
-            try { return (trackSleepPeriodSec?.Value ?? 80) / 100.0; } catch { return 0.8; }
-        }
-
-        public int GetRefreshRate()
-        {
-            if (this.InvokeRequired)
-            {
-                return (int)this.Invoke(new Func<int>(() => GetRefreshRate()));
-            }
-            try { return trackRefreshRate?.Value ?? 0; } catch { return 0; }
+            try { return (trackDuration?.Value ?? 80) / 100.0; } catch { return 0.8; }
         }
 
         private void btnOpenAnimator_Click(object? sender, EventArgs e)

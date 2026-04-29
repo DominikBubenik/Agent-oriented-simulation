@@ -9,24 +9,24 @@ public class ObservationController
 {
     private SimulationModel? _currentModel;
     private StartSimulationArgs? _args;
-    private ObservationWindow? _laneWindow;
+    private ObservationWindow? _observWindow;
     private AnimatorWindow _animatorWindow;
     private volatile bool _isStarted = false;
     
     public void ShowWindow(StartSimulationArgs args)
     {
         _args = args;
-        _laneWindow = new ObservationWindow(_args);
+        _observWindow = new ObservationWindow(_args);
         _currentModel = new SimulationModel();
         
-        _laneWindow.OnRunRequested += OnRunRequested;
-        _laneWindow.OnPauseRequested += OnPauseRequested;
-        _laneWindow.OnOpenAnimatorRequested += OnOpenAnimatorRequested;
-        _laneWindow.OnStopRequested += OnStopRequested;
-
+        _observWindow.OnRunRequested += OnRunRequested;
+        _observWindow.OnPauseRequested += OnPauseRequested;
+        _observWindow.OnOpenAnimatorRequested += OnOpenAnimatorRequested;
+        _observWindow.OnStopRequested += OnStopRequested;
+        _observWindow.OnChangeSpeed += OnChangeSpeed;
         _currentModel.OnRefreshUI += OnObservRefresh;
         
-        _laneWindow.Show();
+        _observWindow.Show();
     }
 
     private void OnStopRequested(object? sender, EventArgs e)
@@ -44,7 +44,7 @@ public class ObservationController
 
     private void OnObservRefresh(SimulationStateDto state)
     {
-        _laneWindow?.RefreshView(state);
+        _observWindow?.RefreshView(state);
     }
 
     private void OnPauseRequested(object? sender, EventArgs e)
@@ -72,5 +72,10 @@ public class ObservationController
         {
             throw new Exception("No animator found");
         }
+    }
+
+    private void OnChangeSpeed(double interval, double duration)
+    {
+        _currentModel.SetSimulationSpeed(interval, duration);
     }
 }

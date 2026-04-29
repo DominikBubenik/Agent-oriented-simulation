@@ -6,11 +6,10 @@ using DISS_sem_3.Entities;
 namespace Agents.AgentEnviroment.ContinualAssistants
 {
 	//meta! id="19"
-	public class RegularPatient : OSPABA.Scheduler
+	public class WalkInPatient : OSPABA.Scheduler
 	{
-		public readonly int TOTO_BUDE_NEJAKY_GEN = 600;
 		private int patientCounter;
-		public RegularPatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
+		public WalkInPatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
 		}

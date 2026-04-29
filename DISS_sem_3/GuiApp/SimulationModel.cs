@@ -119,4 +119,9 @@ public class SimulationModel
     {
         return _core.IsPaused();
     }
+
+    public void SetSimulationSpeed(double interval, double duration)
+    {
+        _core.SetSimSpeed(interval, duration);
+    }
 }

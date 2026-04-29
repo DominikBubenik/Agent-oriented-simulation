@@ -38,13 +38,10 @@ namespace DISS_sem_3
         private System.Windows.Forms.Panel panelLog;
         private System.Windows.Forms.DataGridView dgvLog;
         // Sleep control fields (exposed to partial class)
-        private System.Windows.Forms.TrackBar trackSleepMs;
-        private System.Windows.Forms.Label lblSleepMsValue;
-        private System.Windows.Forms.TrackBar trackSleepPeriodSec;
-        private System.Windows.Forms.Label lblSleepPeriodValue;
-        // Refresh rate control
-        private System.Windows.Forms.TrackBar trackRefreshRate;
-        private System.Windows.Forms.Label lblRefreshRateValue;
+        private System.Windows.Forms.TrackBar trackInterval;
+        private System.Windows.Forms.Label lblIntervalValue;
+        private System.Windows.Forms.TrackBar trackDuration;
+        private System.Windows.Forms.Label lblDurationValue;
 
         protected override void Dispose(bool disposing)
         {
@@ -106,12 +103,12 @@ namespace DISS_sem_3
             ConfigureParam(lblDoctors, txtDoctors, "Before Det:");
 
             // Sleep controls: TrackBars and value labels
-            this.trackSleepMs = new TrackBar();
-            this.trackSleepMs.Orientation = Orientation.Horizontal;
-            this.trackSleepMs.Width = 200;
-            this.trackSleepMs.TickFrequency = 100;
-            this.trackSleepMs.SmallChange = 10;
-            this.trackSleepMs.LargeChange = 100;
+            this.trackInterval = new TrackBar();
+            this.trackInterval.Orientation = Orientation.Horizontal;
+            this.trackInterval.Width = 200;
+            this.trackInterval.TickFrequency = 1;
+            this.trackInterval.SmallChange = 1;
+            this.trackInterval.LargeChange = 2;
 
             Label lblSleepMs = new Label();
             lblSleepMs.Text = "Sleep ms:";
@@ -119,17 +116,17 @@ namespace DISS_sem_3
             lblSleepMs.Width = 80;
             lblSleepMs.Height = 22;
 
-            this.lblSleepMsValue = new Label();
-            this.lblSleepMsValue.AutoSize = false;
-            this.lblSleepMsValue.Width = 60; this.lblSleepMsValue.Height = 22;
+            this.lblIntervalValue = new Label();
+            this.lblIntervalValue.AutoSize = false;
+            this.lblIntervalValue.Width = 60; this.lblIntervalValue.Height = 22;
 
-            this.trackSleepPeriodSec = new TrackBar();
-            this.trackSleepPeriodSec.Orientation = Orientation.Horizontal;
-            this.trackSleepPeriodSec.Width = 300; // wider for better precision and larger range
+            this.trackDuration = new TrackBar();
+            this.trackDuration.Orientation = Orientation.Horizontal;
+            this.trackDuration.Width = 300; // wider for better precision and larger range
             // Represent slider in centiseconds (0.01s). Value=1 => 0.01s, Value=80 => 0.80s
-            this.trackSleepPeriodSec.TickFrequency = 100; // 1.00s ticks
-            this.trackSleepPeriodSec.SmallChange = 1; // 0.01s steps
-            this.trackSleepPeriodSec.LargeChange = 100; // 1.00s large step
+            this.trackDuration.TickFrequency = 100; // 1.00s ticks
+            this.trackDuration.SmallChange = 1; // 0.01s steps
+            this.trackDuration.LargeChange = 100; // 1.00s large step
 
             Label lblSleepPeriod = new Label();
             lblSleepPeriod.Text = "Sleep period (s):";
@@ -137,9 +134,9 @@ namespace DISS_sem_3
             lblSleepPeriod.Width = 110;
             lblSleepPeriod.Height = 22;
 
-            this.lblSleepPeriodValue = new Label();
-            this.lblSleepPeriodValue.AutoSize = false;
-            this.lblSleepPeriodValue.Width = 60; this.lblSleepPeriodValue.Height = 22;
+            this.lblDurationValue = new Label();
+            this.lblDurationValue.AutoSize = false;
+            this.lblDurationValue.Width = 60; this.lblDurationValue.Height = 22;
             this.btnRun.Click += new System.EventHandler(this.BtnRun_Click);
             this.btnOpenAnimator.Click += new System.EventHandler(this.btnOpenAnimator_Click);
 
@@ -168,46 +165,24 @@ namespace DISS_sem_3
             this.topPanel.Controls.Add(lblDoctors); this.topPanel.Controls.Add(txtDoctors);
 
             // Add sleep controls to top panel (labels + trackbars + value labels)
-            this.topPanel.Controls.Add(lblSleepMs); this.topPanel.Controls.Add(this.trackSleepMs); this.topPanel.Controls.Add(this.lblSleepMsValue);
-            this.topPanel.Controls.Add(lblSleepPeriod); this.topPanel.Controls.Add(this.trackSleepPeriodSec); this.topPanel.Controls.Add(this.lblSleepPeriodValue);
+            this.topPanel.Controls.Add(lblSleepMs); this.topPanel.Controls.Add(this.trackInterval); this.topPanel.Controls.Add(this.lblIntervalValue);
+            this.topPanel.Controls.Add(lblSleepPeriod); this.topPanel.Controls.Add(this.trackDuration); this.topPanel.Controls.Add(this.lblDurationValue);
+            
 
-            // Refresh rate control (0..1000)
-            Label lblRefresh = new Label();
-            lblRefresh.Text = "Refresh rate:";
-            lblRefresh.AutoSize = false;
-            lblRefresh.Width = 110;
-            lblRefresh.Height = 22;
 
-            this.trackRefreshRate = new TrackBar();
-            this.trackRefreshRate.Orientation = Orientation.Horizontal;
-            this.trackRefreshRate.Width = 300; // wider to accommodate larger range
-            // Bigger range and coarser ticks for higher values
-            this.trackRefreshRate.TickFrequency = 500;
-            this.trackRefreshRate.SmallChange = 50;
-            this.trackRefreshRate.LargeChange = 1000;
-            this.trackRefreshRate.Minimum = 0;
-            this.trackRefreshRate.Maximum = 500; // expanded maximum
-            this.trackRefreshRate.Value = 0; // default to 0 (no forced refresh)
-
-            this.lblRefreshRateValue = new Label();
-            this.lblRefreshRateValue.AutoSize = false;
-            this.lblRefreshRateValue.Width = 60; this.lblRefreshRateValue.Height = 22;
-
-            this.topPanel.Controls.Add(lblRefresh); this.topPanel.Controls.Add(this.trackRefreshRate); this.topPanel.Controls.Add(this.lblRefreshRateValue);
 
             // Wire valueChanged events to instance handlers implemented in LaneWindow.cs
-            this.trackSleepMs.ValueChanged += new System.EventHandler(this.TrackSleepMs_ValueChanged);
-            this.trackSleepPeriodSec.ValueChanged += new System.EventHandler(this.TrackSleepPeriodSec_ValueChanged);
-            this.trackRefreshRate.ValueChanged += new System.EventHandler(this.TrackRefreshRate_ValueChanged);
+            this.trackInterval.ValueChanged += new System.EventHandler(this.TrackInterval_ValueChanged);
+            this.trackDuration.ValueChanged += new System.EventHandler(this.TrackDuration_ValueChanged);
 
             // Set defaults (min values will be set by controller after creation to model's current settings)
-            this.trackSleepMs.Minimum = 100; // initial min as in EventSimulationCore
-            this.trackSleepMs.Maximum = 5000;
-            this.trackSleepMs.Value = 100; // default sleep ms
-            // Track uses centiseconds (0.01s). Range 1..5000 => 0.01s .. 50.00s
-            this.trackSleepPeriodSec.Minimum = 1; // 0.01 s
-            this.trackSleepPeriodSec.Maximum = 100000; // 50.00 s
-            this.trackSleepPeriodSec.Value = 80; // default to 0.80s (80 centiseconds)
+            this.trackInterval.Minimum = 1; // initial min as in EventSimulationCore
+            this.trackInterval.Maximum = 1000;
+            this.trackInterval.Value = 1; // default sleep ms
+        
+            this.trackDuration.Minimum = 1; 
+            this.trackDuration.Maximum = 10; 
+            this.trackDuration.Value = 1; 
 
             // 
             // btnPause
