@@ -46,13 +46,7 @@ public class ObservationController
     private void OnObservRefresh(SimulationStateDto state)
     {
         if (_observWindow == null || _observWindow.IsDisposed) return;
-        try
-        {
-            _observWindow?.RefreshView(state);
-        }
-        catch 
-        {
-        }
+        try { _observWindow?.RefreshView(state); } catch { }
     }
 
     private void OnPauseRequested(object? sender, EventArgs e)

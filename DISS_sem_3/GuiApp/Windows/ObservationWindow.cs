@@ -46,7 +46,7 @@ namespace DISS_sem_3
                 }
             };
             
-            this.FormClosing += LaneWindow_FormClosing;
+            this.FormClosing += ObservWindow_FormClosing;
         }
 
         // Constructor overload that accepts simulation start arguments
@@ -64,10 +64,7 @@ namespace DISS_sem_3
                 txtSeed.Text = args.Seed.ToString();
                 txtReplications.Text = args.Replications.ToString();
                 txtObservation.Text = args.ObservationMode ? "True" : "False";
-
-                // If start/end look like seconds, format as hh:mm:ss
-            
-
+                
                 try
                 {
                     txtEndSimulationTime.Text = TimeSpan.FromSeconds(args.EndSimulationTime).ToString();
@@ -86,10 +83,8 @@ namespace DISS_sem_3
         private void BtnRun_Click(object? sender, EventArgs e)
         {
             SetRunRunning(true);
-
-            Console.WriteLine("ObservationWindow: Run button clicked");
+            
             CreateLaneTables();
-            // Trigger the custom event that the ObservationController is listening for
             OnRunRequested?.Invoke(this, EventArgs.Empty);
         }
         
@@ -131,7 +126,7 @@ namespace DISS_sem_3
             try { if (btnRun != null && !btnRun.IsDisposed) btnRun.Enabled = enabled; } catch { }
         }
 
-        private void LaneWindow_FormClosing(object? sender, FormClosingEventArgs e)
+        private void ObservWindow_FormClosing(object? sender, FormClosingEventArgs e)
         {
             OnPauseRequested = null;
             OnStopRequested = null;
@@ -268,22 +263,12 @@ namespace DISS_sem_3
 
         public void RefreshView(SimulationStateDto state)
         {
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
             if (this.InvokeRequired)
             {
                 this.Invoke(() => RefreshView(state));
                 return;
             }
-    
-            // LOCK THE UI LAYOUT
+            
             this.SuspendLayout(); 
     
             try {
@@ -299,7 +284,6 @@ namespace DISS_sem_3
                 foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
             }
             finally {
-                // UNLOCK AND PAINT EVERYTHING AT ONCE
                 this.ResumeLayout(); 
             }
         }
