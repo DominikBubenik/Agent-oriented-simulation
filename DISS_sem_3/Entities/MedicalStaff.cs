@@ -44,19 +44,19 @@ public class MedicalStaff : Entity
         
     }
 
-    public double GetWorkingUtilization(double endTime)
+    public double GetWorkingUtilization()
     {
         var workingTime = TotalWorkingTime;
         if (Activity == StaffActivity.Working)
         {
-            workingTime += endTime - _startWorkingTime;
+            workingTime += MySim.CurrentTime - _startWorkingTime;
         }
         var movingTime = TotalTransferTime;
         if (Activity == StaffActivity.Moving)
         {
-            movingTime += endTime - _startTransferTime;
+            movingTime += MySim.CurrentTime - _startTransferTime;
         }
 
-        return (workingTime + movingTime) / endTime;
+        return (workingTime + movingTime) / MySim.CurrentTime;
     }
 }

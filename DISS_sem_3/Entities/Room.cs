@@ -37,15 +37,15 @@ public class Room : Entity
         CurrentStatus = RoomStatus.Free;
     }
     
-    public double GetUtilization(double endTime)
+    public double GetUtilization()
     {
         var occupancyTime = TotalOccupancyTime;
         if (CurrentStatus == RoomStatus.Occupied)
         {
-            occupancyTime += endTime - _startOccupancyTime;
+            occupancyTime += MySim.CurrentTime - _startOccupancyTime;
         }
 
-        return occupancyTime / endTime;
+        return occupancyTime / MySim.CurrentTime;
     }
 
     public override string ToString()

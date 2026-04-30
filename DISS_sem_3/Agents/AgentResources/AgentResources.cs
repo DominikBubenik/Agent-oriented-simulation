@@ -2,6 +2,7 @@ using OSPABA;
 using Simulation;
 using Agents.AgentResources.InstantAssistants;
 using DISS_sem_3.Entities;
+using OpenTK.Platform.Windows;
 
 namespace Agents.AgentResources
 {
@@ -94,6 +95,46 @@ namespace Agents.AgentResources
 			myMsg.Nurse = null;
 			myMsg.Room = null;
 			myMsg.Doctor = null;
+		}
+
+		public double GetUtilAllDoctors()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var doc in AllDoctors)
+			{
+				cumulativeUtil += doc.GetWorkingUtilization();
+			}
+			return cumulativeUtil / AllDoctors.Count;
+		}
+		
+		public double GetUtilAllNurses()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var nurse in Nurses)
+			{
+				cumulativeUtil += nurse.GetWorkingUtilization();
+			}
+			return cumulativeUtil / AllNurses.Count;
+		}
+		
+		public double GetUtilAllRoomsA()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var room in AllRoomsTypeA)
+			{
+				cumulativeUtil += room.TotalOccupancyTime;
+			}
+			return cumulativeUtil / MySim.CurrentTime;
+		}
+		
+		public double GetUtilAllRoomsB()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var room in AllRoomsTypeB)
+			{
+				cumulativeUtil += room.TotalOccupancyTime;
+			}
+			return cumulativeUtil / MySim.CurrentTime;
 		}
 
 		private MySimulation MyCastSim() => (MySimulation)MySim; 

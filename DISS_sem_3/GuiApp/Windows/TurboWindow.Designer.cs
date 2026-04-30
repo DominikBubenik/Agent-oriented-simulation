@@ -30,6 +30,10 @@ partial class TurboWindow
         this.formsPlot10 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot11 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot12 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot13 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot14 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot15 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot16 = new ScottPlot.WinForms.FormsPlot();
         
         this.Text = "Emergency Hospital - Turbo Mode Analysis"; //[cite: 7]
 
@@ -87,15 +91,23 @@ partial class TurboWindow
         AddStatRow(2, "Total Patients", out txtTurboTotal, out txtTurboTotal_CI);
         AddStatRow(3, "Total Walk-In", out txtTurboWalkIn, out txtTurboWalkIn_CI);
         AddStatRow(4, "Total Ambulance", out txtTurboAmbulance, out txtTurboAmbulance_CI);
+        
         AddStatRow(5, "Avg Time in System", out txtTurboAvgTime, out txtTurboAvgTime_CI);
         AddStatRow(6, "Time (Walk-In)", out txtTurboTimeWalkIn, out txtTurboTimeWalkIn_CI);
         AddStatRow(7, "Time (Ambulance)", out txtTurboTimeAmbulance, out txtTurboTimeAmbulance_CI);   
+        
         AddStatRow(8, "EntryWaitingTime (Walk-In)", out txtTurboEntryWaitTimeWalkIn, out txtTurboEntryWaitTimeWalkIn_CI);
         AddStatRow(9, "EntryWaitingTime (Ambulance)", out txtTurboEntryWaitAmbulance, out txtTurboEntryWaitTimeAmbulance_CI);
         AddStatRow(10, "EntryQueueLength", out txtTurboEntryQueueLength, out txtTurboEntryQueueLength_CI);
+        
         AddStatRow(11, "MedicalWaitA", out txtTurboMedicalTrWaitingTimeA, out txtTurboMedicalTrWaitingTimeA_CI);
         AddStatRow(12, "MedicalWaitAB", out txtTurboMedicalTrWaitingTimeAB, out txtTurboMedicalTrWaitingTimeAB_CI);
         AddStatRow(13, "MedicalWaitB", out txtTurboMedicalTrWaitingTimeB, out txtTurboMedicalTrWaitingTimeB_CI);
+        
+        AddStatRow(14, "Doctors Util", out txtTurboAllDoctorsUtil, out txtTurboAllDoctorsUtil_CI);
+        AddStatRow(15, "Nurses Util", out txtTurboAllNursesUtil, out txtTurboAllNursesUtil_CI);
+        AddStatRow(16, "RoomA Util", out txtTurboAllRoomAUtil, out txtTurboAllRoomAUtil_CI);
+        AddStatRow(17, "RoomB Util", out txtTurboAllRoomBUtil, out txtTurboAllRoomBUtil_CI);
 
         this.statsGroup.Controls.Add(statsTable);
 
@@ -113,11 +125,13 @@ partial class TurboWindow
         this.formsPlot7.Dock = DockStyle.Fill; this.formsPlot8.Dock = DockStyle.Fill;
         this.formsPlot9.Dock = DockStyle.Fill; this.formsPlot10.Dock = DockStyle.Fill;
         this.formsPlot11.Dock = DockStyle.Fill; this.formsPlot12.Dock = DockStyle.Fill;
+        this.formsPlot13.Dock = DockStyle.Fill; this.formsPlot14.Dock = DockStyle.Fill;
+        this.formsPlot15.Dock = DockStyle.Fill; this.formsPlot16.Dock = DockStyle.Fill;
         
         plotsTable.Controls.AddRange(new Control[]
         {
             formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9,
-            formsPlot10, formsPlot11, formsPlot12
+            formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16
         });
         // Correct 2D positioning
         plotsTable.Controls.Add(formsPlot1, 0, 0); plotsTable.Controls.Add(formsPlot2, 1, 0);
@@ -126,6 +140,8 @@ partial class TurboWindow
         plotsTable.Controls.Add(formsPlot7, 0, 3); plotsTable.Controls.Add(formsPlot8, 1, 3);
         plotsTable.Controls.Add(formsPlot9, 0, 4); plotsTable.Controls.Add(formsPlot10, 1, 4);
         plotsTable.Controls.Add(formsPlot11, 0, 5); plotsTable.Controls.Add(formsPlot12, 1, 5);
+        plotsTable.Controls.Add(formsPlot13, 0, 6); plotsTable.Controls.Add(formsPlot14, 1, 6);
+        plotsTable.Controls.Add(formsPlot15, 0, 7); plotsTable.Controls.Add(formsPlot16, 1,7);
         
         // Form Assembly
         this.Controls.Add(plotsTable);
@@ -137,7 +153,7 @@ partial class TurboWindow
     }
 
     public ScottPlot.WinForms.FormsPlot formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9;
-    public ScottPlot.WinForms.FormsPlot formsPlot10, formsPlot11, formsPlot12;
+    public ScottPlot.WinForms.FormsPlot formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16;
     public FlowLayoutPanel topPanel;
     public Button btnRun, btnPause, btnResume, btnStop;
     // Skip percent control (string like '5%' or '0.05')
@@ -152,4 +168,6 @@ partial class TurboWindow
     public TextBox txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI;
     public TextBox txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI, txtTurboMedicalTrWaitingTimeA, txtTurboMedicalTrWaitingTimeA_CI;
     public TextBox txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI;
+    public TextBox txtTurboAllDoctorsUtil, txtTurboAllDoctorsUtil_CI, txtTurboAllNursesUtil, txtTurboAllNursesUtil_CI;
+    public TextBox txtTurboAllRoomAUtil, txtTurboAllRoomAUtil_CI, txtTurboAllRoomBUtil, txtTurboAllRoomBUtil_CI;
 }

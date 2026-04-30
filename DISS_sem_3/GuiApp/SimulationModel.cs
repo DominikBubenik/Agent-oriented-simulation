@@ -65,19 +65,31 @@ public class SimulationModel
         var medicalTreatWaitTimeA = mySim.TotalMedicalTreatWaitingTimePatientsA;
         var medicalTreatWaitTimeAB = mySim.TotalMedicalTreatWaitingTimePatientsAB;
         var medicalTreatWaitTimeB = mySim.TotalMedicalTreatWaitingTimePatientsB;
+        var allDoctorsUtil = mySim.TotalDoctorsUtil;
+        var allNursesUtil = mySim.TotalNursesUtil;
+        var allRoomAUtl = mySim.TotalRoomAUtil;
+        var allRoomBUtil = mySim.TotalRoomBUtil;
 
         dto.Stats["TotalPatientsInSystem"] = new OneStat(totalPInSystem.GetConfidenceInterval());
         dto.Stats["TotalWalkInInSystem"] = new OneStat(totalWalkinPInSystem.GetConfidenceInterval());
         dto.Stats["TotalAmbulancedInSystem"] = new OneStat(totalAmbulancedPInSystem.GetConfidenceInterval());
+        
         dto.Stats["TotalTimeInSystem"] = new OneStat(totalTimeInSystem.GetConfidenceInterval());
         dto.Stats["TotalTimeInSystemWalkIn"] = new OneStat(totalTimeInSystemWalkInPatient.GetConfidenceInterval());
         dto.Stats["TotalTimeInSystemAmbulanced"] = new OneStat(totalTimeInSystemAmbulancePatient.GetConfidenceInterval());
+        
         dto.Stats["EntryQueueWaitWalkIn"] = new OneStat(entryQueueWaitingTimeWalkIn.GetConfidenceInterval());
         dto.Stats["EntryQueueWaitAmbulanced"] = new OneStat(entryQueueWaitingTimeAmbulance.GetConfidenceInterval());
         dto.Stats["EntryQueueLength"] = new OneStat(entryQueueLength.GetConfidenceInterval());
+        
         dto.Stats["MedicalTreatWaitingTimeA"] = new OneStat(medicalTreatWaitTimeA.GetConfidenceInterval());
         dto.Stats["MedicalTreatWaitingTimeAB"] = new OneStat(medicalTreatWaitTimeAB.GetConfidenceInterval());
         dto.Stats["MedicalTreatWaitingTimeB"] = new OneStat(medicalTreatWaitTimeB.GetConfidenceInterval());
+        
+        dto.Stats["AllDoctorsUtil"] = new OneStat(allDoctorsUtil.GetConfidenceInterval());
+        dto.Stats["AllNursesUtil"] = new OneStat(allNursesUtil.GetConfidenceInterval());
+        dto.Stats["AllRoomAUtil"] = new OneStat(allRoomAUtl.GetConfidenceInterval());
+        dto.Stats["AllRoomBUtil"] = new OneStat(allRoomBUtil.GetConfidenceInterval());
 
         OnTurboUI?.Invoke(dto);
     }

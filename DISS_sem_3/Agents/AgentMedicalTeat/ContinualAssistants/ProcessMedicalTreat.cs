@@ -47,7 +47,7 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 					myMsg.Nurse.StopWork();
 					myMsg.Doctor.StopWork();
 					myMsg.Patient.PatientStatus = PatientStatus.Exiting;
-					
+					myMsg.Room.StopOccupancy();
 					AssistantFinished(myMsg);
 					break;
 			}

@@ -45,6 +45,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 					MyAgent.AssignPriority(myMsg.Patient);
 					myMsg.Patient.PatientStatus = PatientStatus.MedicalWait;
 					myMsg.Nurse.StopWork();
+					myMsg.Room.StopOccupancy();
 					
 					// myMsg.Addressee = MyAgent; asi zbytocneee
 					AssistantFinished(myMsg);
