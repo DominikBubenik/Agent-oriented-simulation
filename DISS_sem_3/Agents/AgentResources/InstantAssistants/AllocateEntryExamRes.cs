@@ -1,5 +1,6 @@
 using Agents.AgentResources;
 using DISS_sem_3;
+using DISS_sem_3.Entities;
 using MainLogic;
 using OSPABA;
 using Simulation;
@@ -32,14 +33,17 @@ namespace Agents.AgentResources.InstantAssistants
 		private void Exp0FirstAvailable(MyMessage myMsg)
 		{
 			var nurses = MyAgent.Nurses;
-			var rooms = MyAgent.RoomsTypeB;
+			var rooms = MyAgent.FreeRoomsTypeB;
 			if (nurses.Count > 0 && rooms.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];
+				myMsg.Nurse.IsWorking = true;
+				myMsg.Nurse.Activity = StaffActivity.Working;
 				nurses.RemoveAt(0);
 				myMsg.Room = rooms[0];
+				myMsg.Room.CurrentStatus = RoomStatus.Occupied;
 				rooms.RemoveAt(0);
-				GlobalLogger.PrintLog(myMsg.Patient.ToString() + $"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
+				GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
 			}
 		}
 

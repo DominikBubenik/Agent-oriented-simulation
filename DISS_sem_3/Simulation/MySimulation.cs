@@ -1,5 +1,5 @@
-using Agents.AgentResources;
 using Agents.AgentBoss;
+using Agents.AgentResources;
 using OSPABA;
 using Agents.AgentEntryExam;
 using Agents.AgentEnviroment;
@@ -7,21 +7,39 @@ using Agents.AgentMedicalTeat;
 using Agents.AgentTransition;
 using Agents.AgentEDepartment;
 using DISS_sem_3;
+using DISS_sem_3.Entities;
 using MainLogic;
+using OSPAnimator;
 
 namespace Simulation
 {
 	public class MySimulation : OSPABA.Simulation
 	{
-		public SimpleStat TotalTimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TotalPatientCount { get; private set; }
+		public SimpleStat TotalWalkInPatientCount { get; private set; }
+		public SimpleStat TotalAmbulancePatientCount { get; private set; }
+		public SimpleStat TotalTimeInSystem { get; private set; }
 		public SimpleStat TotalTimeInSystemWalkInPatient { get; private set; }
-		public SimpleStat TotalEntranceWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat TotalEntranceWaitingTimeWalkInP { get; private set; }
-		public SimpleStat TotalEntryExamWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat TotalEntryExamWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalTimeInSystemAmbulancePatient { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority1 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority2 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority3 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority4 { get; private set; }
+		public SimpleStat TotalTimeInSystemPriority5 { get; private set; }
+		public SimpleStat TotalEntryQueueLength { get; private set; }
+		public SimpleStat TotalEntryWaitingTime { get; private set; }
+		public SimpleStat TotalEntryWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalEntryWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeWalkInP { get; private set; }
 		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
+		
+		public AnimTextItem SimTimeAnimObject { get; set;}
+		public AnimTextItem ObjednavokAnimObject { get; set; }
+		public AnimTextItem KucharovPracAnimObject { get; set; }
+		public AnimTextItem KucharovNepracAnimObject { get; set; }
+		public AnimTextItem CasnikovPracAnimObject { get; set; }
+		public AnimTextItem CasnikovNepracAnimObject { get; set; }
 
 		public int InitDoctorCount { get; set; } = 5;
 		public int InitNurseCount { get; set; } = 10;
@@ -42,14 +60,16 @@ namespace Simulation
 		{
 			base.PrepareSimulation();
 			// Create global statistcis
+			TotalPatientCount = new SimpleStat();
+			TotalWalkInPatientCount = new SimpleStat();
+			TotalAmbulancePatientCount = new SimpleStat();
+			TotalTimeInSystem = new SimpleStat();
+			
 			TotalTimeInSystemAmbulancePatient = new SimpleStat();
 			TotalTimeInSystemWalkInPatient = new SimpleStat();
 
-			TotalEntranceWaitingTimeAmbulanceP = new SimpleStat();
-			TotalEntranceWaitingTimeWalkInP = new SimpleStat();
-
-			TotalEntryExamWaitingTimeAmbulanceP = new SimpleStat();
-			TotalEntryExamWaitingTimeWalkInP = new SimpleStat();
+			TotalEntryWaitingTimeAmbulanceP = new SimpleStat();
+			TotalEntryWaitingTimeWalkInP = new SimpleStat();
 
 			TotalMedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
 			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
@@ -61,12 +81,24 @@ namespace Simulation
 		{
 			base.PrepareReplication();
 			// Reset entities, queues, local statistics, etc...
+			
+			InitAnimator();
 		}
 
 		override public void ReplicationFinished()
 		{
 			// Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
+
+			TotalTimeInSystem.AddSample(AgentEnviroment.TimeInSystem.GetAverage());
+			TotalTimeInSystemWalkInPatient.AddSample(AgentEnviroment.TimeInSystemWalkInPatient.GetAverage());
+			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
+
+			TotalEntryWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
+			TotalEntryWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
+
+			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
+			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());
 		}
 
 		override public void SimulationFinished()
@@ -74,22 +106,44 @@ namespace Simulation
 			// Display simulation results
 			base.SimulationFinished();
 
-			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
-			TotalTimeInSystemWalkInPatient.AddSample(AgentEnviroment.TimeInSystemWalkInPatient.GetAverage());
-
-			TotalEntranceWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
-			TotalEntranceWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
-
-			TotalEntryExamWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntryExamWaitingTimeAmbulanceP.GetAverage());
-			TotalEntryExamWaitingTimeWalkInP.AddSample(AgentEnviroment.EntryExamWaitingTimeWalkInP.GetAverage());
-
-			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
-			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());
-
 			Console.WriteLine("Simulation finished");
 		}
 
 		public int NextSeed() => Seeder.Next();
+		
+		
+		private void InitAnimator()
+		{
+			if (!AnimatorExists) return;
+
+			UsporiadajSkupinu(AgentResources.AllDoctors.Cast<MedicalStaff>().ToList(), Config.BASE_POSITION_DOCTORS);
+
+			// Config.Gui.SetSimSpeed();
+		}
+		
+		void UsporiadajSkupinu(List<MedicalStaff> skupina, PointF startPozicia)
+		{
+			int poradie = 0;
+			foreach (MedicalStaff pracovnik in skupina)
+			{
+				PointF pozicia = new PointF(startPozicia.X, startPozicia.Y);
+				pozicia.X = pozicia.X + poradie * 50;
+
+				if (AnimatorExists) pracovnik.AnimObject.SetPosition(pozicia);
+				poradie++;
+			}
+		}
+		
+		// private AnimTextItem CreateTextAnimObject(PointF pos, string text, OSPAnimator. AnimTypeface font, int size)
+		// {
+		// 	AnimTextItem animObject = new AnimTextItem(text);
+		//
+		// 	animObject.Font = (font);
+		// 	animObject.Size = (size);
+		// 	animObject.SetPosition(pos);
+		// 	return animObject;
+		// }
+
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

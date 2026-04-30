@@ -1,6 +1,8 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentEntryExam;
+using DISS_sem_3.Entities;
+using MainLogic;
 
 namespace Agents.AgentEntryExam.ContinualAssistants
 {
@@ -21,6 +23,16 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		//meta! sender="AgentEntryExam", id="53", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Room.Nurse = myMsg.Nurse;
+			myMsg.Nurse.Activity = StaffActivity.Working;
+			myMsg.Room.Patient = myMsg.Patient;
+			myMsg.Room.Patient.PatientStatus = PatientStatus.EntryExam;
+			MyAgent.AssignPriority(myMsg.Patient);
+			
+			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
+			myMsg.Code = Mc.Finish;
+			Hold(duration, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +40,13 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					var myMsg = (MyMessage)message;
+					myMsg.Addressee = MyAgent;
+					myMsg.Nurse.Activity = StaffActivity.Not_Working;
+					myMsg.Patient.PatientStatus = PatientStatus.Moving;
+					AssistantFinished(myMsg);
+					break;
 			}
 		}
 

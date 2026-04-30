@@ -8,12 +8,14 @@ namespace Agents.AgentResources
 	//meta! id="34"
 	public class AgentResources : OSPABA.Agent
 	{
-		public List<Doctor>  Doctors { get; set; }
+		public List<Doctor> Doctors { get; set; }
+		public List<Doctor> AllDoctors { get; set; }
 		public List<Nurse> Nurses { get; set; }
-		public List<Room> RoomsTypeA { get; set; }
-		public List<Room> RoomsTypeB { get; set; }
-		
-		public Queue<MyMessage> WaitingForEntryExam { get; set; }
+		public List<Nurse> AllNurses { get; set; }
+		public List<Room> FreeRoomsTypeA { get; set; }
+		public List<Room> AllRoomsTypeA { get; set; }
+		public List<Room> FreeRoomsTypeB { get; set; }
+		public List<Room> AllRoomsTypeB { get; set; }
 		
 		public AgentResources(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
@@ -26,28 +28,72 @@ namespace Agents.AgentResources
 			base.PrepareReplication();
 			// Setup component for the next replication
 			Doctors = new List<Doctor>();
+			AllDoctors = new List<Doctor>();
 			for (int i = 0; i < MyCastSim().InitDoctorCount; i++)
 			{
-				Doctors.Add(new Doctor(i, MySim));
+				var doctor = new Doctor(i, MySim); 
+				Doctors.Add(doctor);
+				AllDoctors.Add(doctor);
 			}
 
 			Nurses = new List<Nurse>();
+			AllNurses = new List<Nurse>();
 			for (int i = 0; i < MyCastSim().InitNurseCount; i++)
 			{
-				Nurses.Add(new Nurse(i, MySim));
+				var nurse = new Nurse(i, MySim); 
+				Nurses.Add(nurse);
+				AllNurses.Add(nurse);
 			}
-			RoomsTypeA = new List<Room>();
+			FreeRoomsTypeA = new List<Room>();
+			AllRoomsTypeA = new List<Room>();
 			for (int i = 0; i < MyCastSim().InitRoomACount; i++)
 			{
-				RoomsTypeA.Add(new Room(i, MySim, 'A'));
+				var room = new Room(i, MySim, 'A');
+				FreeRoomsTypeA.Add(room);
+				AllRoomsTypeA.Add(room);
 			}
-			RoomsTypeB = new List<Room>();
+			FreeRoomsTypeB = new List<Room>();
+			AllRoomsTypeB = new List<Room>();
 			for (int i = 0; i < MyCastSim().InitRoomBCount; i++)
 			{
-				RoomsTypeB.Add(new Room(i, MySim, 'B'));
+				var room = new Room(i, MySim, 'B');
+				FreeRoomsTypeB.Add(room);
+				AllRoomsTypeB.Add(room);
+			}
+		}
+		
+		public void FreeUpResources(MyMessage myMsg)
+		{
+			if (myMsg.Nurse != null)
+			{
+				myMsg.Nurse.Activity = StaffActivity.Not_Working;
+				Nurses.Add(myMsg.Nurse);
+			}
+
+			if (myMsg.Doctor != null)
+			{
+				myMsg.Doctor.Activity = StaffActivity.Not_Working;
+				Doctors.Add(myMsg.Doctor);
+			}
+			if (myMsg.Room != null)
+			{
+				if (myMsg.Room.Type == 'A')
+				{
+					FreeRoomsTypeA.Add(myMsg.Room);
+				}
+				else
+				{
+					FreeRoomsTypeB.Add(myMsg.Room);
+				}
+				myMsg.Room.Nurse = null;
+				myMsg.Room.Doctor = null;
+				myMsg.Room.Patient = null;
+				myMsg.Room.CurrentStatus = RoomStatus.Empty;
 			}
 			
-			WaitingForEntryExam = new Queue<MyMessage>();
+			myMsg.Nurse = null;
+			myMsg.Room = null;
+			myMsg.Doctor = null;
 		}
 
 		private MySimulation MyCastSim() => (MySimulation)MySim; 
@@ -59,8 +105,8 @@ namespace Agents.AgentResources
 			new AllocateMedicalTreatRes(SimId.AllocateMedicalTreatRes, MySim, this);
 			new AllocateEntryExamRes(SimId.AllocateEntryExamRes, MySim, this);
 			AddOwnMessage(Mc.FreeUpResources);
-			AddOwnMessage(Mc.MedicalTreatResources);
-			AddOwnMessage(Mc.EntryExamResources);
+			AddOwnMessage(Mc.GetMedicalTreatResources);
+			AddOwnMessage(Mc.GetEntryExamResources);
 		}
 		//meta! tag="end"
 	}

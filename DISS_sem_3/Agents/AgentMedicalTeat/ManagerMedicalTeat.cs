@@ -26,11 +26,19 @@ namespace Agents.AgentMedicalTeat
 		//meta! sender="AgentEDepartment", id="45", type="Request"
 		public void ProcessMedicalTreatPatient(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.Start;
+			myMsg.Addressee = MyAgent.FindAssistant(SimId.ProcessMedicalTreat);
+			StartContinualAssistant(myMsg);
 		}
 
 		//meta! sender="ProcessMedicalTreat", id="56", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.MedicalTreatPatient;
+			myMsg.Addressee = MyAgent.Parent;
+			Response(myMsg);
 		}
 		
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -50,12 +58,12 @@ namespace Agents.AgentMedicalTeat
 		{
 			switch (message.Code)
 			{
-			case Mc.MedicalTreatPatient:
-				ProcessMedicalTreatPatient(message);
-			break;
-
 			case Mc.Finish:
 				ProcessFinish(message);
+			break;
+
+			case Mc.MedicalTreatPatient:
+				ProcessMedicalTreatPatient(message);
 			break;
 
 			default:

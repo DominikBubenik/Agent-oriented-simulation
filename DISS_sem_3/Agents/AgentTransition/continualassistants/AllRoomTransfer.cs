@@ -1,6 +1,8 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentTransition;
+using DISS_sem_3.Entities;
+using MainLogic;
 
 namespace Agents.AgentTransition.ContinualAssistants
 {
@@ -21,6 +23,37 @@ namespace Agents.AgentTransition.ContinualAssistants
 		//meta! sender="AgentTransition", id="119", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.Finish;
+			var duration = MyAgent.GetAllRoomTransferDuration();
+			if (myMsg.Patient != null)
+			{
+				myMsg.Patient.PatientStatus = PatientStatus.Moving;
+				if (MySim.AnimatorExists)
+				{
+					var config = MyAgent.GetConfigForPatientTransfer(myMsg.Room, myMsg.Patient);
+					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
+				}
+			}
+			if (myMsg.Nurse != null)
+			{
+				myMsg.Nurse.Activity = StaffActivity.Moving;
+				if (MySim.AnimatorExists)
+				{
+					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
+					myMsg.Nurse.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
+				}
+			}
+			if (myMsg.Doctor != null)
+			{
+				myMsg.Doctor.Activity = StaffActivity.Moving;
+				if (MySim.AnimatorExists)
+				{
+					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
+					myMsg.Doctor.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
+				}
+			}
+			Hold(duration, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +61,11 @@ namespace Agents.AgentTransition.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					var myMsg = (MyMessage)message;
+					myMsg.Addressee = MyAgent;
+					AssistantFinished(myMsg);
+					break;
 			}
 		}
 

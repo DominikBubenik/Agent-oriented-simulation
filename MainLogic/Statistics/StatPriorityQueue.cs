@@ -19,10 +19,12 @@ public class StatPriorityQueue<T> : BaseStatQueue<T>
 
     public override int Count => _items.Count;
 
-    public void Enqueue(T item, int priority, double currentTime)
+    public T Pop() => _items[0].Data;
+
+    public void Enqueue(T item, int priority, double arrival, double currentTime)
     {
         UpdateStats(currentTime);
-        _items.Add(new PriorityItem { Data = item, Priority = priority, ArrivalTime = currentTime });
+        _items.Add(new PriorityItem { Data = item, Priority = priority, ArrivalTime = arrival });
         
         _items.Sort((a, b) => {
             int res = a.Priority.CompareTo(b.Priority);
@@ -42,5 +44,15 @@ public class StatPriorityQueue<T> : BaseStatQueue<T>
     {
         base.Reset(currentTime);
         _items.Clear();
+    }
+    
+    public List<T> GetAllItems()
+    {
+        int count = _items.Count;
+        if (count == 0) return new List<T>();
+        var result = new List<T>(count);
+
+        for (int i = 0; i < count; i++) result.Add(_items[i].Data);
+        return result;
     }
 }

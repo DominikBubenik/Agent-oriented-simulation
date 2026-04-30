@@ -6,11 +6,10 @@ using DISS_sem_3.Entities;
 namespace Agents.AgentEnviroment.ContinualAssistants
 {
 	//meta! id="19"
-	public class RegularPatient : OSPABA.Scheduler
+	public class WalkInPatient : OSPABA.Scheduler
 	{
-		public readonly int TOTO_BUDE_NEJAKY_GEN = 5;
 		private int patientCounter;
-		public RegularPatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
+		public WalkInPatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
 		}
@@ -28,7 +27,7 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			var myMsg = (MyMessage)message;
 			myMsg.Code = Mc.Finish;
 			
-			Hold(TOTO_BUDE_NEJAKY_GEN, myMsg);
+			Hold(MyAgent.GetNextWalkIn(), myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -37,10 +36,12 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			switch (message.Code)
 			{
 				case Mc.Finish:
-					Hold(TOTO_BUDE_NEJAKY_GEN, message.CreateCopy());
+					Hold(MyAgent.GetNextWalkIn(), message.CreateCopy());
 					
 					var myMsg = (MyMessage)message;
 					myMsg.Patient = new Patient(patientCounter, MySim, MySim.CurrentTime, false);
+					MyAgent.PatientEntered(myMsg.Patient);
+					myMsg.Patient.PatientStatus = PatientStatus.Entering;
 					myMsg.Addressee = MyAgent;
 					patientCounter++;
 					AssistantFinished(myMsg);

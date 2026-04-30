@@ -28,31 +28,51 @@ namespace Agents.AgentResources
 		//meta! sender="AgentEDepartment", id="79", type="Notice"
 		public void ProcessFreeUpResources(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			MyAgent.FreeUpResources(myMsg);
 		}
 
-		//meta! sender="AgentEDepartment", id="49", type="Request"
-		public void ProcessMedicalTreatResources(MessageForm message)
+		//meta! sender="AgentEDepartment", id="49", type="Notice"
+		public void ProcessGetMedicalTreatResources(MessageForm message)
 		{
-		}
-
-		//meta! sender="AgentEDepartment", id="44", type="Request"
-		public void ProcessEntryExamResources(MessageForm message)
-		{
-			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			var myMsg = (MyMessage)message;
 
 			myMsg.Nurse = null;
 			myMsg.Room = null;
-			GlobalLogger.PrintLog(myMsg.Patient.ToString() + " looking for some resources", MySim.CurrentTime);
-			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);
-			if (myMsg.Nurse != null && myMsg.Room != null)
+			myMsg.Doctor = null;
+			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+			((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(myMsg);
+			if (myMsg.Nurse != null && myMsg.Room != null && myMsg.Doctor != null)
 			{
-				myMsg.Code = Mc.EntryExamResources;
-				Response(myMsg);
+				myMsg.Code = Mc.SendMedicalTreatResources;
+				myMsg.Addressee = MyAgent.Parent;
+				Notice(myMsg);
 			}
 			else
 			{
-				GlobalLogger.PrintLog(myMsg.Patient.ToString() + " no resources", MySim.CurrentTime);
-				MyAgent.WaitingForEntryExam.Enqueue(myMsg);
+				GlobalLogger.PrintLog( " no resources for medical treat", MySim.CurrentTime);
+			}
+		}
+
+		//meta! sender="AgentEDepartment", id="44", type="Notice"
+		public void ProcessGetEntryExamResources(MessageForm message)
+		{
+			var myMsg = (MyMessage)message;
+
+			myMsg.Nurse = null;
+			myMsg.Doctor = null;
+			myMsg.Room = null;
+			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);
+			if (myMsg.Nurse != null && myMsg.Room != null)
+			{
+				myMsg.Code = Mc.SendEntryExamResources;
+				myMsg.Addressee = MyAgent.Parent;
+				Notice(myMsg);
+			}
+			else
+			{
+				GlobalLogger.PrintLog( " no resources", MySim.CurrentTime);
 			}
 		}
 
@@ -73,16 +93,16 @@ namespace Agents.AgentResources
 		{
 			switch (message.Code)
 			{
-			case Mc.EntryExamResources:
-				ProcessEntryExamResources(message);
+			case Mc.GetMedicalTreatResources:
+				ProcessGetMedicalTreatResources(message);
+			break;
+
+			case Mc.GetEntryExamResources:
+				ProcessGetEntryExamResources(message);
 			break;
 
 			case Mc.FreeUpResources:
 				ProcessFreeUpResources(message);
-			break;
-
-			case Mc.MedicalTreatResources:
-				ProcessMedicalTreatResources(message);
 			break;
 
 			default:

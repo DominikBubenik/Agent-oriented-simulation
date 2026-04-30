@@ -26,16 +26,19 @@ namespace Agents.AgentEntryExam
 		//meta! sender="AgentEDepartment", id="47", type="Request"
 		public void ProcessEntryExamPatient(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.Start;
+			myMsg.Addressee = MyAgent.FindAssistant(SimId.ProcessEntryExam);
+			StartContinualAssistant(myMsg);
 		}
-
-		//meta! userInfo="Removed from model"
-		public void ProcessFinishProcessEntryFinished(MessageForm message)
-		{
-		}
-
+		
 		//meta! sender="ProcessEntryExam", id="53", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.EntryExamPatient;
+			myMsg.Addressee = MyAgent.Parent;
+			Response(myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

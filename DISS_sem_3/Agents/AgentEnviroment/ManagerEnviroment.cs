@@ -26,7 +26,8 @@ namespace Agents.AgentEnviroment
 		//meta! sender="AgentBoss", id="15", type="Notice"
 		public void ProcessPatientExit(MessageForm message)
 		{
-			MyAgent.TreatedPatientsCount++;
+			var myMsg = (MyMessage)message;
+			MyAgent.PatientExit(myMsg.Patient);
 		}
 
 		//meta! sender="AmbulancePatient", id="18", type="Finish"
@@ -37,18 +38,18 @@ namespace Agents.AgentEnviroment
 			Notice(message);
 			
 			var newMessage = (MyMessage)message.CreateCopy();
-			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
+			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
-		//meta! sender="RegularPatient", id="20", type="Finish"
-		public void ProcessFinishRegularPatient(MessageForm message)
+		//meta! sender="WalkInPatient", id="20", type="Finish"
+		public void ProcessFinishWalkInPatient(MessageForm message)
 		{
 			message.Addressee = MyAgent.Parent;
 			message.Code = Mc.PatientArrival;
 			Notice(message);
 			
 			var newMessage = (MyMessage)message.CreateCopy();
-			Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
+			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -68,6 +69,10 @@ namespace Agents.AgentEnviroment
 		{
 			switch (message.Code)
 			{
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
+			break;
+
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -75,14 +80,10 @@ namespace Agents.AgentEnviroment
 					ProcessFinishAmbulancePatient(message);
 				break;
 
-				case SimId.RegularPatient:
-					ProcessFinishRegularPatient(message);
+				case SimId.WalkInPatient:
+					ProcessFinishWalkInPatient(message);
 				break;
 				}
-			break;
-
-			case Mc.PatientExit:
-				ProcessPatientExit(message);
 			break;
 
 			default:
