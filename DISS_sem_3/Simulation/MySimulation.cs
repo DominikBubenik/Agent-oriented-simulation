@@ -15,6 +15,7 @@ namespace Simulation
 {
 	public class MySimulation : OSPABA.Simulation
 	{
+		public double EndSimulationTime { get; private set; }
 		public SimpleStat TotalPatientCount { get; private set; }
 		public SimpleStat TotalWalkInPatientCount { get; private set; }
 		public SimpleStat TotalAmbulancePatientCount { get; private set; }
@@ -75,6 +76,7 @@ namespace Simulation
 			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
 
 			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
+			
 		}
 
 		override public void PrepareReplication()
@@ -143,6 +145,8 @@ namespace Simulation
 		// 	animObject.SetPosition(pos);
 		// 	return animObject;
 		// }
+		
+		public void SetEndTime(double  endTime) => EndSimulationTime = endTime;
 
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

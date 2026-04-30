@@ -3,5 +3,5 @@
 public enum RoomStatus
 {
     Occupied,
-    Empty
+    Free
 }

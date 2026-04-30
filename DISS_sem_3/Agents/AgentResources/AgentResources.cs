@@ -88,7 +88,7 @@ namespace Agents.AgentResources
 				myMsg.Room.Nurse = null;
 				myMsg.Room.Doctor = null;
 				myMsg.Room.Patient = null;
-				myMsg.Room.CurrentStatus = RoomStatus.Empty;
+				myMsg.Room.CurrentStatus = RoomStatus.Free;
 			}
 			
 			myMsg.Nurse = null;

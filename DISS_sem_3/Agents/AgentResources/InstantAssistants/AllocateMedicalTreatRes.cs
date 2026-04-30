@@ -47,17 +47,13 @@ namespace Agents.AgentResources.InstantAssistants
 			if (nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];
-				myMsg.Nurse.IsWorking = true;
-				myMsg.Nurse.Activity = StaffActivity.Working;
 				nurses.RemoveAt(0);
 
 				myMsg.Doctor = doctors[0];
-				myMsg.Doctor.IsWorking = true;
-				myMsg.Doctor.Activity = StaffActivity.Working;
 				doctors.RemoveAt(0);
 
 				myMsg.Room = rooms[0];
-				myMsg.Room.CurrentStatus = RoomStatus.Occupied;
+				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
 				GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
 			}

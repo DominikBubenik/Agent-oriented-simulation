@@ -30,6 +30,7 @@ public class SimulationModel
         }
         
         _core.SimulateAsync(args.Replications, args.EndSimulationTime);
+        _core.SetEndTime(args.EndSimulationTime);
     }
 
     public Animator CreateAnimator(StartSimulationArgs args)

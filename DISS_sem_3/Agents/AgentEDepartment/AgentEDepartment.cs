@@ -72,7 +72,7 @@ namespace Agents.AgentEDepartment
 				MedicalTreatQueueB.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
 			}
 
-			patient.PatientStatus = PatientStatus.MedicalQueue;
+			patient.PatientStatus = PatientStatus.MedicalWait;
 		}
 		
 		public Patient GetWaitingPatientForMedicalTreat(Patient patient)

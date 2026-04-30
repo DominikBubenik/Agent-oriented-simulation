@@ -25,10 +25,10 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Room.Nurse = myMsg.Nurse;
-			myMsg.Nurse.Activity = StaffActivity.Working;
+			myMsg.Nurse.StartWork();
+			
 			myMsg.Room.Patient = myMsg.Patient;
 			myMsg.Room.Patient.PatientStatus = PatientStatus.EntryExam;
-			MyAgent.AssignPriority(myMsg.Patient);
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -42,9 +42,11 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 			{
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
+					MyAgent.AssignPriority(myMsg.Patient);
+					myMsg.Patient.PatientStatus = PatientStatus.MedicalWait;
+					myMsg.Nurse.StopWork();
+					
 					myMsg.Addressee = MyAgent;
-					myMsg.Nurse.Activity = StaffActivity.Not_Working;
-					myMsg.Patient.PatientStatus = PatientStatus.Moving;
 					AssistantFinished(myMsg);
 					break;
 			}
