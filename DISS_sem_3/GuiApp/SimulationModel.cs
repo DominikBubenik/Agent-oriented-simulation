@@ -62,6 +62,9 @@ public class SimulationModel
         var entryQueueWaitingTimeWalkIn = mySim.TotalEntryWaitingTimeWalkInP;
         var entryQueueWaitingTimeAmbulance = mySim.TotalEntryWaitingTimeAmbulanceP;
         var entryQueueLength = mySim.TotalEntryQueueLength;
+        var medicalTreatWaitTimeA = mySim.TotalMedicalTreatWaitingTimePatientsA;
+        var medicalTreatWaitTimeAB = mySim.TotalMedicalTreatWaitingTimePatientsAB;
+        var medicalTreatWaitTimeB = mySim.TotalMedicalTreatWaitingTimePatientsB;
 
         dto.Stats["TotalPatientsInSystem"] = new OneStat(totalPInSystem.GetConfidenceInterval());
         dto.Stats["TotalWalkInInSystem"] = new OneStat(totalWalkinPInSystem.GetConfidenceInterval());
@@ -72,6 +75,9 @@ public class SimulationModel
         dto.Stats["EntryQueueWaitWalkIn"] = new OneStat(entryQueueWaitingTimeWalkIn.GetConfidenceInterval());
         dto.Stats["EntryQueueWaitAmbulanced"] = new OneStat(entryQueueWaitingTimeAmbulance.GetConfidenceInterval());
         dto.Stats["EntryQueueLength"] = new OneStat(entryQueueLength.GetConfidenceInterval());
+        dto.Stats["MedicalTreatWaitingTimeA"] = new OneStat(medicalTreatWaitTimeA.GetConfidenceInterval());
+        dto.Stats["MedicalTreatWaitingTimeAB"] = new OneStat(medicalTreatWaitTimeAB.GetConfidenceInterval());
+        dto.Stats["MedicalTreatWaitingTimeB"] = new OneStat(medicalTreatWaitTimeB.GetConfidenceInterval());
 
         OnTurboUI?.Invoke(dto);
     }

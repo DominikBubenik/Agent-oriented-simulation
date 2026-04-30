@@ -62,17 +62,17 @@ public class Patient : Entity
     {
         _entryQueueStartWait = MySim.CurrentTime;
     }
-    
-    public void StartMedicalQueueWait()
-    {
-        _medicalQueueStartWait = MySim.CurrentTime;
-    }
 
     public void StopEntryWaiting()
     {
         EntryQueueWaitingTime = MySim.CurrentTime - _entryQueueStartWait;
     }
-    
+
+    public void StartMedicalQueueWait()
+    {
+        _medicalQueueStartWait = MySim.CurrentTime;
+    }
+
     public void StopMedicalQueueWaiting()
     {
         MedicalQueueWaitingTime = MySim.CurrentTime - _medicalQueueStartWait;

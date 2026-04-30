@@ -41,6 +41,9 @@ public partial class TurboWindow : Form
             { "EntryQueueWaitWalkIn", formsPlot7 },
             { "EntryQueueWaitAmbulanced", formsPlot8 },
             { "EntryQueueLength", formsPlot9 },
+            { "MedicalTreatWaitingTimeA", formsPlot10 },
+            { "MedicalTreatWaitingTimeAB", formsPlot11 },
+            { "MedicalTreatWaitingTimeB", formsPlot12 },
         };
 
         SetupGraphStyles();
@@ -49,8 +52,14 @@ public partial class TurboWindow : Form
     private void SetupGraphStyles()
     {
         string[] titles = { "Total Patients", "Walk-In Count", "Ambulance Count", "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)", 
-            "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "AvgEntryQueueLength" };
-        var plots = new[] { formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9 };
+            "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "AvgEntryQueueLength", "AvgMedicTreatWaitTime TypeA", "AvgMedicTreatWaitTime TypeAB",
+            "AvgMedicTreatWaitTime TypeB", 
+        };
+        var plots = new[]
+        {
+            formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9,
+            formsPlot10, formsPlot11, formsPlot12
+        };
         
         for (int i = 0; i < plots.Length; i++)
         {
@@ -175,6 +184,9 @@ public partial class TurboWindow : Form
         Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI);
         Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI);
         Map("EntryQueueLength", txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI);
+        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA,txtTurboMedicalTrWaitingTimeA_CI);
+        Map("MedicalTreatWaitingTimeAB", txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI);
+        Map("MedicalTreatWaitingTimeB", txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI);
     }
 
     public void SetStatus(string status)

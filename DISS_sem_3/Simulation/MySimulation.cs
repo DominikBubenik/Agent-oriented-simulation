@@ -31,17 +31,12 @@ namespace Simulation
 		// public SimpleStat TotalEntryWaitingTime { get; private set; }
 		public SimpleStat TotalEntryWaitingTimeWalkInP { get; private set; }
 		public SimpleStat TotalEntryWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat TotalMedicalTreatWaitingTimeWalkInP { get; private set; }
+		public SimpleStat TotalMedicalTreatWaitingTimePatientsA { get; private set; }
+		public SimpleStat TotalMedicalTreatWaitingTimePatientsAB { get; private set; }
+		public SimpleStat TotalMedicalTreatWaitingTimePatientsB { get; private set; }
 		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
 		
-		public AnimTextItem SimTimeAnimObject { get; set;}
-		public AnimTextItem ObjednavokAnimObject { get; set; }
-		public AnimTextItem KucharovPracAnimObject { get; set; }
-		public AnimTextItem KucharovNepracAnimObject { get; set; }
-		public AnimTextItem CasnikovPracAnimObject { get; set; }
-		public AnimTextItem CasnikovNepracAnimObject { get; set; }
-
+		
 		public int InitDoctorCount { get; set; } = 5;
 		public int InitNurseCount { get; set; } = 10;
 		public int InitRoomACount { get; set; } = 5;
@@ -73,8 +68,9 @@ namespace Simulation
 			TotalEntryWaitingTimeAmbulanceP = new SimpleStat();
 			TotalEntryWaitingTimeWalkInP = new SimpleStat();
 
-			TotalMedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
-			TotalMedicalTreatWaitingTimeWalkInP = new SimpleStat();
+			TotalMedicalTreatWaitingTimePatientsA = new SimpleStat();
+			TotalMedicalTreatWaitingTimePatientsAB = new SimpleStat();
+			TotalMedicalTreatWaitingTimePatientsB = new SimpleStat();
 
 			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
 			
@@ -104,8 +100,9 @@ namespace Simulation
 			TotalEntryWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
 			TotalEntryWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
 
-			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
-			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());
+			TotalMedicalTreatWaitingTimePatientsA.AddSample(AgentEnviroment.MedicalTreatWaitingTimePA.GetAverage());
+			TotalMedicalTreatWaitingTimePatientsAB.AddSample(AgentEnviroment.MedicalTreatWaitingTimePAB.GetAverage());
+			TotalMedicalTreatWaitingTimePatientsB.AddSample(AgentEnviroment.MedicalTreatWaitingTimePB.GetAverage());
 			
 			TotalEntryQueueLength.AddSample(AgentEDepartment.EntryQueue.GetAverageQueueLength(CurrentTime));
 		}

@@ -27,6 +27,9 @@ partial class TurboWindow
         this.formsPlot7 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot8 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot9 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot10 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot11 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot12 = new ScottPlot.WinForms.FormsPlot();
         
         this.Text = "Emergency Hospital - Turbo Mode Analysis"; //[cite: 7]
 
@@ -90,6 +93,9 @@ partial class TurboWindow
         AddStatRow(8, "EntryWaitingTime (Walk-In)", out txtTurboEntryWaitTimeWalkIn, out txtTurboEntryWaitTimeWalkIn_CI);
         AddStatRow(9, "EntryWaitingTime (Ambulance)", out txtTurboEntryWaitAmbulance, out txtTurboEntryWaitTimeAmbulance_CI);
         AddStatRow(10, "EntryQueueLength", out txtTurboEntryQueueLength, out txtTurboEntryQueueLength_CI);
+        AddStatRow(11, "MedicalWaitA", out txtTurboMedicalTrWaitingTimeA, out txtTurboMedicalTrWaitingTimeA_CI);
+        AddStatRow(12, "MedicalWaitAB", out txtTurboMedicalTrWaitingTimeAB, out txtTurboMedicalTrWaitingTimeAB_CI);
+        AddStatRow(13, "MedicalWaitB", out txtTurboMedicalTrWaitingTimeB, out txtTurboMedicalTrWaitingTimeB_CI);
 
         this.statsGroup.Controls.Add(statsTable);
 
@@ -105,15 +111,21 @@ partial class TurboWindow
         this.formsPlot3.Dock = DockStyle.Fill; this.formsPlot4.Dock = DockStyle.Fill;
         this.formsPlot5.Dock = DockStyle.Fill; this.formsPlot6.Dock = DockStyle.Fill;
         this.formsPlot7.Dock = DockStyle.Fill; this.formsPlot8.Dock = DockStyle.Fill;
-        this.formsPlot9.Dock = DockStyle.Fill;
+        this.formsPlot9.Dock = DockStyle.Fill; this.formsPlot10.Dock = DockStyle.Fill;
+        this.formsPlot11.Dock = DockStyle.Fill; this.formsPlot12.Dock = DockStyle.Fill;
         
-        plotsTable.Controls.AddRange(new Control[] { formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9 });
+        plotsTable.Controls.AddRange(new Control[]
+        {
+            formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9,
+            formsPlot10, formsPlot11, formsPlot12
+        });
         // Correct 2D positioning
         plotsTable.Controls.Add(formsPlot1, 0, 0); plotsTable.Controls.Add(formsPlot2, 1, 0);
         plotsTable.Controls.Add(formsPlot3, 0, 1); plotsTable.Controls.Add(formsPlot4, 1, 1);
         plotsTable.Controls.Add(formsPlot5, 0, 2); plotsTable.Controls.Add(formsPlot6, 1, 2);
         plotsTable.Controls.Add(formsPlot7, 0, 3); plotsTable.Controls.Add(formsPlot8, 1, 3);
-        plotsTable.Controls.Add(formsPlot9, 0, 4);
+        plotsTable.Controls.Add(formsPlot9, 0, 4); plotsTable.Controls.Add(formsPlot10, 1, 4);
+        plotsTable.Controls.Add(formsPlot11, 0, 5); plotsTable.Controls.Add(formsPlot12, 1, 5);
         
         // Form Assembly
         this.Controls.Add(plotsTable);
@@ -125,6 +137,7 @@ partial class TurboWindow
     }
 
     public ScottPlot.WinForms.FormsPlot formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9;
+    public ScottPlot.WinForms.FormsPlot formsPlot10, formsPlot11, formsPlot12;
     public FlowLayoutPanel topPanel;
     public Button btnRun, btnPause, btnResume, btnStop;
     // Skip percent control (string like '5%' or '0.05')
@@ -137,5 +150,6 @@ partial class TurboWindow
     public TextBox txtTurboTotal_CI,txtTurboWalkIn, txtTurboWalkIn_CI, txtTurboAmbulance, txtTurboAmbulance_CI, txtTurboAvgTime_CI, txtTurboEntryQueue_CI, txtTurboDetectorQueue_CI, txtTurboLuggageQueue_CI;
     public TextBox txtTurboBeforeDetector, txtTurboBeforeDetector_CI, txtTurboAfterDetector, txtTurboAfterDetector_CI, txtTurboTimeWalkIn,txtTurboTimeWalkIn_CI;
     public TextBox txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI;
-    public TextBox txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI;
+    public TextBox txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI, txtTurboMedicalTrWaitingTimeA, txtTurboMedicalTrWaitingTimeA_CI;
+    public TextBox txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI;
 }
