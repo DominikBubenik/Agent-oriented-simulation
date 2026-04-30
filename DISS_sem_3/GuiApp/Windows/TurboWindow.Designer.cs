@@ -24,6 +24,11 @@ partial class TurboWindow
         this.formsPlot4 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot5 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot6 = new ScottPlot.WinForms.FormsPlot();
+        
+        this.Text = "Emergency Hospital - Turbo Mode Analysis"; //[cite: 7]
+
+        // Update the stat rows for Hospital metrics[cite: 11, 13]
+      
 
         // Top Panel
         this.topPanel = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 45, Padding = new Padding(5) };
@@ -73,13 +78,12 @@ partial class TurboWindow
         }
 
         AddStatRow(1, "Replication Index", out txtTurboReplication, out _, false);
-        AddStatRow(2, "Total Passengers", out txtTurboTotal, out txtTurboTotal_CI);
-        AddStatRow(3, "Avg Time in System (s)", out txtTurboAvgTime, out txtTurboAvgTime_CI);
-        AddStatRow(4, "Avg Entry Queue Length", out txtTurboEntryQueue, out txtTurboEntryQueue_CI);
-        AddStatRow(5, "Avg Detector Queue Length", out txtTurboDetectorQueue, out txtTurboDetectorQueue_CI);
-        AddStatRow(6, "Avg Before-Lug Detector", out txtTurboBeforeDetector, out txtTurboBeforeDetector_CI);
-        AddStatRow(7, "Avg After-Lug Detector", out txtTurboAfterDetector, out txtTurboAfterDetector_CI);
-        AddStatRow(8, "Avg Waiting for Luggage", out txtTurboLuggageQueue, out txtTurboLuggageQueue_CI);
+        AddStatRow(2, "Total Patients", out txtTurboTotal, out txtTurboTotal_CI);
+        AddStatRow(3, "Total Walk-In", out txtTurboWalkIn, out txtTurboWalkIn_CI);
+        AddStatRow(4, "Total Ambulance", out txtTurboAmbulance, out txtTurboAmbulance_CI);
+        AddStatRow(5, "Avg Time in System", out txtTurboAvgTime, out txtTurboAvgTime_CI);
+        AddStatRow(6, "Time (Walk-In)", out txtTurboTimeWalkIn, out txtTurboTimeWalkIn_CI);
+        AddStatRow(7, "Time (Ambulance)", out txtTurboTimeAmbulance, out txtTurboTimeAmbulance_CI);
 
         this.statsGroup.Controls.Add(statsTable);
 
@@ -120,6 +124,7 @@ partial class TurboWindow
     public Label lblStatus;
     public GroupBox statsGroup;
     public TextBox txtTurboReplication, txtTurboTotal, txtTurboAvgTime, txtTurboEntryQueue, txtTurboDetectorQueue, txtTurboLuggageQueue;
-    public TextBox txtTurboTotal_CI, txtTurboAvgTime_CI, txtTurboEntryQueue_CI, txtTurboDetectorQueue_CI, txtTurboLuggageQueue_CI;
-    public TextBox txtTurboBeforeDetector, txtTurboBeforeDetector_CI, txtTurboAfterDetector, txtTurboAfterDetector_CI;
+    public TextBox txtTurboTotal_CI,txtTurboWalkIn, txtTurboWalkIn_CI, txtTurboAmbulance, txtTurboAmbulance_CI, txtTurboAvgTime_CI, txtTurboEntryQueue_CI, txtTurboDetectorQueue_CI, txtTurboLuggageQueue_CI;
+    public TextBox txtTurboBeforeDetector, txtTurboBeforeDetector_CI, txtTurboAfterDetector, txtTurboAfterDetector_CI, txtTurboTimeWalkIn,txtTurboTimeWalkIn_CI;
+    public TextBox txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI;
 }
