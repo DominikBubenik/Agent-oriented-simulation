@@ -13,7 +13,6 @@ namespace Agents.AgentEnviroment
 		public SimpleStat TimeInSystemWalkInPatient { get; private set; }
 		public SimpleStat TimeInSystemAmbulancePatient { get; private set; }
 
-		public int TreatedPatientsCount { get; set; }
 		public Dictionary<string, Patient> AllPatientsInSystem { get; private set; }
 
 		public SimpleStat EntranceWaitingTimeAmbulanceP { get; private set; }
@@ -21,6 +20,9 @@ namespace Agents.AgentEnviroment
 
 		public SimpleStat MedicalTreatWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat MedicalTreatWaitingTimeWalkInP { get; private set; }
+		public int TotalPatientsStats { get; set; }
+		public int TotalWalkInPatientsStats { get; set; }
+		public int TotalAmbulancedPatientsStats { get; set; }
 
 		private ExponentionalGenerator _walkInGenerator;
 		private GammaGenerator _ambulanceGenerator;
@@ -40,11 +42,14 @@ namespace Agents.AgentEnviroment
 			TimeInSystem = new SimpleStat();
 			TimeInSystemWalkInPatient = new SimpleStat();
 			TimeInSystemAmbulancePatient = new SimpleStat();
+			
 
-			TreatedPatientsCount = 0;
+			TotalPatientsStats = 0;
+			TotalWalkInPatientsStats = 0;
+			TotalAmbulancedPatientsStats = 0;
 
-			EntranceWaitingTimeAmbulanceP = new SimpleStat();
 			EntranceWaitingTimeWalkInP = new SimpleStat();
+			EntranceWaitingTimeAmbulanceP = new SimpleStat();
 
 			MedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
 			MedicalTreatWaitingTimeWalkInP = new SimpleStat();
@@ -73,14 +78,18 @@ namespace Agents.AgentEnviroment
 			TimeInSystem.AddSample(MySim.CurrentTime - patient.ArrivalTime);
 			if (patient.ArrivedByAmbulance)
 			{
+				TotalAmbulancedPatientsStats++;
 				TimeInSystemAmbulancePatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+				EntranceWaitingTimeAmbulanceP.AddSample(patient.EntryQueueWaitingTime);
 			}
 			else
 			{
+				TotalWalkInPatientsStats++;
 				TimeInSystemWalkInPatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+				EntranceWaitingTimeWalkInP.AddSample(patient.EntryQueueWaitingTime);
 			}
 			AllPatientsInSystem.Remove(patient.Name);
-			TreatedPatientsCount++;
+			TotalPatientsStats++;
 		}
 
 		public double GetNextWalkIn() => _walkInGenerator.Generate();

@@ -37,7 +37,10 @@ public partial class TurboWindow : Form
             { "TotalAmbulancedInSystem", formsPlot3 },
             { "TotalTimeInSystem", formsPlot4 },
             { "TotalTimeInSystemWalkIn", formsPlot5 },
-            { "TotalTimeInSystemAmbulanced", formsPlot6 }
+            { "TotalTimeInSystemAmbulanced", formsPlot6 },
+            { "EntryQueueWaitWalkIn", formsPlot7 },
+            { "EntryQueueWaitAmbulanced", formsPlot8 },
+            { "EntryQueueLength", formsPlot9 },
         };
 
         SetupGraphStyles();
@@ -45,8 +48,9 @@ public partial class TurboWindow : Form
 
     private void SetupGraphStyles()
     {
-        string[] titles = { "Total Patients", "Walk-In Count", "Ambulance Count", "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)" };
-        var plots = new[] { formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6 };
+        string[] titles = { "Total Patients", "Walk-In Count", "Ambulance Count", "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)", 
+            "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "AvgEntryQueueLength" };
+        var plots = new[] { formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9 };
         
         for (int i = 0; i < plots.Length; i++)
         {
@@ -63,7 +67,7 @@ public partial class TurboWindow : Form
         // THROTTLE: Skip frame if updated too recently to keep the window clickable[cite: 15]
         // if (_uiRefreshThrottle.ElapsedMilliseconds < REFRESH_MS) return;
         // _uiRefreshThrottle.Restart();
-        if (replication % 50 != 0)
+        if (replication % 500 != 0)
         {
             return;
         }
@@ -166,6 +170,11 @@ public partial class TurboWindow : Form
         Map("TotalTimeInSystem", txtTurboAvgTime, txtTurboAvgTime_CI);
         Map("TotalTimeInSystemWalkIn", txtTurboTimeWalkIn, txtTurboTimeWalkIn_CI);
         Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI);
+        Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI);
+        Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI);
+        Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI);
+        Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI);
+        Map("EntryQueueLength", txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI);
     }
 
     public void SetStatus(string status)

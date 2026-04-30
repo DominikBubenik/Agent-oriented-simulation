@@ -24,6 +24,9 @@ partial class TurboWindow
         this.formsPlot4 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot5 = new ScottPlot.WinForms.FormsPlot();
         this.formsPlot6 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot7 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot8 = new ScottPlot.WinForms.FormsPlot();
+        this.formsPlot9 = new ScottPlot.WinForms.FormsPlot();
         
         this.Text = "Emergency Hospital - Turbo Mode Analysis"; //[cite: 7]
 
@@ -60,7 +63,7 @@ partial class TurboWindow
         // Header Row
         statsTable.Controls.Add(new Label { Text = "Metric", Dock = DockStyle.Fill, TextAlign = System.Drawing.ContentAlignment.BottomLeft }, 0, 0);
         statsTable.Controls.Add(new Label { Text = "Average", Dock = DockStyle.Fill, TextAlign = System.Drawing.ContentAlignment.BottomCenter }, 1, 0);
-        statsTable.Controls.Add(new Label { Text = "90% C.I.", Dock = DockStyle.Fill, TextAlign = System.Drawing.ContentAlignment.BottomCenter }, 2, 0);
+        statsTable.Controls.Add(new Label { Text = "95% C.I.", Dock = DockStyle.Fill, TextAlign = System.Drawing.ContentAlignment.BottomCenter }, 2, 0);
 
         // Helper to add rows
         void AddStatRow(int row, string label, out TextBox txtVal, out TextBox txtCi, bool hasCi = true)
@@ -83,7 +86,10 @@ partial class TurboWindow
         AddStatRow(4, "Total Ambulance", out txtTurboAmbulance, out txtTurboAmbulance_CI);
         AddStatRow(5, "Avg Time in System", out txtTurboAvgTime, out txtTurboAvgTime_CI);
         AddStatRow(6, "Time (Walk-In)", out txtTurboTimeWalkIn, out txtTurboTimeWalkIn_CI);
-        AddStatRow(7, "Time (Ambulance)", out txtTurboTimeAmbulance, out txtTurboTimeAmbulance_CI);
+        AddStatRow(7, "Time (Ambulance)", out txtTurboTimeAmbulance, out txtTurboTimeAmbulance_CI);   
+        AddStatRow(8, "EntryWaitingTime (Walk-In)", out txtTurboEntryWaitTimeWalkIn, out txtTurboEntryWaitTimeWalkIn_CI);
+        AddStatRow(9, "EntryWaitingTime (Ambulance)", out txtTurboEntryWaitAmbulance, out txtTurboEntryWaitTimeAmbulance_CI);
+        AddStatRow(10, "EntryQueueLength", out txtTurboEntryQueueLength, out txtTurboEntryQueueLength_CI);
 
         this.statsGroup.Controls.Add(statsTable);
 
@@ -98,13 +104,17 @@ partial class TurboWindow
         this.formsPlot1.Dock = DockStyle.Fill; this.formsPlot2.Dock = DockStyle.Fill;
         this.formsPlot3.Dock = DockStyle.Fill; this.formsPlot4.Dock = DockStyle.Fill;
         this.formsPlot5.Dock = DockStyle.Fill; this.formsPlot6.Dock = DockStyle.Fill;
-
-        plotsTable.Controls.AddRange(new Control[] { formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6 });
+        this.formsPlot7.Dock = DockStyle.Fill; this.formsPlot8.Dock = DockStyle.Fill;
+        this.formsPlot9.Dock = DockStyle.Fill;
+        
+        plotsTable.Controls.AddRange(new Control[] { formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9 });
         // Correct 2D positioning
         plotsTable.Controls.Add(formsPlot1, 0, 0); plotsTable.Controls.Add(formsPlot2, 1, 0);
         plotsTable.Controls.Add(formsPlot3, 0, 1); plotsTable.Controls.Add(formsPlot4, 1, 1);
         plotsTable.Controls.Add(formsPlot5, 0, 2); plotsTable.Controls.Add(formsPlot6, 1, 2);
-
+        plotsTable.Controls.Add(formsPlot7, 0, 3); plotsTable.Controls.Add(formsPlot8, 1, 3);
+        plotsTable.Controls.Add(formsPlot9, 0, 4);
+        
         // Form Assembly
         this.Controls.Add(plotsTable);
         this.Controls.Add(this.statsGroup);
@@ -114,7 +124,7 @@ partial class TurboWindow
         this.ClientSize = new System.Drawing.Size(1400, 850);
     }
 
-    public ScottPlot.WinForms.FormsPlot formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6;
+    public ScottPlot.WinForms.FormsPlot formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9;
     public FlowLayoutPanel topPanel;
     public Button btnRun, btnPause, btnResume, btnStop;
     // Skip percent control (string like '5%' or '0.05')
@@ -123,8 +133,9 @@ partial class TurboWindow
     // Status label (shows Running / Paused / Stopped)
     public Label lblStatus;
     public GroupBox statsGroup;
-    public TextBox txtTurboReplication, txtTurboTotal, txtTurboAvgTime, txtTurboEntryQueue, txtTurboDetectorQueue, txtTurboLuggageQueue;
+    public TextBox txtTurboReplication, txtTurboTotal, txtTurboAvgTime;
     public TextBox txtTurboTotal_CI,txtTurboWalkIn, txtTurboWalkIn_CI, txtTurboAmbulance, txtTurboAmbulance_CI, txtTurboAvgTime_CI, txtTurboEntryQueue_CI, txtTurboDetectorQueue_CI, txtTurboLuggageQueue_CI;
     public TextBox txtTurboBeforeDetector, txtTurboBeforeDetector_CI, txtTurboAfterDetector, txtTurboAfterDetector_CI, txtTurboTimeWalkIn,txtTurboTimeWalkIn_CI;
-    public TextBox txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI;
+    public TextBox txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI;
+    public TextBox txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI;
 }

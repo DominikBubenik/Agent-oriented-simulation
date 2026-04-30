@@ -28,7 +28,7 @@ namespace Simulation
 		public SimpleStat TotalTimeInSystemPriority4 { get; private set; }
 		public SimpleStat TotalTimeInSystemPriority5 { get; private set; }
 		public SimpleStat TotalEntryQueueLength { get; private set; }
-		public SimpleStat TotalEntryWaitingTime { get; private set; }
+		// public SimpleStat TotalEntryWaitingTime { get; private set; }
 		public SimpleStat TotalEntryWaitingTimeWalkInP { get; private set; }
 		public SimpleStat TotalEntryWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimeAmbulanceP { get; private set; }
@@ -69,6 +69,7 @@ namespace Simulation
 			TotalTimeInSystemAmbulancePatient = new SimpleStat();
 			TotalTimeInSystemWalkInPatient = new SimpleStat();
 
+			TotalEntryQueueLength = new SimpleStat();
 			TotalEntryWaitingTimeAmbulanceP = new SimpleStat();
 			TotalEntryWaitingTimeWalkInP = new SimpleStat();
 
@@ -92,15 +93,21 @@ namespace Simulation
 			// Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
 
+			TotalPatientCount.AddSample(AgentEnviroment.TotalPatientsStats);
+			TotalWalkInPatientCount.AddSample(AgentEnviroment.TotalWalkInPatientsStats);
+			TotalAmbulancePatientCount.AddSample(AgentEnviroment.TotalAmbulancedPatientsStats);
+			
 			TotalTimeInSystem.AddSample(AgentEnviroment.TimeInSystem.GetAverage());
 			TotalTimeInSystemWalkInPatient.AddSample(AgentEnviroment.TimeInSystemWalkInPatient.GetAverage());
 			TotalTimeInSystemAmbulancePatient.AddSample(AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage());
 
-			TotalEntryWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
 			TotalEntryWaitingTimeWalkInP.AddSample(AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage());
+			TotalEntryWaitingTimeAmbulanceP.AddSample(AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage());
 
 			TotalMedicalTreatWaitingTimeAmbulanceP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeAmbulanceP.GetAverage());
 			TotalMedicalTreatWaitingTimeWalkInP.AddSample(AgentEnviroment.MedicalTreatWaitingTimeWalkInP.GetAverage());
+			
+			TotalEntryQueueLength.AddSample(AgentEDepartment.EntryQueue.GetAverageQueueLength(CurrentTime));
 		}
 
 		override public void SimulationFinished()

@@ -58,18 +58,21 @@ public class SimulationModel
         var totalTimeInSystemPriority3 = mySim.TotalTimeInSystemPriority3;
         var totalTimeInSystemPriority4 = mySim.TotalTimeInSystemPriority4;
         var totalTimeInSystemPriority5 = mySim.TotalTimeInSystemPriority5;
-        var entryQueueLength = mySim.TotalEntryQueueLength;
-        var entryQueueWaitingTime = mySim.TotalEntryWaitingTime;
+        // var entryQueueWaitingTime = mySim.TotalEntryWaitingTime;
         var entryQueueWaitingTimeWalkIn = mySim.TotalEntryWaitingTimeWalkInP;
         var entryQueueWaitingTimeAmbulance = mySim.TotalEntryWaitingTimeAmbulanceP;
-        
+        var entryQueueLength = mySim.TotalEntryQueueLength;
+
         dto.Stats["TotalPatientsInSystem"] = new OneStat(totalPInSystem.GetConfidenceInterval());
         dto.Stats["TotalWalkInInSystem"] = new OneStat(totalWalkinPInSystem.GetConfidenceInterval());
         dto.Stats["TotalAmbulancedInSystem"] = new OneStat(totalAmbulancedPInSystem.GetConfidenceInterval());
         dto.Stats["TotalTimeInSystem"] = new OneStat(totalTimeInSystem.GetConfidenceInterval());
         dto.Stats["TotalTimeInSystemWalkIn"] = new OneStat(totalTimeInSystemWalkInPatient.GetConfidenceInterval());
         dto.Stats["TotalTimeInSystemAmbulanced"] = new OneStat(totalTimeInSystemAmbulancePatient.GetConfidenceInterval());
-        
+        dto.Stats["EntryQueueWaitWalkIn"] = new OneStat(entryQueueWaitingTimeWalkIn.GetConfidenceInterval());
+        dto.Stats["EntryQueueWaitAmbulanced"] = new OneStat(entryQueueWaitingTimeAmbulance.GetConfidenceInterval());
+        dto.Stats["EntryQueueLength"] = new OneStat(entryQueueLength.GetConfidenceInterval());
+
         OnTurboUI?.Invoke(dto);
     }
 
