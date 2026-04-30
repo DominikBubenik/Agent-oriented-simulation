@@ -24,12 +24,12 @@ public class Patient : Entity
         {
             Priority = 0;
             Name = "am-patient-" + Id;
-            AnimObject = new AnimImageItem(Config.AMBULANCE_PATIENT_IMG);
+            if (MySim.AnimatorExists) AnimObject = new AnimImageItem(Config.AMBULANCE_PATIENT_IMG);
         }
         else
         {
             Name = "wa-patient-" + Id;
-            AnimObject = new AnimImageItem(Config.WALK_IN_PATIENT_IMG);
+            if (MySim.AnimatorExists)  AnimObject = new AnimImageItem(Config.WALK_IN_PATIENT_IMG);
         }
         if (MySim.AnimatorExists) MySim.Animator.Register(AnimObject);
     }

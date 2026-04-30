@@ -25,18 +25,6 @@ namespace Agents.AgentEDepartment
 			}
 		}
 
-		//meta! userInfo="Removed from model"
-		public void ProcessMedicalTreatResources(MessageForm message)
-		{
-			// var myMsg = (MyMessage)message;
-			// MyAgent.DequeuePatientMedicalTreat(myMsg);
-			//
-			// //tu treba pridat ten request response aby bolo jednoznacne odkial idu 
-			// myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			// myMsg.Code = Mc.BetweenAmbulanceTransition;
-			// Request(myMsg);
-		}
-
 		//meta! sender="AgentBoss", id="23", type="Notice"
 		public void ProcessTreatPatient(MessageForm message)
 		{
@@ -74,18 +62,6 @@ namespace Agents.AgentEDepartment
 			}
 		
 			
-		}
-
-		//meta! userInfo="Removed from model"
-		public void ProcessEntryExamResources(MessageForm message)
-		{
-			// //tuto ho zoberiem z radu lebo az teraz sa priradia resource
-			// var myMsg = (MyMessage)message;
-			// MyAgent.DequeuePatientEntry(myMsg);
-			//
-			// myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			// myMsg.Code = Mc.BetweenAmbulanceTransition;
-			// Request(myMsg);
 		}
 
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"

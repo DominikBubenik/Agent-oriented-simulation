@@ -36,9 +36,6 @@ namespace Agents.AgentEnviroment
 			message.Addressee = MyAgent.Parent;
 			message.Code = Mc.PatientArrival;
 			Notice(message);
-			
-			var newMessage = (MyMessage)message.CreateCopy();
-			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! sender="WalkInPatient", id="20", type="Finish"
@@ -47,9 +44,6 @@ namespace Agents.AgentEnviroment
 			message.Addressee = MyAgent.Parent;
 			message.Code = Mc.PatientArrival;
 			Notice(message);
-			
-			var newMessage = (MyMessage)message.CreateCopy();
-			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

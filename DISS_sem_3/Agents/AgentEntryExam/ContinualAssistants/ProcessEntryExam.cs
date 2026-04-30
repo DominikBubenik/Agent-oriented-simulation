@@ -46,7 +46,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 					myMsg.Patient.PatientStatus = PatientStatus.MedicalWait;
 					myMsg.Nurse.StopWork();
 					
-					myMsg.Addressee = MyAgent;
+					// myMsg.Addressee = MyAgent; asi zbytocneee
 					AssistantFinished(myMsg);
 					break;
 			}
