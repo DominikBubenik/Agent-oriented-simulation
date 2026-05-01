@@ -37,7 +37,8 @@ public class SimulationModel
             _core.OnRefreshUI(UpdateWelch);   
             _core.SetSimSpeed(1.0, 0.000001);
             _core.SetEndTime(args.EndSimulationTime);
-            _core.Simulate(args.Replications, args.EndSimulationTime);
+            // _core.Simulate(args.Replications, args.EndSimulationTime);
+            Task.Run(() => _core.Simulate(args.Replications, args.EndSimulationTime));
         }
         else
         {

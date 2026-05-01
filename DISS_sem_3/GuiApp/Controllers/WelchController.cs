@@ -90,7 +90,9 @@ public class WelchController
                     // ── 2. Wire a lightweight simulation that emits graph ticks ──
                     var sim = new SimulationModel();
                     // _activeCore = sim;
- 
+                    var tcs = new TaskCompletionSource<bool>();
+                    sim.OnTurboUI += (stats) => { if (stats.Replication >= 0) tcs.TrySetResult(true); };
+                    
                     var tickTimes = new List<double>();
                     var tickVals  = new List<double>[MetricCount];
                     for (int m = 0; m < MetricCount; m++) tickVals[m] = new List<double>();
@@ -110,6 +112,7 @@ public class WelchController
  
                     // Run on background thread, await completion
                     sim.StartSimulation(repArgs);
+                    await tcs.Task;
                     _activeCore = null;
  
                     if (!_isRunning) break;

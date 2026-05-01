@@ -18,6 +18,8 @@ public partial class TurboWindow : Form
     private readonly Dictionary<string, ScottPlot.WinForms.FormsPlot> _plotMapping;
     private readonly Stopwatch _uiRefreshThrottle = Stopwatch.StartNew();
     private const int REFRESH_MS = 500; // Throttling ensures the UI thread stays responsive
+    private readonly Stopwatch _renderThrottle = Stopwatch.StartNew();
+    private const int MIN_RENDER_MS = 200;
 
     public TurboWindow()
     {
@@ -214,6 +216,9 @@ public partial class TurboWindow : Form
     
     public void RenderSnapshot(double[] xs, double[][] snapshots)
     {
+        if (_renderThrottle.ElapsedMilliseconds < MIN_RENDER_MS) return;
+        _renderThrottle.Restart();
+        
         if (this.InvokeRequired)
         {
             this.Invoke(new Action(() => RenderSnapshot(xs, snapshots)));
