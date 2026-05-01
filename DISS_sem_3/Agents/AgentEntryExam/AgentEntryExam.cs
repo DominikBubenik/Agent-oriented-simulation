@@ -75,5 +75,10 @@ namespace Agents.AgentEntryExam
 		//meta! tag="end"
 		
 		private MySimulation MyCastSim() => (MySimulation)MySim;
+
+		public void SetPositionAfterExam(MyMessage myMsg)
+		{
+			myMsg.Patient.AnimObject.SetPosition(MySim.CurrentTime, Config.ROOMS_B_AFTER_EXAM_POSITION[myMsg.Room.Id]);
+		}
 	}
 }

@@ -149,21 +149,23 @@ namespace Simulation
 		{
 			if (!AnimatorExists) return;
 
-			UsporiadajSkupinu(AgentResources.AllDoctors.Cast<MedicalStaff>().ToList(), Config.BASE_POSITION_DOCTORS);
-
-			// Config.Gui.SetSimSpeed();
+			InitMedicalStaff(AgentResources.AllDoctors.Cast<MedicalStaff>().ToList(), Config.BASE_POSITION_DOCTORS);
+			InitMedicalStaff(AgentResources.AllNurses.Cast<MedicalStaff>().ToList(), Config.BASE_POSITION_NURSES);
 		}
 		
-		void UsporiadajSkupinu(List<MedicalStaff> skupina, PointF startPozicia)
+		/**
+		 * Metoda prevzata z prikladu Restauracia
+		 */
+		void InitMedicalStaff(List<MedicalStaff> skupina, PointF startPozicia)
 		{
-			int poradie = 0;
+			int order = 0;
 			foreach (MedicalStaff pracovnik in skupina)
 			{
-				PointF pozicia = new PointF(startPozicia.X, startPozicia.Y);
-				pozicia.X = pozicia.X + poradie * 50;
+				PointF position = new PointF(startPozicia.X, startPozicia.Y);
+				position.X = position.X + order * 50;
 
-				if (AnimatorExists) pracovnik.AnimObject.SetPosition(pozicia);
-				poradie++;
+				if (AnimatorExists) pracovnik.AnimObject.SetPosition(position);
+				order++;
 			}
 		}
 		
