@@ -212,6 +212,14 @@
     btnTurbo.Height = 50;
     btnTurbo.Font = new Font("Segoe UI", 11, FontStyle.Bold);
     btnTurbo.Click += TurboBtnClick;
+    
+    // BUTTON WELCH
+    Button btnWelch = new Button();
+    btnWelch.Text = "Welch";
+    btnWelch.Width = 120;
+    btnWelch.Height = 50;
+    btnWelch.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+    btnWelch.Click += WelchBtnClick;
 
     FlowLayoutPanel leftPanel = new FlowLayoutPanel();
     leftPanel.Dock = DockStyle.Left;
@@ -221,6 +229,7 @@
     leftPanel.Controls.Add(btnSensitivity);
     leftPanel.Controls.Add(btnObservation);
     leftPanel.Controls.Add(btnTurbo);
+    leftPanel.Controls.Add(btnWelch);
     // Keep a simple checkbox in main view to toggle sensitivity mode
     chkSensRun.Text = "Run Sensitivity";
     chkSensRun.AutoSize = true;

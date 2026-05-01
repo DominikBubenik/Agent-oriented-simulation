@@ -7,6 +7,7 @@ public class SimulationController
 {
     private readonly ObservationController _observationController;
     private readonly TurboController _turboController;
+    private readonly WelchController _welchController;
     private readonly MainView _view;
     
      public SimulationController(MainView view)
@@ -15,6 +16,7 @@ public class SimulationController
         
         _observationController = new ObservationController();
         _turboController = new TurboController();
+        _welchController = new WelchController();
         
         _view.OnOpenObservationRequested += (s, e) => {
             Console.WriteLine("lets gooo");
@@ -25,7 +27,13 @@ public class SimulationController
         _view.OnOpenTurboRequested += (s, e) => {
             var args = _view.GetCurrentArguments();
             _turboController.ShowWindow(args);
+        };  
+        
+        _view.OnOpenWelchRequested += (s, e) => {
+            var args = _view.GetCurrentArguments();
+            _welchController.ShowWindow(args);
         };
+        
     }
 
     public async void StartSimulation(StartSimulationArgs args)

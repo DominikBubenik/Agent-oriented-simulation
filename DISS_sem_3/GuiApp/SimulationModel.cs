@@ -12,8 +12,11 @@ public class SimulationModel
     
     public event Action<SimulationStateDto> OnRefreshUI;
     public event Action<SimulationStatsDto> OnTurboUI;
+    public event Action<WelchDto> OnWelchUpdate;
     private DateTime _lastRefreshTime = DateTime.MinValue;
     private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60); // ~30 FPS
+    private double _lastWelchUpdateTime = 0;
+    private const double WELCH_INTERVAL = 3600.0;
 
     public void StartSimulation(StartSimulationArgs args)
     {
@@ -28,9 +31,20 @@ public class SimulationModel
             _core.OnReplicationDidFinish(UpdateTurboWindow);   
             _core.SetMaxSimSpeed();
         }
+        
+        if (args.WarmUpProof)
+        {
+            _core.OnRefreshUI(UpdateWelch);   
+            _core.SetSimSpeed(1.0, 0.000001);
+            _core.SetEndTime(args.EndSimulationTime);
+            _core.Simulate(args.Replications, args.EndSimulationTime);
+        }
+        else
+        {
+            _core.SimulateAsync(args.Replications, args.EndSimulationTime);
+            _core.SetEndTime(args.EndSimulationTime);
+        }
         Console.WriteLine(DateTime.Now);
-        _core.SimulateAsync(args.Replications, args.EndSimulationTime);
-        _core.SetEndTime(args.EndSimulationTime);
     }
 
     public Animator CreateAnimator(StartSimulationArgs args)
@@ -119,6 +133,24 @@ public class SimulationModel
         };
         
         OnRefreshUI?.Invoke(state);
+    }
+    
+    private void UpdateWelch(OSPABA.Simulation Sim)
+    {
+        if (Sim.CurrentTime - _lastWelchUpdateTime < WELCH_INTERVAL)
+            return;
+        _lastWelchUpdateTime = Sim.CurrentTime;
+
+        var mySim = (MySimulation)Sim;
+        var welchDto = new WelchDto();
+        welchDto.CurrentTime = mySim.CurrentTime / 3600;
+        welchDto.TotalPatientsInSystem = mySim.AgentEnviroment.TotalPatientsStats;
+        welchDto.TotalWalkInInSystem = mySim.AgentEnviroment.TotalWalkInPatientsStats;
+        welchDto.TotalAmbulancedInSystem = mySim.AgentEnviroment.TotalAmbulancedPatientsStats;
+        welchDto.TotalTimeInSystem = mySim.AgentEnviroment.TimeInSystem.GetAverage();
+        welchDto.TotalTimeInSystemWalkIn = mySim.AgentEnviroment.TimeInSystemWalkInPatient.GetAverage();
+        welchDto.TotalTimeInSystemAmbulanced = mySim.AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage();
+        OnWelchUpdate?.Invoke(welchDto);
     }
 
     public void PauseSimulation()

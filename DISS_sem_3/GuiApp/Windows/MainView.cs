@@ -18,6 +18,7 @@ public partial class MainView : Form
     public event EventHandler? OnOpenSensitivityRequested;
     public event EventHandler? OnOpenObservationRequested;
     public event EventHandler? OnOpenTurboRequested;
+    public event EventHandler? OnOpenWelchRequested;
     private bool _paused;
 
     // Charts moved to separate ChartsWindow. MainView no longer stores plot data.
@@ -125,6 +126,11 @@ public partial class MainView : Form
     public void TurboBtnClick(object? sender, EventArgs e)
     {
         OnOpenTurboRequested?.Invoke(this, EventArgs.Empty);
+    } 
+    
+    public void WelchBtnClick(object? sender, EventArgs e)
+    {
+        OnOpenWelchRequested?.Invoke(this, EventArgs.Empty);
     }
 
     // Thread-safe method to update the current simulation time textbox.
