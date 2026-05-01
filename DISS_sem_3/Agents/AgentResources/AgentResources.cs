@@ -110,7 +110,7 @@ namespace Agents.AgentResources
 		public double GetUtilAllNurses()
 		{
 			var cumulativeUtil = 0.0;
-			foreach (var nurse in Nurses)
+			foreach (var nurse in AllNurses)
 			{
 				cumulativeUtil += nurse.GetWorkingUtilization();
 			}

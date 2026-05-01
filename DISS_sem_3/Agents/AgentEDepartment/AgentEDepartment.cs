@@ -45,8 +45,7 @@ namespace Agents.AgentEDepartment
 		
 		public void DequeuePatientMedicalTreat(MyMessage myMsg)
 		{
-			var pat = myMsg.Patient;
-			if (myMsg.Patient.Priority < 3)
+			if (myMsg.Patient.Priority < 3 && myMsg.Room.IsTypeA())
 			{
 				myMsg.Patient = MedicalTreatQueueA.Dequeue(MySim.CurrentTime);
 			}
@@ -54,8 +53,6 @@ namespace Agents.AgentEDepartment
 			{
 				myMsg.Patient = MedicalTreatQueueB.Dequeue(MySim.CurrentTime);
 			}
-
-			// if (pat.Name != myMsg.Patient.Name) throw new Exception();
 			myMsg.Patient.PatientStatus = PatientStatus.Moving;
 			myMsg.Patient.StopMedicalQueueWaiting();
 		}

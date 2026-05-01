@@ -84,7 +84,7 @@ namespace Simulation
 			TotalRoomAUtil = new SimpleStat();
 			TotalRoomBUtil = new SimpleStat();
 
-			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
+			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp1LeastUtilized;
 			
 		}
 

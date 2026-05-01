@@ -27,6 +27,9 @@ namespace Agents.AgentResources.InstantAssistants
 				case ResourceAllocatingStrategy.Exp0FirstAvailable:
 					Exp0FirstAvailable(myMsg);
 					break;
+				case ResourceAllocatingStrategy.Exp1LeastUtilized:
+					Exp1LeastUtilizedStaff(myMsg);
+					break;
 			}
 		}
 
@@ -44,6 +47,23 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
 				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
+			}
+		}
+		
+		private void Exp1LeastUtilizedStaff(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.FreeRoomsTypeB;
+			
+			if (nurses.Count > 0 && rooms.Count > 0 )
+			{
+				myMsg.Nurse = nurses.MinBy(n => n.GetWorkingUtilization());
+				nurses.Remove(myMsg.Nurse);
+
+				myMsg.Room = rooms[0];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(0);
+				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
 			}
 		}
 

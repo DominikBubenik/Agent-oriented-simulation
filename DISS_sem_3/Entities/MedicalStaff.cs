@@ -41,7 +41,7 @@ public class MedicalStaff : Entity
     public void StopTransfer()
     {
         Activity = StaffActivity.Standing;
-        
+        TotalTransferTime += MySim.CurrentTime - _startTransferTime;
     }
 
     public double GetWorkingUtilization()
