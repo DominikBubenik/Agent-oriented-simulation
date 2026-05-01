@@ -34,6 +34,8 @@ namespace Simulation
 		public SimpleStat TotalMedicalTreatWaitingTimePatientsA { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimePatientsAB { get; private set; }
 		public SimpleStat TotalMedicalTreatWaitingTimePatientsB { get; private set; }
+		public SimpleStat TotalTimeFromEntryToMedicalTreatWalkIn { get; private set; }
+		public SimpleStat TotalTimeFromEntryToMedicalTreatAmbulance { get; private set; }
 		public SimpleStat TotalDoctorsUtil { get; private set; }
 		public SimpleStat TotalNursesUtil { get; private set; }
 		public SimpleStat TotalRoomAUtil { get; private set; }
@@ -78,13 +80,16 @@ namespace Simulation
 			TotalMedicalTreatWaitingTimePatientsA = new SimpleStat();
 			TotalMedicalTreatWaitingTimePatientsAB = new SimpleStat();
 			TotalMedicalTreatWaitingTimePatientsB = new SimpleStat();
+			
+			TotalTimeFromEntryToMedicalTreatWalkIn = new SimpleStat();
+			TotalTimeFromEntryToMedicalTreatAmbulance = new SimpleStat();
 
 			TotalDoctorsUtil = new SimpleStat();
 			TotalNursesUtil = new SimpleStat();
 			TotalRoomAUtil = new SimpleStat();
 			TotalRoomBUtil = new SimpleStat();
 
-			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp1LeastUtilized;
+			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
 			
 		}
 
@@ -121,6 +126,9 @@ namespace Simulation
 			TotalNursesUtil.AddSample(AgentResources.GetUtilAllNurses());
 			TotalRoomAUtil.AddSample(AgentResources.GetUtilAllRoomsA());
 			TotalRoomBUtil.AddSample(AgentResources.GetUtilAllRoomsB());
+			
+			TotalTimeFromEntryToMedicalTreatWalkIn.AddSample(AgentEnviroment.TimeFromEntryToMedicalTreatWalkIn.GetAverage());
+			TotalTimeFromEntryToMedicalTreatAmbulance.AddSample(AgentEnviroment.TimeFromEntryToMedicalTreatAmbulance.GetAverage());
 			
 			TotalEntryQueueLength.AddSample(AgentEDepartment.EntryQueue.GetAverageQueueLength(CurrentTime));
 		}

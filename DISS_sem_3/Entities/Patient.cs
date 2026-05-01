@@ -14,6 +14,7 @@ public class Patient : Entity
     public string Name { get; set; }
     public double EntryQueueWaitingTime { get; private set; }
     public double MedicalQueueWaitingTime { get; private set; }
+    public double TimeFromEnterToMedicTreat { get; set; }
     public PatientStatus PatientStatus { get; set; }
     public AnimImageItem AnimObject { get; private set; }
   
@@ -65,5 +66,6 @@ public class Patient : Entity
     public void StopMedicalQueueWaiting()
     {
         MedicalQueueWaitingTime = MySim.CurrentTime - _medicalQueueStartWait;
+        TimeFromEnterToMedicTreat = MySim.CurrentTime - ArrivalTime;
     }
 }

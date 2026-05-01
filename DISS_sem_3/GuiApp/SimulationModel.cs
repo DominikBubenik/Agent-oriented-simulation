@@ -84,6 +84,8 @@ public class SimulationModel
         var allNursesUtil = mySim.TotalNursesUtil;
         var allRoomAUtl = mySim.TotalRoomAUtil;
         var allRoomBUtil = mySim.TotalRoomBUtil;
+        var timeFromEntryToMedicalTreatWalkIn = mySim.TotalTimeFromEntryToMedicalTreatWalkIn;
+        var timeFromEntryToMedicalTreatAmbulance = mySim.TotalTimeFromEntryToMedicalTreatAmbulance;
 
         dto.Stats["TotalPatientsInSystem"] = new OneStat(totalPInSystem.GetConfidenceInterval());
         dto.Stats["TotalWalkInInSystem"] = new OneStat(totalWalkinPInSystem.GetConfidenceInterval());
@@ -105,6 +107,9 @@ public class SimulationModel
         dto.Stats["AllNursesUtil"] = new OneStat(allNursesUtil.GetConfidenceInterval());
         dto.Stats["AllRoomAUtil"] = new OneStat(allRoomAUtl.GetConfidenceInterval());
         dto.Stats["AllRoomBUtil"] = new OneStat(allRoomBUtil.GetConfidenceInterval());
+        
+        dto.Stats["FromEntryToMedicalWalkIn"] = new OneStat(timeFromEntryToMedicalTreatWalkIn.GetConfidenceInterval());
+        dto.Stats["FromEntryToMedicalAmbulance"] = new OneStat(timeFromEntryToMedicalTreatAmbulance.GetConfidenceInterval());
 
         OnTurboUI?.Invoke(dto);
     }

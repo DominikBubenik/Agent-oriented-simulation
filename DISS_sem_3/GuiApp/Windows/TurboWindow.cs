@@ -50,6 +50,8 @@ public partial class TurboWindow : Form
             { "AllNursesUtil", formsPlot14 },
             { "AllRoomAUtil", formsPlot15 },
             { "AllRoomBUtil", formsPlot16 },
+            { "FromEntryToMedicalWalkIn", formsPlot17 },
+            { "FromEntryToMedicalAmbulance", formsPlot18 },
         };
 
         SetupGraphStyles();
@@ -59,12 +61,13 @@ public partial class TurboWindow : Form
     {
         string[] titles = { "Total Patients", "Walk-In Count", "Ambulance Count", "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)", 
             "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "AvgEntryQueueLength", "AvgMedicTreatWaitTime TypeA", "AvgMedicTreatWaitTime TypeAB",
-            "AvgMedicTreatWaitTime TypeB", "Doctors Utilization", "Nurses Utilization", "Rooms A Utilization", "Rooms B Utilization"
+            "AvgMedicTreatWaitTime TypeB", "Doctors Utilization", "Nurses Utilization", "Rooms A Utilization", "Rooms B Utilization", "TimeFromEntryToMedicalTreatWalkIn",
+            "TimeFromEntryToMedicalTreatAmbulance"
         };
         var plots = new[]
         {
             formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9,
-            formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16
+            formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16, formsPlot17, formsPlot18
         };
         
         for (int i = 0; i < plots.Length; i++)
@@ -166,11 +169,11 @@ public partial class TurboWindow : Form
     {
         if (this.InvokeRequired) { this.BeginInvoke(new Action(() => UpdateStats(stats))); return; }
 
-        void Map(string key, TextBox valBox, TextBox ciBox, double divider = 1.0)
+        void Map(string key, TextBox valBox, TextBox ciBox, bool time = false)
         {
             if (stats.Stats.TryGetValue(key, out var s) && s != null)
             {
-                valBox.Text = (s.Avg / divider).ToString("F3");
+                valBox.Text = time ?  $"{TimeSpan.FromSeconds(s.Avg):hh\\:mm\\:ss}": s.Avg.ToString("F3");
                 ciBox.Text = $"[{s.LowerBound:F2} - {s.UpperBound:F2}]";
             }
             else 
@@ -183,22 +186,25 @@ public partial class TurboWindow : Form
         Map("TotalWalkInInSystem", txtTurboWalkIn, txtTurboWalkIn_CI);
         Map("TotalAmbulancedInSystem", txtTurboAmbulance, txtTurboAmbulance_CI);
         
-        Map("TotalTimeInSystem", txtTurboAvgTime, txtTurboAvgTime_CI, 60.0);
-        Map("TotalTimeInSystemWalkIn", txtTurboTimeWalkIn, txtTurboTimeWalkIn_CI, 60.0);
-        Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, 60.0);
+        Map("TotalTimeInSystem", txtTurboAvgTime, txtTurboAvgTime_CI, true);
+        Map("TotalTimeInSystemWalkIn", txtTurboTimeWalkIn, txtTurboTimeWalkIn_CI, true);
+        Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, true);
         
-        Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, 60.0);
-        Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI, 60.0);
+        Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, true);
+        Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI, true);
         Map("EntryQueueLength", txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI);
         
-        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA,txtTurboMedicalTrWaitingTimeA_CI, 60.0);
-        Map("MedicalTreatWaitingTimeAB", txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, 60.0);
-        Map("MedicalTreatWaitingTimeB", txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI, 60.0);
+        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA,txtTurboMedicalTrWaitingTimeA_CI, true);
+        Map("MedicalTreatWaitingTimeAB", txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, true);
+        Map("MedicalTreatWaitingTimeB", txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI, true);
         
         Map("AllDoctorsUtil", txtTurboAllDoctorsUtil, txtTurboAllDoctorsUtil_CI);
         Map("AllNursesUtil", txtTurboAllNursesUtil, txtTurboAllNursesUtil_CI);
         Map("AllRoomAUtil", txtTurboAllRoomAUtil, txtTurboAllRoomAUtil_CI);
         Map("AllRoomBUtil", txtTurboAllRoomBUtil, txtTurboAllRoomBUtil_CI);
+        
+        Map("FromEntryToMedicalWalkIn", txtTurboTimeFromEntryToMedicalWalkIn, txtTurboTimeFromEntryToMedicalWalkIn_CI, true);
+        Map("FromEntryToMedicalAmbulance", txtTurboTimeFromEntryToMedicalAmbulance, txtTurboTimeFromEntryToMedicalAmbulance_CI, true);
     }
 
     public void SetStatus(string status)

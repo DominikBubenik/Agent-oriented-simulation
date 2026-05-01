@@ -21,6 +21,9 @@ namespace Agents.AgentEnviroment
 		public SimpleStat MedicalTreatWaitingTimePA { get; private set; }
 		public SimpleStat MedicalTreatWaitingTimePAB { get; private set; }
 		public SimpleStat MedicalTreatWaitingTimePB { get; private set; }
+		
+		public SimpleStat TimeFromEntryToMedicalTreatWalkIn { get; private set; }
+		public SimpleStat TimeFromEntryToMedicalTreatAmbulance { get; private set; }
 		public int TotalPatientsStats { get; set; }
 		public int TotalWalkInPatientsStats { get; set; }
 		public int TotalAmbulancedPatientsStats { get; set; }
@@ -55,7 +58,10 @@ namespace Agents.AgentEnviroment
 			MedicalTreatWaitingTimePA = new SimpleStat();
 			MedicalTreatWaitingTimePAB = new SimpleStat();
 			MedicalTreatWaitingTimePB = new SimpleStat();
-
+			
+			TimeFromEntryToMedicalTreatWalkIn = new SimpleStat();
+			TimeFromEntryToMedicalTreatAmbulance = new SimpleStat();
+			
 			AllPatientsInSystem = new Dictionary<string, Patient>();
 			SchedulePatientArrivals();
 		}
@@ -83,12 +89,14 @@ namespace Agents.AgentEnviroment
 				TotalAmbulancedPatientsStats++;
 				TimeInSystemAmbulancePatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
 				EntranceWaitingTimeAmbulanceP.AddSample(patient.EntryQueueWaitingTime);
+				TimeFromEntryToMedicalTreatAmbulance.AddSample(patient.TimeFromEnterToMedicTreat);
 			}
 			else
 			{
 				TotalWalkInPatientsStats++;
 				TimeInSystemWalkInPatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
 				EntranceWaitingTimeWalkInP.AddSample(patient.EntryQueueWaitingTime);
+				TimeFromEntryToMedicalTreatWalkIn.AddSample(patient.TimeFromEnterToMedicTreat);
 			}
 
 			if (patient.Priority < 3)
