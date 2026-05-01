@@ -23,8 +23,6 @@ namespace Agents.AgentTransition
 			_exitSystemDuration = new Random(MyCastSim().NextSeed());
 		}
 
-		public List<Nurse> MovingNurses { get; set; }
-
 		override public void PrepareReplication()
 		{
 			base.PrepareReplication();
@@ -63,6 +61,25 @@ namespace Agents.AgentTransition
 				return Config.PATH_MEDICAL_B_QUEUE_TO_ROOM_A;
 			}
 			return Config.PATH_MEDICAL_B_QUEUE_TO_ROOM_B;
+		}
+
+		public void SetPositionsInRoom(MyMessage myMsg)
+		{
+			if (myMsg.Room.IsTypeA() || myMsg.Room.Id == 0)
+			{
+				var position = myMsg.Room.IsTypeA() ? Config.ROOMS_A[myMsg.Room.Id]  : Config.ROOM_B_0;
+				myMsg.Patient.AnimObject.SetPosition(MySim.CurrentTime, position);
+				myMsg.Nurse.AnimObject.SetPosition(MySim.CurrentTime, position.X + 100, position.Y);
+				if (myMsg.Doctor != null) myMsg.Doctor.AnimObject.SetPosition(MySim.CurrentTime, position.X + 180, position.Y);
+			}
+			else
+			{
+				var position = Config.ROOMS_B[myMsg.Room.Id];
+				myMsg.Patient.AnimObject.SetPosition(MySim.CurrentTime, position);
+				myMsg.Nurse.AnimObject.SetPosition(MySim.CurrentTime, position.X, position.Y + 100);
+				if (myMsg.Doctor != null) myMsg.Doctor.AnimObject.SetPosition(MySim.CurrentTime, position.X, position.Y + 200);
+			}
+			
 		}
 	}
 }

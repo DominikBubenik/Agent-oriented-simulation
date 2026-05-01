@@ -71,6 +71,7 @@ namespace Agents.AgentTransition.ContinualAssistants
 					myMsg.Addressee = MyAgent;
 					myMsg.Nurse.StopTransfer();
 					myMsg.Doctor?.StopTransfer();
+					if (MySim.AnimatorExists) MyAgent.SetPositionsInRoom(myMsg);
 					AssistantFinished(myMsg);
 					break;
 			}

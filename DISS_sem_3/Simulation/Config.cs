@@ -60,6 +60,16 @@ public class Config
     public static readonly PointF ROOM_A_2 = new PointF(220, 780);
     public static readonly PointF ROOM_A_3 = new PointF(220, 995);
     public static readonly PointF ROOM_A_4 = new PointF(220, 1210);
+
+    public static readonly PointF[] ROOMS_A = new PointF[]
+    {
+        ROOM_A_0, ROOM_A_1, ROOM_A_2, ROOM_A_3, ROOM_A_4
+    };
+
+    public static readonly PointF[] ROOMS_B = new PointF[]
+    {
+        ROOM_B_0, ROOM_B_1, ROOM_B_2, ROOM_B_3, ROOM_B_4, ROOM_B_5, ROOM_B_6
+    };
     
     public static readonly PointF[][] PATH_ROOM_B_EXIT = new PointF[][]
     {
