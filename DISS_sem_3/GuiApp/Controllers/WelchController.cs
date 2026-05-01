@@ -1,4 +1,5 @@
 ﻿using Airport_GUI;
+using DISS_sem_3.GuiApp.Windows;
 using DISS_SEM_GUI.EventsArguments;
 using Simulation;
 
@@ -17,12 +18,12 @@ public class WelchController
         // Cap on ScottPlot data points to keep rendering fast.
         private const int MaxPlotPoints = 5000;
  
-        private const int MetricCount = 6;
+        private const int MetricCount = 18;
  
         // ── State ─────────────────────────────────────────────────────────
         private StartSimulationArgs _args;
         private readonly object _lock;
-        private TurboWindow? _window;
+        private WelchWindow? _window;
         private MySimulation? _activeCore;   // kept so Pause/Stop can reach it
         private volatile bool _isRunning;
  
@@ -30,7 +31,7 @@ public class WelchController
  
         public void ShowWindow(StartSimulationArgs args)
         {
-            _window = new TurboWindow();
+            _window = new WelchWindow();
             _args  = args;
             _window.OnRunRequested    += (s, e) => { _ = StartAsync(); };
             _window.OnPauseRequested  += (s, e) => Pause();
@@ -102,12 +103,15 @@ public class WelchController
                     sim.OnWelchUpdate += (welchDto) =>
                     {
                         tickTimes.Add(welchDto.CurrentTime);
-                        tickVals[0].Add(welchDto.TotalPatientsInSystem);
-                        tickVals[1].Add(welchDto.TotalWalkInInSystem);
-                        tickVals[2].Add(welchDto.TotalAmbulancedInSystem);
-                        tickVals[3].Add(welchDto.TotalTimeInSystem);
-                        tickVals[4].Add(welchDto.TotalTimeInSystemWalkIn);
-                        tickVals[5].Add(welchDto.TotalTimeInSystemAmbulanced);
+                        tickVals[0].Add(welchDto.CurrentPatientCount);
+                        tickVals[1].Add(welchDto.CurrentWalkInPatientCount);
+                        tickVals[2].Add(welchDto.CurrentAmbulancePatientCount);
+                        tickVals[3].Add(welchDto.CurrentEntryQueueLength);
+                        tickVals[4].Add(welchDto.CurrentMedicalTreatWaitingCount);
+                        tickVals[5].Add(welchDto.CurrentAllDoctorsUtil);
+                        tickVals[6].Add(welchDto.CurrentAllNursesUtil);
+                        tickVals[7].Add(welchDto.CurrentAllRoomAUtil);
+                        tickVals[8].Add(welchDto.CurrentAllRoomBUtil);
                     };
  
                     // Run on background thread, await completion

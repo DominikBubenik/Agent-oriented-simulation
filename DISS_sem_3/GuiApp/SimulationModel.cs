@@ -1,4 +1,5 @@
-﻿using DISS_SEM_GUI.EventsArguments;
+﻿using DISS_sem_3.Entities;
+using DISS_SEM_GUI.EventsArguments;
 using OSPAnimator;
 using Simulation;
 
@@ -16,7 +17,7 @@ public class SimulationModel
     private DateTime _lastRefreshTime = DateTime.MinValue;
     private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60); // ~30 FPS
     private double _lastWelchUpdateTime = 0;
-    private const double WELCH_INTERVAL = 3600.0;
+    private const double WELCH_INTERVAL = 600.0;
 
     public void StartSimulation(StartSimulationArgs args)
     {
@@ -149,13 +150,18 @@ public class SimulationModel
 
         var mySim = (MySimulation)Sim;
         var welchDto = new WelchDto();
-        welchDto.CurrentTime = mySim.CurrentTime / 3600;
-        welchDto.TotalPatientsInSystem = mySim.AgentEnviroment.TotalPatientsStats;
-        welchDto.TotalWalkInInSystem = mySim.AgentEnviroment.TotalWalkInPatientsStats;
-        welchDto.TotalAmbulancedInSystem = mySim.AgentEnviroment.TotalAmbulancedPatientsStats;
-        welchDto.TotalTimeInSystem = mySim.AgentEnviroment.TimeInSystem.GetAverage();
-        welchDto.TotalTimeInSystemWalkIn = mySim.AgentEnviroment.TimeInSystemWalkInPatient.GetAverage();
-        welchDto.TotalTimeInSystemAmbulanced = mySim.AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage();
+        welchDto.CurrentTime = mySim.CurrentTime / WELCH_INTERVAL;
+        welchDto.CurrentPatientCount = mySim.AgentEnviroment.AllPatientsInSystem.Count;
+        welchDto.CurrentWalkInPatientCount = mySim.AgentEnviroment.AllPatientsInSystem
+            .Count(k => !k.Value.ArrivedByAmbulance);
+        welchDto.CurrentAmbulancePatientCount = mySim.AgentEnviroment.AllPatientsInSystem
+            .Count(k => k.Value.ArrivedByAmbulance);;
+        welchDto.CurrentEntryQueueLength = mySim.AgentEDepartment.EntryQueue.Count;
+        welchDto.CurrentMedicalTreatWaitingCount = mySim.AgentEDepartment.MedicalTreatQueueA.Count +  mySim.AgentEDepartment.MedicalTreatQueueB.Count;
+        welchDto.CurrentAllDoctorsUtil = (double)mySim.AgentResources.AllDoctors.Count(doctor => doctor.Activity == StaffActivity.Working) / mySim.AgentResources.AllDoctors.Count;
+        welchDto.CurrentAllNursesUtil = (double)mySim.AgentResources.AllNurses.Count(nurse => nurse.Activity == StaffActivity.Working) / mySim.AgentResources.AllNurses.Count;
+        welchDto.CurrentAllRoomAUtil = (double)mySim.AgentResources.AllRoomsTypeA.Count(room => room.CurrentStatus == RoomStatus.Occupied) / mySim.AgentResources.AllRoomsTypeA.Count;
+        welchDto.CurrentAllRoomBUtil = (double)mySim.AgentResources.AllRoomsTypeB.Count(room => room.CurrentStatus == RoomStatus.Occupied) / mySim.AgentResources.AllRoomsTypeB.Count;
         OnWelchUpdate?.Invoke(welchDto);
     }
 

@@ -4,24 +4,13 @@ public class WelchDto
 {
     public double CurrentTime { get; set; }
 
-    public double TotalPatientsInSystem { get; set; }
-    public double TotalWalkInInSystem { get; set; }
-    public double TotalAmbulancedInSystem { get; set; }
-
-    public double TotalTimeInSystem { get; set; }
-    public double TotalTimeInSystemWalkIn { get; set; }
-    public double TotalTimeInSystemAmbulanced { get; set; }
-
-    public double EntryQueueWaitWalkIn { get; set; }
-    public double EntryQueueWaitAmbulanced { get; set; }
-    public double EntryQueueLength { get; set; }
-
-    public double MedicalTreatWaitingTimeA { get; set; }
-    public double MedicalTreatWaitingTimeAB { get; set; }
-    public double MedicalTreatWaitingTimeB { get; set; }
-
-    public double AllDoctorsUtil { get; set; }
-    public double AllNursesUtil { get; set; }
-    public double AllRoomAUtil { get; set; }
-    public double AllRoomBUtil { get; set; }
+    public int CurrentPatientCount { get; set; }
+    public int CurrentWalkInPatientCount { get; set; }
+    public int CurrentAmbulancePatientCount { get; set; }
+    public int CurrentEntryQueueLength { get; set; }
+    public int CurrentMedicalTreatWaitingCount { get; set; }
+    public double CurrentAllDoctorsUtil { get; set; }
+    public double CurrentAllNursesUtil { get; set; }
+    public double CurrentAllRoomAUtil { get; set; }
+    public double CurrentAllRoomBUtil { get; set; }
 }
