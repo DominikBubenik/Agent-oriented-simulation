@@ -55,7 +55,7 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Room = rooms[0];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
-				GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
+				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
 			}
 		}
 		

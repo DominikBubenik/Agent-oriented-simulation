@@ -17,7 +17,7 @@ public class SimulationModel
 
     public void StartSimulation(StartSimulationArgs args)
     {
-        _core ??= new MySimulation(args.Seed);
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount);
         if (args.ObservationMode)
         {
             _core.SetSimSpeed(1.0, 0.05);
@@ -28,14 +28,14 @@ public class SimulationModel
             _core.OnReplicationDidFinish(UpdateTurboWindow);   
             _core.SetMaxSimSpeed();
         }
-        
+        Console.WriteLine(DateTime.Now);
         _core.SimulateAsync(args.Replications, args.EndSimulationTime);
         _core.SetEndTime(args.EndSimulationTime);
     }
 
     public Animator CreateAnimator(StartSimulationArgs args)
     {
-        _core ??= new MySimulation(args.Seed);
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount);
         var animator = new Animator(_core);
         _core.Animator = animator;
         animator.SetBackgroundImage(Config.BACKGROUND_IMG);

@@ -310,7 +310,7 @@
 
     SetupTable(timeTable);
 
-    StyleInput(lblEndTime, txtEndTime, "End Time", "86400");
+    StyleInput(lblEndTime, txtEndTime, "End Time", "672");
     // Time Interval input accepts HH:MM:SS or numeric seconds. If provided it will set End = Start + Interval
     StyleInput(lblTimeInterval, txtTimeInterval, "Time Interval (HH:MM:SS)", "24:00:00");
     // Current simulation time (read-only) - will be updated from the controller/model
@@ -339,7 +339,7 @@
     SetupTable(resTable);
 
     StyleInput(lblNurses, txtNurses, "Nurses", "10");
-    StyleInput(lblDoctors, txtDoctors, "Doctors", "5");
+    StyleInput(lblDoctors, txtDoctors, "Doctors", "10");
 
     resTable.Controls.Add(lblNurses, 0, 0);
     resTable.Controls.Add(txtNurses, 1, 0);

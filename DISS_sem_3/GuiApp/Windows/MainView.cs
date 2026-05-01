@@ -171,7 +171,7 @@ public partial class MainView : Form
         observation = chkObservationMode.Checked;
      
         if (!string.IsNullOrWhiteSpace(txtEndTime.Text) && double.TryParse(txtEndTime.Text, out var etVal))
-            endTime = etVal;
+            endTime = etVal * 60 * 60;
 
         // Parse Time Interval if provided. Accepts either a numeric seconds value or HH:MM:SS (or HH:MM) format.
         if (!string.IsNullOrWhiteSpace(txtTimeInterval.Text))

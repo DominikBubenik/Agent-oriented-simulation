@@ -42,7 +42,7 @@ namespace Simulation
 		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
 		
 		
-		public int InitDoctorCount { get; set; } = 5;
+		public int InitDoctorCount { get; set; } = 10;
 		public int InitNurseCount { get; set; } = 10;
 		public int InitRoomACount { get; set; } = 5;
 		public int InitRoomBCount { get; set; } = 7;
@@ -50,10 +50,12 @@ namespace Simulation
 		public Random Seeder {get; private set;}
 		private readonly int _seed;
 		
-		public MySimulation(int seed)
+		public MySimulation(int seed, int nursesCount, int doctorsCount)
 		{
 			_seed = seed;
 			Seeder = new Random(_seed);
+			InitNurseCount = nursesCount;
+			InitDoctorCount = doctorsCount;
 			Init();
 		}
 
@@ -98,7 +100,8 @@ namespace Simulation
 		{
 			// Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
-
+			
+			// return;
 			TotalPatientCount.AddSample(AgentEnviroment.TotalPatientsStats);
 			TotalWalkInPatientCount.AddSample(AgentEnviroment.TotalWalkInPatientsStats);
 			TotalAmbulancePatientCount.AddSample(AgentEnviroment.TotalAmbulancedPatientsStats);
@@ -126,6 +129,7 @@ namespace Simulation
 		{
 			// Display simulation results
 			base.SimulationFinished();
+			Console.WriteLine(DateTime.Now);
 
 			Console.WriteLine("Simulation finished");
 		}

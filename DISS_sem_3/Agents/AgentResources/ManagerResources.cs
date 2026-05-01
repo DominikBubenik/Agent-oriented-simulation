@@ -30,6 +30,68 @@ namespace Agents.AgentResources
 		{
 			var myMsg = (MyMessage)message;
 			MyAgent.FreeUpResources(myMsg);
+			if (myMsg.MedicalWaitingA != null && MyAgent.FreeResForMedicalA())
+			{
+				myMsg.Nurse = null;
+				myMsg.Room = null;
+				myMsg.Doctor = null;
+				myMsg.Patient =  myMsg.MedicalWaitingA;
+				// GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+				((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(myMsg);
+				if (myMsg.Nurse != null && myMsg.Room != null && myMsg.Doctor != null)
+				{
+					myMsg.Code = Mc.SendMedicalTreatResources;
+					myMsg.Addressee = MyAgent.Parent;
+					Notice(myMsg);
+				}
+			}
+			if (myMsg.MedicalWaitingB != null)
+			{
+				var canContinue = false;
+				if (myMsg.MedicalWaitingB.Priority < 5 && MyAgent.FreeResForMedicalAB())
+				{
+					canContinue = true;
+				}
+
+				if (MyAgent.FreeResForMedicalB())
+				{
+					canContinue = true;
+				}
+
+				if (canContinue)
+				{
+					var initiate = (MyMessage)myMsg.CreateCopy();
+					initiate.Nurse = null;
+					initiate.Room = null;
+					initiate.Doctor = null;
+					initiate.Patient = initiate.MedicalWaitingB;
+					// GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+					((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(initiate);
+					if (initiate.Nurse != null && initiate.Room != null && initiate.Doctor != null)
+					{
+						
+						initiate.Code = Mc.SendMedicalTreatResources;
+						initiate.Addressee = MyAgent.Parent;
+						Notice(initiate);
+					}	
+				}
+			}
+			if (myMsg.EntryWaiting != null && MyAgent.FreeResForEntryExam())
+			{
+				var initiate = (MyMessage)myMsg.CreateCopy();
+				initiate.Nurse = null;
+				initiate.Room = null;
+				initiate.Doctor = null;
+				initiate.Patient = initiate.EntryWaiting;
+				// GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+				((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(initiate);
+				if (initiate.Nurse != null && initiate.Room != null)
+				{
+					initiate.Code = Mc.SendEntryExamResources;
+					initiate.Addressee = MyAgent.Parent;
+					Notice(initiate);
+				}	
+			}
 		}
 
 		//meta! sender="AgentEDepartment", id="49", type="Notice"
@@ -40,7 +102,7 @@ namespace Agents.AgentResources
 			myMsg.Nurse = null;
 			myMsg.Room = null;
 			myMsg.Doctor = null;
-			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+			// GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
 			((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(myMsg);
 			if (myMsg.Nurse != null && myMsg.Room != null && myMsg.Doctor != null)
 			{
@@ -50,7 +112,7 @@ namespace Agents.AgentResources
 			}
 			else
 			{
-				GlobalLogger.PrintLog( " no resources for medical treat", MySim.CurrentTime);
+				// GlobalLogger.PrintLog( " no resources for medical treat", MySim.CurrentTime);
 			}
 		}
 
@@ -62,7 +124,7 @@ namespace Agents.AgentResources
 			myMsg.Nurse = null;
 			myMsg.Doctor = null;
 			myMsg.Room = null;
-			GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
+			// GlobalLogger.PrintLog(" looking for some resources", MySim.CurrentTime);
 			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(myMsg);
 			if (myMsg.Nurse != null && myMsg.Room != null)
 			{
@@ -72,7 +134,7 @@ namespace Agents.AgentResources
 			}
 			else
 			{
-				GlobalLogger.PrintLog( " no resources", MySim.CurrentTime);
+				// GlobalLogger.PrintLog( " no resources", MySim.CurrentTime);
 			}
 		}
 

@@ -59,9 +59,13 @@ public class TurboController
     private void OnTurboRefresh(SimulationStatsDto st)
     {
          // Skip initial replications as requested by UI
+         if (st.Replication % 10 == 0)
+         {
+             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " - " + st.Replication);
+         }
          if (st.Replication <= _skipCount) return;
-         
-         
+
+       
          foreach (var kvp in st.Stats)
          {
              if (kvp.Value == null) continue;

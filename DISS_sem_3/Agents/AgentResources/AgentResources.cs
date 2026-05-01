@@ -122,9 +122,9 @@ namespace Agents.AgentResources
 			var cumulativeUtil = 0.0;
 			foreach (var room in AllRoomsTypeA)
 			{
-				cumulativeUtil += room.TotalOccupancyTime;
+				cumulativeUtil += room.GetUtilization();
 			}
-			return cumulativeUtil / MySim.CurrentTime;
+			return cumulativeUtil / AllRoomsTypeA.Count;
 		}
 		
 		public double GetUtilAllRoomsB()
@@ -132,9 +132,29 @@ namespace Agents.AgentResources
 			var cumulativeUtil = 0.0;
 			foreach (var room in AllRoomsTypeB)
 			{
-				cumulativeUtil += room.TotalOccupancyTime;
+				cumulativeUtil += room.GetUtilization();
 			}
-			return cumulativeUtil / MySim.CurrentTime;
+			return cumulativeUtil / AllRoomsTypeB.Count;
+		}
+		
+		public bool FreeResForMedicalA()
+		{
+			return Doctors.Count > 0 && Nurses.Count > 0 && FreeRoomsTypeA.Count > 0;
+		}
+
+		public bool FreeResForMedicalAB()
+		{
+			return Doctors.Count > 0 && Nurses.Count > 0 && (FreeRoomsTypeA.Count > 0 || FreeRoomsTypeB.Count > 0);
+		}
+
+		public bool FreeResForMedicalB()
+		{
+			return Doctors.Count > 0 && Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
+		}
+		
+		public bool FreeResForEntryExam()
+		{
+			return Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
 		}
 
 		private MySimulation MyCastSim() => (MySimulation)MySim; 

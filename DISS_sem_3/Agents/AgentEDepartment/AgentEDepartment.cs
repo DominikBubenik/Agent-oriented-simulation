@@ -30,7 +30,7 @@ namespace Agents.AgentEDepartment
 		
 		public void EnqueuePatientEntry(Patient patient)
 		{
-			GlobalLogger.PrintLog(patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
+			// GlobalLogger.PrintLog(patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
 			patient.StartEntryQueueWait();
 			patient.PatientStatus = PatientStatus.EntryQueue;
 			EntryQueue.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
@@ -55,7 +55,7 @@ namespace Agents.AgentEDepartment
 				myMsg.Patient = MedicalTreatQueueB.Dequeue(MySim.CurrentTime);
 			}
 
-			if (pat.Name != myMsg.Patient.Name) throw new Exception();
+			// if (pat.Name != myMsg.Patient.Name) throw new Exception();
 			myMsg.Patient.PatientStatus = PatientStatus.Moving;
 			myMsg.Patient.StopMedicalQueueWaiting();
 		}

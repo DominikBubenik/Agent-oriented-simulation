@@ -9,6 +9,9 @@ namespace Simulation
 		public Nurse? Nurse { get; set; }
 		public Room? Room { get; set; }
 		public Doctor? Doctor { get; set; }
+		public Patient? EntryWaiting { get; set; }
+		public Patient? MedicalWaitingA { get; set; }
+		public Patient? MedicalWaitingB { get; set; }
 		public MyMessage(OSPABA.Simulation mySim) :
 			base(mySim)
 		{
@@ -34,6 +37,9 @@ namespace Simulation
 			Nurse = original.Nurse;
 			Room = original.Room;
 			Doctor = original.Doctor;
+			EntryWaiting = original.EntryWaiting;
+			MedicalWaitingA = original.MedicalWaitingA;
+			MedicalWaitingB = original.MedicalWaitingB;
 		}
 	}
 }

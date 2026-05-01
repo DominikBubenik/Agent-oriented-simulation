@@ -164,11 +164,11 @@ public partial class TurboWindow : Form
     {
         if (this.InvokeRequired) { this.BeginInvoke(new Action(() => UpdateStats(stats))); return; }
 
-        void Map(string key, TextBox valBox, TextBox ciBox)
+        void Map(string key, TextBox valBox, TextBox ciBox, double divider = 1.0)
         {
             if (stats.Stats.TryGetValue(key, out var s) && s != null)
             {
-                valBox.Text = s.Avg.ToString("F3");
+                valBox.Text = (s.Avg / divider).ToString("F3");
                 ciBox.Text = $"[{s.LowerBound:F2} - {s.UpperBound:F2}]";
             }
             else 
@@ -181,17 +181,17 @@ public partial class TurboWindow : Form
         Map("TotalWalkInInSystem", txtTurboWalkIn, txtTurboWalkIn_CI);
         Map("TotalAmbulancedInSystem", txtTurboAmbulance, txtTurboAmbulance_CI);
         
-        Map("TotalTimeInSystem", txtTurboAvgTime, txtTurboAvgTime_CI);
-        Map("TotalTimeInSystemWalkIn", txtTurboTimeWalkIn, txtTurboTimeWalkIn_CI);
-        Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI);
+        Map("TotalTimeInSystem", txtTurboAvgTime, txtTurboAvgTime_CI, 60.0);
+        Map("TotalTimeInSystemWalkIn", txtTurboTimeWalkIn, txtTurboTimeWalkIn_CI, 60.0);
+        Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, 60.0);
         
-        Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI);
-        Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI);
+        Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, 60.0);
+        Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI, 60.0);
         Map("EntryQueueLength", txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI);
         
-        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA,txtTurboMedicalTrWaitingTimeA_CI);
-        Map("MedicalTreatWaitingTimeAB", txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI);
-        Map("MedicalTreatWaitingTimeB", txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI);
+        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA,txtTurboMedicalTrWaitingTimeA_CI, 60.0);
+        Map("MedicalTreatWaitingTimeAB", txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, 60.0);
+        Map("MedicalTreatWaitingTimeB", txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI, 60.0);
         
         Map("AllDoctorsUtil", txtTurboAllDoctorsUtil, txtTurboAllDoctorsUtil_CI);
         Map("AllNursesUtil", txtTurboAllNursesUtil, txtTurboAllNursesUtil_CI);
