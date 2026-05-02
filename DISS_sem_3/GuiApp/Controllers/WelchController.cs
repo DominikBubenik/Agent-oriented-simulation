@@ -9,7 +9,7 @@ public class WelchController
 {
     // ── Welch parameters ──────────────────────────────────────────────
         // How many replications to average across. More = smoother curve.
-        private const int NumberOfReplications = 100;
+        private const int NumberOfReplications = 150;
  
         // Half-width of the moving-average window (full width = 2w+1).
         // Increase if the resulting curve is still too noisy.
@@ -18,7 +18,7 @@ public class WelchController
         // Cap on ScottPlot data points to keep rendering fast.
         private const int MaxPlotPoints = 5000;
  
-        private const int MetricCount = 18;
+        private const int MetricCount = 30;
  
         // ── State ─────────────────────────────────────────────────────────
         private StartSimulationArgs _args;
@@ -112,6 +112,26 @@ public class WelchController
                         tickVals[6].Add(welchDto.CurrentAllNursesUtil);
                         tickVals[7].Add(welchDto.CurrentAllRoomAUtil);
                         tickVals[8].Add(welchDto.CurrentAllRoomBUtil);
+                        tickVals[10].Add(welchDto.TotalPatientsInSystem);
+                        tickVals[11].Add(welchDto.TotalWalkInPatientsInSystem);
+                        tickVals[12].Add(welchDto.TotalAmbulancePatientsInSystem);
+                        tickVals[13].Add(welchDto.TotalTimeInSystemAll);
+                        tickVals[14].Add(welchDto.TotalTimeInSystemWalkIn);
+                        tickVals[15].Add(welchDto.TotalTimeInSystemAmbulance);
+                        tickVals[16].Add(welchDto.EntryQueueWaitingTimeWalkIn);
+                        tickVals[17].Add(welchDto.EntryQueueWaitingTimeAmbulanced);
+                        tickVals[18].Add(welchDto.EntryQueueLength);
+                        tickVals[19].Add(welchDto.MedicalTreatWaitingTimeA);
+                        tickVals[20].Add(welchDto.MedicalTreatWaitingTimeAB);
+                        tickVals[21].Add(welchDto.MedicalTreatWaitingTimeB);
+                        tickVals[22].Add(welchDto.AllDoctorsUtil);
+                        tickVals[23].Add(welchDto.AllNursesUtil);
+                        tickVals[24].Add(welchDto.AllRoomsAUtil);
+                        tickVals[25].Add(welchDto.AllRoomsBUtil);
+                        tickVals[26].Add(welchDto.FromEntryToMedicalWalkIn);
+                        tickVals[27].Add(welchDto.FromEntryToMedicalAmbulanced);
+                        tickVals[28].Add(welchDto.MedicalQueueLengthTypeA);
+                        tickVals[29].Add(welchDto.MedicalQueueLengthTypeB);
                     };
  
                     // Run on background thread, await completion

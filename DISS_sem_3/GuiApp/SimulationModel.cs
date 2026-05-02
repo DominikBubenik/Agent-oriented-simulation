@@ -162,6 +162,26 @@ public class SimulationModel
         welchDto.CurrentAllNursesUtil = (double)mySim.AgentResources.AllNurses.Count(nurse => nurse.Activity == StaffActivity.Working) / mySim.AgentResources.AllNurses.Count;
         welchDto.CurrentAllRoomAUtil = (double)mySim.AgentResources.AllRoomsTypeA.Count(room => room.CurrentStatus == RoomStatus.Occupied) / mySim.AgentResources.AllRoomsTypeA.Count;
         welchDto.CurrentAllRoomBUtil = (double)mySim.AgentResources.AllRoomsTypeB.Count(room => room.CurrentStatus == RoomStatus.Occupied) / mySim.AgentResources.AllRoomsTypeB.Count;
+        welchDto.TotalPatientsInSystem = mySim.AgentEnviroment.TotalPatientsStats;
+        welchDto.TotalWalkInPatientsInSystem = mySim.AgentEnviroment.TotalWalkInPatientsStats;
+        welchDto.TotalAmbulancePatientsInSystem = mySim.AgentEnviroment.TotalAmbulancedPatientsStats;
+        welchDto.TotalTimeInSystemAll = mySim.AgentEnviroment.TimeInSystem.GetAverage();
+        welchDto.TotalTimeInSystemWalkIn = mySim.AgentEnviroment.TimeInSystemWalkInPatient.GetAverage();
+        welchDto.TotalTimeInSystemAmbulance = mySim.AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage();
+        welchDto.EntryQueueWaitingTimeWalkIn = mySim.AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage();
+        welchDto.EntryQueueWaitingTimeAmbulanced = mySim.AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage();
+        welchDto.EntryQueueLength = mySim.AgentEDepartment.EntryQueue.GetAverageQueueLength(Sim.CurrentTime);
+        welchDto.MedicalTreatWaitingTimeA = mySim.AgentEnviroment.MedicalTreatWaitingTimePA.GetAverage();
+        welchDto.MedicalTreatWaitingTimeAB = mySim.AgentEnviroment.MedicalTreatWaitingTimePAB.GetAverage();
+        welchDto.MedicalTreatWaitingTimeB = mySim.AgentEnviroment.MedicalTreatWaitingTimePB.GetAverage();
+        welchDto.AllDoctorsUtil = mySim.AgentResources.GetUtilAllDoctors();
+        welchDto.AllNursesUtil = mySim.AgentResources.GetUtilAllNurses();
+        welchDto.AllRoomsAUtil = mySim.AgentResources.GetUtilAllRoomsA();
+        welchDto.AllRoomsBUtil = mySim.AgentResources.GetUtilAllRoomsB();
+        welchDto.FromEntryToMedicalWalkIn = mySim.AgentEnviroment.TimeFromEntryToMedicalTreatWalkIn.GetAverage();
+        welchDto.FromEntryToMedicalAmbulanced = mySim.AgentEnviroment.TimeFromEntryToMedicalTreatAmbulance.GetAverage();
+        welchDto.MedicalQueueLengthTypeA = mySim.AgentEDepartment.MedicalTreatQueueA.GetAverageQueueLength(Sim.CurrentTime);
+        welchDto.MedicalQueueLengthTypeB = mySim.AgentEDepartment.MedicalTreatQueueB.GetAverageQueueLength(Sim.CurrentTime);
         OnWelchUpdate?.Invoke(welchDto);
     }
 

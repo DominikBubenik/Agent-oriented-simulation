@@ -35,6 +35,28 @@ public partial class WelchWindow : Form
             { "CurrentAllNursesUtil", formsPlot7 },
             { "CurrentAllRoomAUtil", formsPlot8 },
             { "CurrentAllRoomBUtil", formsPlot9 },
+            { "Empty", formsPlot10 },
+            { "TotalPatientsInSystem", formsPlot11 },
+            { "TotalWalkInInSystem", formsPlot12 },
+            { "TotalAmbulancedInSystem", formsPlot13 },
+            { "TotalTimeInSystem", formsPlot14 },
+            { "TotalTimeInSystemWalkIn", formsPlot15 },
+            { "TotalTimeInSystemAmbulanced", formsPlot16 },
+            { "EntryQueueWaitWalkIn", formsPlot17 },
+            { "EntryQueueWaitAmbulanced", formsPlot18 },
+            { "EntryQueueLength", formsPlot19 },
+            { "MedicalTreatWaitingTimeA", formsPlot20 },
+            { "MedicalTreatWaitingTimeAB", formsPlot21 },
+            { "MedicalTreatWaitingTimeB", formsPlot22 },
+            { "AllDoctorsUtil", formsPlot23 },
+            { "AllNursesUtil", formsPlot24 },
+            { "AllRoomAUtil", formsPlot25 },
+            { "AllRoomBUtil", formsPlot26 },
+            { "FromEntryToMedicalWalkIn", formsPlot27 },
+            { "FromEntryToMedicalAmbulance", formsPlot28 },
+            { "MedicalQueueLengthA", formsPlot29 },
+            { "MedicalQueueLengthB", formsPlot30 },
+            
         };
 
         SetupGraphStyles();
@@ -44,10 +66,17 @@ public partial class WelchWindow : Form
     {
         string[] titles = { "Current Patient Count", "Current WalkIn Patient Count", "Current Ambulance Patient Count", "Current EntryQueue Length", 
             "Current MedicalTreat Waiting Count", "Current All Doctors Util", "Current All Nurses Util", "Current AllRoom A Util", "Current AllRoom B Util", 
+            "Empty", "Total Patients", "Walk-In Count", "Ambulance Count", "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)", 
+            "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "AvgEntryQueueLength", "AvgMedicTreatWaitTime TypeA", "AvgMedicTreatWaitTime TypeAB",
+            "AvgMedicTreatWaitTime TypeB", "Doctors Utilization", "Nurses Utilization", "Rooms A Utilization", "Rooms B Utilization", "TimeFromEntryToMedicalTreatWalkIn",
+            "TimeFromEntryToMedicalTreatAmbulance", "MedicalQueue Length TypeA",  "MedicalQueue Length TypeB"
         };
         var plots = new[]
         {
-            formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9
+            formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9, 
+            formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16, formsPlot17, formsPlot18, formsPlot19, 
+            formsPlot20, formsPlot21, formsPlot22, formsPlot23, formsPlot24, formsPlot25, formsPlot26, formsPlot27, formsPlot28,
+            formsPlot29, formsPlot30,
         };
         
         for (int i = 0; i < plots.Length; i++)
@@ -75,7 +104,10 @@ public partial class WelchWindow : Form
  
         var plots = new[]
         {
-            formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, 
+            formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9, 
+            formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16, formsPlot17, formsPlot18, formsPlot19, 
+            formsPlot20, formsPlot21, formsPlot22, formsPlot23, formsPlot24, formsPlot25, formsPlot26, formsPlot27, formsPlot28,
+            formsPlot29, formsPlot30,
         };
         for (int i = 0; i < plots.Length && i < snapshots.Length; i++)
         {

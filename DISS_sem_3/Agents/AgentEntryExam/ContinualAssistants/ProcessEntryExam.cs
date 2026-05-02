@@ -46,7 +46,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 					myMsg.Patient.PatientStatus = PatientStatus.MedicalWait;
 					myMsg.Nurse.StopWork();
 					myMsg.Room.StopOccupancy();
-					MyAgent.SetPositionAfterExam(myMsg);
+					if(MySim.AnimatorExists) MyAgent.SetPositionAfterExam(myMsg);
 					// myMsg.Addressee = MyAgent; asi zbytocneee
 					AssistantFinished(myMsg);
 					break;
