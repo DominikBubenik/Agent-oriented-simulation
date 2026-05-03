@@ -24,6 +24,8 @@ public class SimulationModel
         _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp);
         if (args.ObservationMode)
         {
+            _core.WarmUpSystem = false;
+            _core.WarmUpTime = 0;
             _core.SetSimSpeed(1.0, 0.05);
             _core.OnRefreshUI(UpdateGui);   
         }
@@ -38,12 +40,15 @@ public class SimulationModel
             _core.OnRefreshUI(UpdateWelch);   
             _core.SetSimSpeed(1.0, 0.000001);
             _core.SetEndTime(args.EndSimulationTime);
+            _core.WarmUpSystem = false;
+            _core.WarmUpTime = 0;
             // _core.Simulate(args.Replications, args.EndSimulationTime);
             Task.Run(() => _core.Simulate(args.Replications, args.EndSimulationTime));
         }
         else
         {
-            var end = args.EndSimulationTime + args.WarmUp;
+            var end = args.EndSimulationTime;
+            if (args.TurboMode) end += args.WarmUp;
             _core.SetEndTime(end);
             _core.SimulateAsync(args.Replications, end);
         }

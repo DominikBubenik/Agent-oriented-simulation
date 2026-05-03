@@ -51,8 +51,8 @@ namespace Simulation
 		
 		public Random Seeder {get; private set;}
 		private readonly int _seed;
-		public bool WarmUpSystem {get; private set;} 
-		public double WarmUpTime {get; private set;}
+		public bool WarmUpSystem {get; set;} 
+		public double WarmUpTime {get; set;}
 		
 		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime)
 		{
