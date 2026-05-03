@@ -168,7 +168,7 @@ public partial class MainView : Form
         int experimentVariant = 1000;
         double lambda = 0.08;
         double intervalSeconds = 0;
-        int warmUp = 15000; // default warm-up in milliseconds (or whatever unit the simulation expects)
+        double warmUp = 15000; // default warm-up in milliseconds (or whatever unit the simulation expects)
 
         if (!string.IsNullOrWhiteSpace(txtSeed.Text) && int.TryParse(txtSeed.Text, out var sVal))
             seed = sVal;
@@ -177,7 +177,7 @@ public partial class MainView : Form
         observation = chkObservationMode.Checked;
      
         if (!string.IsNullOrWhiteSpace(txtEndTime.Text) && double.TryParse(txtEndTime.Text, out var etVal))
-            endTime = etVal * 60 * 60;
+            endTime = etVal * 3600;
 
         // Parse Time Interval if provided. Accepts either a numeric seconds value or HH:MM:SS (or HH:MM) format.
         if (!string.IsNullOrWhiteSpace(txtTimeInterval.Text))
@@ -237,7 +237,7 @@ public partial class MainView : Form
 
         // Read warmUp from UI if provided
         if (!string.IsNullOrWhiteSpace(txtWarmUp?.Text) && int.TryParse(txtWarmUp.Text, out var wu))
-            warmUp = wu;
+            warmUp = wu * 3600;
 
         // Read warming-proof options (RefreshRate)
         int refreshRate = 100;

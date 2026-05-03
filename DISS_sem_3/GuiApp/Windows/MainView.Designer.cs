@@ -335,7 +335,7 @@
     timeTable.Controls.Add(txtCurrentTime, 1, 3);
 
     // Add Warm-up input into the Time group (row 4)
-    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (ms)", "20000");
+    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (ms)", "168");
     timeTable.Controls.Add(lblWarmUp, 0, 4);
     timeTable.Controls.Add(txtWarmUp, 1, 4);
 
@@ -347,8 +347,8 @@
 
     SetupTable(resTable);
 
-    StyleInput(lblNurses, txtNurses, "Nurses", "10");
-    StyleInput(lblDoctors, txtDoctors, "Doctors", "10");
+    StyleInput(lblNurses, txtNurses, "Nurses", "8");
+    StyleInput(lblDoctors, txtDoctors, "Doctors", "6");
 
     resTable.Controls.Add(lblNurses, 0, 0);
     resTable.Controls.Add(txtNurses, 1, 0);

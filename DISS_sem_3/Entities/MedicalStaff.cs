@@ -57,6 +57,16 @@ public class MedicalStaff : Entity
             movingTime += MySim.CurrentTime - _startTransferTime;
         }
 
-        return (workingTime + movingTime) / MySim.CurrentTime;
+        var myCastSim = (MySimulation)MySim;
+        var time = MySim.CurrentTime > myCastSim.WarmUpTime ? MySim.CurrentTime - myCastSim.WarmUpTime : MySim.CurrentTime;
+        return (workingTime + movingTime) / time;
+    }
+
+    public void Reset()
+    {
+        _startWorkingTime = MySim.CurrentTime;
+        _startTransferTime = MySim.CurrentTime;
+        TotalWorkingTime = 0;
+        TotalTransferTime = 0;
     }
 }

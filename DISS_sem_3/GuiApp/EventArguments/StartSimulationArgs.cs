@@ -12,7 +12,7 @@ public class StartSimulationArgs(
     int systemCapacity,
     int refreshRate,
     bool warmUpProof,
-    int warmUp = 15000,
+    double warmUp = 15000,
     bool sensibilityRequested = false,
     int sensCapacity = 1000,
     int sensReplications = 10,
@@ -36,7 +36,7 @@ public class StartSimulationArgs(
     public int SystemCapacity { get; set; } = systemCapacity;
     public int RefreshRate { get; set; } = refreshRate;
     public bool WarmUpProof { get; set; } = warmUpProof;
-    public int WarmUp { get; set; } = warmUp;
+    public double WarmUp { get; set; } = warmUp;
 
     // Sensitivity / sweep options
     public bool SensibilityRequested { get; set; } = sensibilityRequested;

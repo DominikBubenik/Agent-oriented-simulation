@@ -44,20 +44,24 @@ namespace Simulation
 		public ResourceAllocatingStrategy ResourceAllocatingStrategy { get; private set; }
 		
 		
-		public int InitDoctorCount { get; set; } = 10;
-		public int InitNurseCount { get; set; } = 10;
+		public int InitDoctorCount { get; set; }
+		public int InitNurseCount { get; set; }
 		public int InitRoomACount { get; set; } = 5;
 		public int InitRoomBCount { get; set; } = 7;
 		
 		public Random Seeder {get; private set;}
 		private readonly int _seed;
+		public bool WarmUpSystem {get; private set;} 
+		public double WarmUpTime {get; private set;}
 		
-		public MySimulation(int seed, int nursesCount, int doctorsCount)
+		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime)
 		{
 			_seed = seed;
 			Seeder = new Random(_seed);
 			InitNurseCount = nursesCount;
 			InitDoctorCount = doctorsCount;
+			WarmUpSystem = warmUpSystem;
+			WarmUpTime = warmUpTime;
 			Init();
 		}
 
@@ -91,6 +95,10 @@ namespace Simulation
 
 			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
 			
+			//TODO zrusit potom
+			// WarmUpTime = 604_800;
+			WarmUpSystem = true;
+			// EndSimulationTime = WarmUpTime + EndSimulationTime;
 		}
 
 		override public void PrepareReplication()
@@ -178,7 +186,14 @@ namespace Simulation
 		// 	animObject.SetPosition(pos);
 		// 	return animObject;
 		// }
-		
+
+		public void ResetStatistics()
+		{
+			AgentEnviroment.Reset();
+			AgentEDepartment.Reset();
+			AgentResources.Reset();
+		}
+
 		public void SetEndTime(double  endTime) => EndSimulationTime = endTime;
 
 

@@ -156,6 +156,28 @@ namespace Agents.AgentResources
 		{
 			return Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
 		}
+		
+		public void Reset()
+		{
+			foreach (var doctor in AllDoctors)
+			{
+				doctor.Reset();
+			}
+
+			foreach (var nurse in AllNurses)
+			{
+				nurse.Reset();
+			}
+
+			foreach (var room in AllRoomsTypeA)
+			{
+				room.Reset();
+			}
+			foreach (var room in AllRoomsTypeB)
+			{
+				room.Reset();
+			}
+		}
 
 		private MySimulation MyCastSim() => (MySimulation)MySim; 
 

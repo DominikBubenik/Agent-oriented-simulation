@@ -21,7 +21,7 @@ public class SimulationModel
 
     public void StartSimulation(StartSimulationArgs args)
     {
-        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount);
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp);
         if (args.ObservationMode)
         {
             _core.SetSimSpeed(1.0, 0.05);
@@ -29,7 +29,7 @@ public class SimulationModel
         }
         else if (args.TurboMode)
         {
-            _core.OnReplicationDidFinish(UpdateTurboWindow);   
+            _core.OnReplicationDidFinish(UpdateTurboWindow);  
             _core.SetMaxSimSpeed();
         }
         
@@ -43,15 +43,16 @@ public class SimulationModel
         }
         else
         {
-            _core.SimulateAsync(args.Replications, args.EndSimulationTime);
-            _core.SetEndTime(args.EndSimulationTime);
+            var end = args.EndSimulationTime + args.WarmUp;
+            _core.SetEndTime(end);
+            _core.SimulateAsync(args.Replications, end);
         }
         Console.WriteLine(DateTime.Now);
     }
 
     public Animator CreateAnimator(StartSimulationArgs args)
     {
-        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount);
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp);
         var animator = new Animator(_core);
         _core.Animator = animator;
         animator.SetBackgroundImage(Config.BACKGROUND_IMG);
@@ -69,11 +70,11 @@ public class SimulationModel
         var totalTimeInSystem = mySim.TotalTimeInSystem;
         var totalTimeInSystemWalkInPatient = mySim.TotalTimeInSystemWalkInPatient;
         var totalTimeInSystemAmbulancePatient = mySim.TotalTimeInSystemAmbulancePatient;
-        var totalTimeInSystemPriority1 = mySim.TotalTimeInSystemPriority1;
-        var totalTimeInSystemPriority2 = mySim.TotalTimeInSystemPriority2;
-        var totalTimeInSystemPriority3 = mySim.TotalTimeInSystemPriority3;
-        var totalTimeInSystemPriority4 = mySim.TotalTimeInSystemPriority4;
-        var totalTimeInSystemPriority5 = mySim.TotalTimeInSystemPriority5;
+        // var totalTimeInSystemPriority1 = mySim.TotalTimeInSystemPriority1;
+        // var totalTimeInSystemPriority2 = mySim.TotalTimeInSystemPriority2;
+        // var totalTimeInSystemPriority3 = mySim.TotalTimeInSystemPriority3;
+        // var totalTimeInSystemPriority4 = mySim.TotalTimeInSystemPriority4;
+        // var totalTimeInSystemPriority5 = mySim.TotalTimeInSystemPriority5;
         // var entryQueueWaitingTime = mySim.TotalEntryWaitingTime;
         var entryQueueWaitingTimeWalkIn = mySim.TotalEntryWaitingTimeWalkInP;
         var entryQueueWaitingTimeAmbulance = mySim.TotalEntryWaitingTimeAmbulanceP;

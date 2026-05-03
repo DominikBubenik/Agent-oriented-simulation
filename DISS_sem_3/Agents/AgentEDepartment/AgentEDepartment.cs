@@ -76,6 +76,13 @@ namespace Agents.AgentEDepartment
 		{
 			return patient.Priority < 3 ? MedicalTreatQueueA.Pop() : MedicalTreatQueueB.Pop();
 		}
+		
+		public void Reset()
+		{
+			EntryQueue.Reset(MySim.CurrentTime);
+			MedicalTreatQueueA.Reset(MySim.CurrentTime);
+			MedicalTreatQueueB.Reset(MySim.CurrentTime);
+		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

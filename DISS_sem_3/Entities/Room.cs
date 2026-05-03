@@ -37,7 +37,7 @@ public class Room : Entity
         CurrentStatus = RoomStatus.Free;
     }
     
-    public double GetUtilization()
+    public double GetUtilization()  
     {
         var occupancyTime = TotalOccupancyTime;
         if (CurrentStatus == RoomStatus.Occupied)
@@ -45,7 +45,15 @@ public class Room : Entity
             occupancyTime += MySim.CurrentTime - _startOccupancyTime;
         }
 
-        return occupancyTime / MySim.CurrentTime;
+        var myCastSim = (MySimulation)MySim;
+        var time = MySim.CurrentTime > myCastSim.WarmUpTime ? MySim.CurrentTime - myCastSim.WarmUpTime : MySim.CurrentTime;
+        return occupancyTime / time;
+    }
+
+    public void Reset()
+    {
+        _startOccupancyTime = MySim.CurrentTime;
+        TotalOccupancyTime = 0;
     }
 
     public override string ToString()

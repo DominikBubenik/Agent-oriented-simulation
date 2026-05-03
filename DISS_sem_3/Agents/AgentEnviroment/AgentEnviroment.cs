@@ -83,6 +83,9 @@ namespace Agents.AgentEnviroment
 
 		public void PatientExit(Patient patient)
 		{
+			AllPatientsInSystem.Remove(patient.Name);
+			if (patient.ArrivalTime < MyCastSim().WarmUpTime) return;
+			
 			TimeInSystem.AddSample(MySim.CurrentTime - patient.ArrivalTime);
 			if (patient.ArrivedByAmbulance)
 			{
@@ -110,8 +113,7 @@ namespace Agents.AgentEnviroment
 			{
 				MedicalTreatWaitingTimePB.AddSample(patient.MedicalQueueWaitingTime);
 			}
-
-			AllPatientsInSystem.Remove(patient.Name);
+			
 			TotalPatientsStats++;
 		}
 
@@ -129,5 +131,22 @@ namespace Agents.AgentEnviroment
 		//meta! tag="end"
 		
 		private MySimulation MyCastSim() => (MySimulation)MySim;
+
+		public void Reset()
+		{
+			TimeInSystem.Reset();
+			TimeInSystemWalkInPatient.Reset();
+			TimeInSystemAmbulancePatient.Reset();
+			TimeFromEntryToMedicalTreatWalkIn.Reset();
+			TimeFromEntryToMedicalTreatAmbulance.Reset();
+			EntranceWaitingTimeWalkInP.Reset();
+			EntranceWaitingTimeAmbulanceP.Reset();
+			MedicalTreatWaitingTimePA.Reset();
+			MedicalTreatWaitingTimePAB.Reset();
+			MedicalTreatWaitingTimePB.Reset();
+			TotalPatientsStats = 0;
+			TotalWalkInPatientsStats = 0;
+			TotalAmbulancedPatientsStats = 0;
+		}
 	}
 }

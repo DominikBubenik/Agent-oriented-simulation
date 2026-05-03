@@ -17,7 +17,16 @@ namespace Agents.AgentBoss
 		{
 			base.PrepareReplication();
 			// Setup component for the next replication
+			if (MyCastSim().WarmUpSystem)
+			{
+				var message = new MyMessage(MySim);
+				message.Addressee = FindAssistant(SimId.WarmUp);
+				message.Code = Mc.Start;
+				MyManager.StartContinualAssistant(message);	
+			}
 		}
+		
+		public MySimulation MyCastSim() => (MySimulation)MySim;
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

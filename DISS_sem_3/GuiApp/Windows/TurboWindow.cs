@@ -85,7 +85,7 @@ public partial class TurboWindow : Form
         // THROTTLE: Skip frame if updated too recently to keep the window clickable[cite: 15]
         // if (_uiRefreshThrottle.ElapsedMilliseconds < REFRESH_MS) return;
         // _uiRefreshThrottle.Restart();
-        if (replication % 500 != 0)
+        if ((replication + 1) % 10 != 0)
         {
             return;
         }
