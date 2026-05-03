@@ -24,10 +24,11 @@ namespace Simulation
 		public const int AmbulancePatient = 1001;
 		public const int AllocateEntryExamRes = 1011;
 		public const int WalkInPatient = 1002;
-		public const int AllocateMedicalTreatRes = 1012;
 		public const int ProcessEntryExam = 1003;
+		public const int AllocateMedicalTreatRes = 1012;
 		public const int AllRoomTransfer = 1013;
 		public const int ProcessMedicalTreat = 1004;
+		public const int WarmUp = 1019;
 		//meta! tag="end"
 	}
 }

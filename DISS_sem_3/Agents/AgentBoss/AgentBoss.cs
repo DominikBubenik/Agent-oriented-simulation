@@ -1,5 +1,6 @@
 using OSPABA;
 using Simulation;
+using Agents.AgentBoss.ContinualAssistants;
 
 namespace Agents.AgentBoss
 {
@@ -22,6 +23,7 @@ namespace Agents.AgentBoss
 		private void Init()
 		{
 			new ManagerBoss(SimId.ManagerBoss, MySim, this);
+			new WarmUp(SimId.WarmUp, MySim, this);
 			AddOwnMessage(Mc.PatientArrival);
 			AddOwnMessage(Mc.PatientTreated);
 		}

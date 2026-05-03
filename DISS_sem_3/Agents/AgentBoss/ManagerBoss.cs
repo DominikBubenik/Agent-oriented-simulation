@@ -53,6 +53,11 @@ namespace Agents.AgentBoss
 			Notice(message);
 		}
 
+		//meta! sender="WarmUp", id="190", type="Finish"
+		public void ProcessFinish(MessageForm message)
+		{
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -68,6 +73,10 @@ namespace Agents.AgentBoss
 
 			case Mc.PatientTreated:
 				ProcessPatientTreated(message);
+			break;
+
+			case Mc.Finish:
+				ProcessFinish(message);
 			break;
 
 			default:
