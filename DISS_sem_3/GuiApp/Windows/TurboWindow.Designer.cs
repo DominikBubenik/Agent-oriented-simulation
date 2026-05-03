@@ -117,13 +117,20 @@ partial class TurboWindow
         this.statsGroup.Controls.Add(statsTable);
 
         // Plots Area (Center)
-        var plotsTable = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 3 };
+        var plotsTable = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 9,
+            AutoSize = true,
+            Padding = new Padding(0, 0, 20, 0),
+            AutoScroll = true
+        };
         plotsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         plotsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        plotsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3F));
-        plotsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3F));
-        plotsTable.RowStyles.Add(new RowStyle(SizeType.Percent, 33.4F));
 
+        for (int i = 0; i < 9; i++) 
+        {
+            plotsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 500F));
+        }
         this.formsPlot1.Dock = DockStyle.Fill; this.formsPlot2.Dock = DockStyle.Fill;
         this.formsPlot3.Dock = DockStyle.Fill; this.formsPlot4.Dock = DockStyle.Fill;
         this.formsPlot5.Dock = DockStyle.Fill; this.formsPlot6.Dock = DockStyle.Fill;
