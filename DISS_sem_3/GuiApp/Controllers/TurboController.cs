@@ -83,49 +83,7 @@ public class TurboController
          // Send the complete history to the window
          _turboWindow?.UpdateDashboard(st.Replication, _history);
          _turboWindow?.UpdateStats(st);
-
-         // xs.Add(st.Replication);
          
-        //  // helper to safely extract avg and CI bounds
-        //  double a0 = st.SumAvgTimeInSystem?.Avg ?? double.NaN;
-        //  double l0 = st.SumAvgTimeInSystem?.LowerBound ?? double.NaN;
-        //  double u0 = st.SumAvgTimeInSystem?.UpperBound ?? double.NaN;
-        //  
-        //  double a1 = st.SumAvgEntryQueue?.Avg ?? double.NaN;
-        //  double l1 = st.SumAvgEntryQueue?.LowerBound ?? double.NaN;
-        //  double u1 = st.SumAvgEntryQueue?.UpperBound ?? double.NaN;
-        //  
-        //  double a2 = st.SumAvgDetectorQueue?.Avg ?? double.NaN;
-        //  double l2 = st.SumAvgDetectorQueue?.LowerBound ?? double.NaN;
-        //  double u2 = st.SumAvgDetectorQueue?.UpperBound ?? double.NaN;
-        //  
-        //  double a3 = st.SumAvgBeforeDetector?.Avg ?? double.NaN;
-        //  double l3 = st.SumAvgBeforeDetector?.LowerBound ?? double.NaN;
-        //  double u3 = st.SumAvgBeforeDetector?.UpperBound ?? double.NaN;
-        //  
-        //  double a4 = st.SumAvgAfterDetector?.Avg ?? double.NaN;
-        //  double l4 = st.SumAvgAfterDetector?.LowerBound ?? double.NaN;
-        //  double u4 = st.SumAvgAfterDetector?.UpperBound ?? double.NaN;
-        //  
-        //  double a5 = st.SumAvgWaitingQueue?.Avg ?? double.NaN;
-        //  double l5 = st.SumAvgWaitingQueue?.LowerBound ?? double.NaN;
-        //  double u5 = st.SumAvgWaitingQueue?.UpperBound ?? double.NaN;
-        //  
-        //  valsAvg[0].Add(a0); valsLower[0].Add(l0); valsUpper[0].Add(u0);
-        //  valsAvg[1].Add(a1); valsLower[1].Add(l1); valsUpper[1].Add(u1);
-        //  valsAvg[2].Add(a2); valsLower[2].Add(l2); valsUpper[2].Add(u2);
-        //  valsAvg[3].Add(a3); valsLower[3].Add(l3); valsUpper[3].Add(u3);
-        //  valsAvg[4].Add(a4); valsLower[4].Add(l4); valsUpper[4].Add(u4);
-        //  valsAvg[5].Add(a5); valsLower[5].Add(l5); valsUpper[5].Add(u5);
-        //  
-        //  // Convert to arrays and render the accumulated history so far
-        //  double[] ax = xs.ToArray();
-        //  double[][] avgSnaps = new double[6][];
-        //  double[][] lowerSnaps = new double[6][];
-        //  double[][] upperSnaps = new double[6][];
-        //  for (int m = 0; m < 6; m++) { avgSnaps[m] = valsAvg[m].ToArray(); lowerSnaps[m] = valsLower[m].ToArray(); upperSnaps[m] = valsUpper[m].ToArray(); }
-        // try { _turboWindow?.RenderSnapshot(ax, avgSnaps, lowerSnaps, upperSnaps); } catch (Exception ex) { Console.WriteLine("RenderSnapshot failed: " + ex.Message); }
-        // try { _turboWindow?.UpdateStats(st); } catch (Exception ex) { Console.WriteLine("UpdateStats failed: " + ex.Message); }
     }
     
     private void OnPauseRequested(object? sender, EventArgs e)
