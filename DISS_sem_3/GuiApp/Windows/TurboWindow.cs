@@ -131,8 +131,7 @@ public partial class TurboWindow : Form
 
     private void UpdatePlot(ScottPlot.WinForms.FormsPlot plot, double[] xs, double[] ys, double[]? lowerYs, double[]? upperYs)
     {
-        plot.Invalidate();
-        plot.Update();
+        plot.Plot.Clear();
 
         // Main line (Average)
         var avg = plot.Plot.Add.Scatter(xs, ys);
