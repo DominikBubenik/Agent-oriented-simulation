@@ -198,7 +198,7 @@ public class SimulationModel
 
     public void StopSimulation()
     {
-        _core.StopSimulation();
+        _core?.StopSimulation();
         _core = null;
     }
     

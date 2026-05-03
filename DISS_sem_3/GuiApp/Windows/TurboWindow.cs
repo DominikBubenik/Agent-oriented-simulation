@@ -85,6 +85,7 @@ public partial class TurboWindow : Form
         // THROTTLE: Skip frame if updated too recently to keep the window clickable[cite: 15]
         // if (_uiRefreshThrottle.ElapsedMilliseconds < REFRESH_MS) return;
         // _uiRefreshThrottle.Restart();
+        if (this.IsDisposed || this.Disposing) return;
         if ((replication + 1) % 10 != 0)
         {
             return;
@@ -166,6 +167,7 @@ public partial class TurboWindow : Form
 
     public void UpdateStats(SimulationStatsDto stats)
     {
+        if (this.IsDisposed || this.Disposing) return;
         if (this.InvokeRequired) { this.BeginInvoke(new Action(() => UpdateStats(stats))); return; }
 
         void Map(string key, TextBox valBox, TextBox ciBox, bool time = false)

@@ -29,6 +29,8 @@ public class TurboController
         _turboWindow.OnPauseRequested += OnPauseRequested;
 
         _currentModel.OnTurboUI += OnTurboRefresh;
+        _turboWindow.OnStopRequested += OnStopRequested;
+        _turboWindow.FormClosed += OnWindowClosed;
         
         _turboWindow.Show();
     }
@@ -96,5 +98,33 @@ public class TurboController
         {
             _currentModel.PauseSimulation();
         }
+    }
+    
+    private void OnStopRequested(object? sender, EventArgs e)
+    {
+        _currentModel?.StopSimulation();
+        _turboWindow?.SetStatus("Stopped");
+    }
+    
+    private void OnWindowClosed(object? sender, FormClosedEventArgs e)
+    {
+        if (_currentModel != null)
+        {
+            _currentModel.StopSimulation();
+            // Unsubscribe model from the refresh event to stop background logic
+            _currentModel.OnTurboUI -= OnTurboRefresh;
+        }
+
+        // 2. Unsubscribe from Window events to prevent memory leaks
+        if (_turboWindow != null)
+        {
+            _turboWindow.OnRunRequested -= OnRunRequested;
+            _turboWindow.OnPauseRequested -= OnPauseRequested;
+            _turboWindow.OnStopRequested -= OnStopRequested;
+            _turboWindow.FormClosed -= OnWindowClosed;
+            _turboWindow = null;
+        }
+
+        _isStarted = false;
     }
 }

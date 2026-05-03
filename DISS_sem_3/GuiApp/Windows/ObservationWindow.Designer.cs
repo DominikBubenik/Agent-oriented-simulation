@@ -299,6 +299,7 @@ namespace DISS_sem_3
             dgvPassengers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvPassengers.Columns.Add("id", header);
             dgvPassengers.Columns.Add("Activity", "Current Activity");
+            dgvPassengers.Columns.Add("Util", "Utilization");
             return dgvPassengers;
         }
         
@@ -314,6 +315,7 @@ namespace DISS_sem_3
             dgv.Columns.Add("Patient", "Patient");
             dgv.Columns.Add("Nurse", "Nurse");
             dgv.Columns.Add("Doctor", "Doctor");
+            dgv.Columns.Add("Util", "Utilization");
             return dgv;
         }
     }

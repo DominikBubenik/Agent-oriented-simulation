@@ -303,6 +303,7 @@ namespace DISS_sem_3
                 UpdateCellIfChanged(row.Cells[1], room.Patient?.ToString() ?? "Empty");
                 UpdateCellIfChanged(row.Cells[2], room.Nurse?.ToString() ?? "---");
                 UpdateCellIfChanged(row.Cells[3], room.Doctor?.ToString() ?? "---");
+                UpdateCellIfChanged(row.Cells[4], room.GetUtilization().ToString("F2") ?? "---");
             }
         }
 
@@ -503,6 +504,7 @@ namespace DISS_sem_3
                 // Tip: Only update if the value changed to reduce repaints
                 UpdateCellIfChanged(row.Cells[0], p.Id);
                 UpdateCellIfChanged(row.Cells[1], p.Activity.ToString());
+                UpdateCellIfChanged(row.Cells[2], p.GetWorkingUtilization().ToString("F2"));
             }
         }
         
