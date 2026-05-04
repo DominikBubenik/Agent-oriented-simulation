@@ -34,6 +34,10 @@
         private System.Windows.Forms.TextBox txtNurses = null!;
         private System.Windows.Forms.Label lblDoctors = null!;
         private System.Windows.Forms.TextBox txtDoctors = null!;
+        private System.Windows.Forms.Label lblMaxEntryQueue = null!;
+        private System.Windows.Forms.TextBox txtMaxEntryQueue = null!;
+        private System.Windows.Forms.Label lblMaxMedicalQueue = null!;
+        private System.Windows.Forms.TextBox txtMaxMedicalQueue = null!;
         // Sensitivity controls
          private System.Windows.Forms.GroupBox grpSensitivity = null!;
          private System.Windows.Forms.Label lblSensCapacity = null!;
@@ -142,6 +146,8 @@
     // Initialize resource inputs (were declared earlier)
     lblNurses = new Label(); txtNurses = new TextBox();
     lblDoctors = new Label(); txtDoctors = new TextBox();
+    lblMaxEntryQueue = new Label(); txtMaxEntryQueue = new TextBox();
+    lblMaxMedicalQueue = new Label(); txtMaxMedicalQueue = new TextBox();
 
     // Sensibility init
     grpSensitivity = new GroupBox();
@@ -342,7 +348,7 @@
     timeTable.Controls.Add(txtCurrentTime, 1, 3);
 
     // Add Warm-up input into the Time group (row 4)
-    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (ms)", "168");
+    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (hours)", "168");
     timeTable.Controls.Add(lblWarmUp, 0, 4);
     timeTable.Controls.Add(txtWarmUp, 1, 4);
 
@@ -356,11 +362,17 @@
 
     StyleInput(lblNurses, txtNurses, "Nurses", "8");
     StyleInput(lblDoctors, txtDoctors, "Doctors", "6");
+    StyleInput(lblMaxEntryQueue, txtMaxEntryQueue, "MaxEntryQueue", "3");
+    StyleInput(lblMaxMedicalQueue, txtMaxMedicalQueue, "MaxMedicalQueue", "0");
 
     resTable.Controls.Add(lblNurses, 0, 0);
     resTable.Controls.Add(txtNurses, 1, 0);
     resTable.Controls.Add(lblDoctors, 0, 1);
-    resTable.Controls.Add(txtDoctors, 1, 1);
+    resTable.Controls.Add(txtDoctors, 1, 1); 
+    resTable.Controls.Add(lblMaxEntryQueue, 0, 2);
+    resTable.Controls.Add(txtMaxEntryQueue, 1, 2); 
+    resTable.Controls.Add(lblMaxMedicalQueue, 0, 3);
+    resTable.Controls.Add(txtMaxMedicalQueue, 1, 3);
 
     grpResources.Controls.Add(resTable);
 

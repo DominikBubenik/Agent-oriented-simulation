@@ -55,6 +55,11 @@ public class Room : Entity
         _startOccupancyTime = MySim.CurrentTime;
         TotalOccupancyTime = 0;
     }
+    
+    public bool Equals(Room room)
+    {
+        return Id == room.Id && Type ==  room.Type;
+    }
 
     public override string ToString()
     {

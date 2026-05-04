@@ -11,6 +11,7 @@ public class MedicalStaff : Entity
     public double TotalTransferTime { get; set; }
     protected double _startWorkingTime;
     protected double _startTransferTime;
+    public Room? CurrentRoom { get; set; } 
     public AnimImageItem AnimObject { get; protected set; }
     public MedicalStaff(OSPABA.Simulation mySim) : base(mySim)
     {

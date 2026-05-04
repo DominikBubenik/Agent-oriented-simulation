@@ -39,6 +39,7 @@ namespace Agents.AgentTransition.ContinualAssistants
 			if (myMsg.Nurse != null)
 			{
 				myMsg.Nurse.StartTransfer();
+				myMsg.Nurse.CurrentRoom = null;
 				duration = MyAgent.GetAllRoomTransferDuration();
 				if (duration > maxDuration) maxDuration = duration; 
 				if (MySim.AnimatorExists)
@@ -50,6 +51,7 @@ namespace Agents.AgentTransition.ContinualAssistants
 			if (myMsg.Doctor != null)
 			{
 				myMsg.Doctor.StartTransfer();
+				myMsg.Doctor.CurrentRoom = myMsg.Room;
 				duration = MyAgent.GetAllRoomTransferDuration();
 				if (duration > maxDuration) maxDuration = duration; 
 				if (MySim.AnimatorExists)
@@ -72,7 +74,12 @@ namespace Agents.AgentTransition.ContinualAssistants
 					var myMsg = (MyMessage)message;
 					myMsg.Addressee = MyAgent;
 					myMsg.Nurse.StopTransfer();
-					myMsg.Doctor?.StopTransfer();
+					myMsg.Nurse.CurrentRoom = myMsg.Room;
+					if (myMsg.Doctor != null)
+					{
+						myMsg.Doctor.StopTransfer();
+						myMsg.Doctor.CurrentRoom = myMsg.Room;
+					}
 					if (MySim.AnimatorExists) MyAgent.SetPositionsInRoom(myMsg);
 					if (MySim is MySimulation sim && sim.ObservationMode) 
 						sim.NotifyLogger($"Ambulace transition finished P> {myMsg?.Patient.Name}; D> {myMsg?.Doctor?.Id}, N> {myMsg?.Nurse.Id}, R> {myMsg?.Room.Id}");

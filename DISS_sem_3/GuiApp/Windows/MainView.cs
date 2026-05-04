@@ -167,6 +167,8 @@ public partial class MainView : Form
         double endTime = 627;
         int nursesCount = 3;
         int doctorsCount = 2;
+        int entryMax = 2;
+        int medicalMax = 2;
         int after = 2;
         double lambda = 0.08;
         double intervalSeconds = 0;
@@ -230,7 +232,11 @@ public partial class MainView : Form
         if (!string.IsNullOrWhiteSpace(txtNurses.Text) && int.TryParse(txtNurses.Text, out var lVal))
             nursesCount = lVal;
         if (!string.IsNullOrWhiteSpace(txtDoctors.Text) && int.TryParse(txtDoctors.Text, out var bVal))
-            doctorsCount = bVal;
+            doctorsCount = bVal; 
+        if (!string.IsNullOrWhiteSpace(txtMaxEntryQueue.Text) && int.TryParse(txtMaxEntryQueue.Text, out var entry))
+            entryMax = entry;
+        if (!string.IsNullOrWhiteSpace(txtMaxMedicalQueue.Text) && int.TryParse(txtMaxMedicalQueue.Text, out var medical))
+            medicalMax = medical;
         
         var experimentVariant = (ResourceAllocatingStrategy)cmbExperimentVariant.SelectedItem;
 
@@ -286,7 +292,8 @@ public partial class MainView : Form
             endSimulationTime: endTime,
             nursesCount: nursesCount,
             doctorsCount: doctorsCount,
-            afterDetectorCount: after,
+            entryMax: entryMax,
+            medicalMax: medicalMax,
             timeIntervalSeconds: intervalSeconds,
             experimentVariant: experimentVariant,
             refreshRate: refreshRate,

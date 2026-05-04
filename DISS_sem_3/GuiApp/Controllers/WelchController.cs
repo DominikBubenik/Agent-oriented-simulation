@@ -78,8 +78,9 @@ public class WelchController
                         observationMode: false,
                         endSimulationTime: _args.EndSimulationTime,
                         nursesCount:     _args.NursesCount,
-                        doctorsCount:    _args.DoctorsCount,
-                        afterDetectorCount: 0,          // unused in ED model
+                        doctorsCount:    _args.DoctorsCount, 
+                        entryMax: _args.EntryMax,
+                        medicalMax: _args.MedicalMax,// unused in ED model
                         timeIntervalSeconds: _args.TimeIntervalSeconds,
                         experimentVariant:  0,             // unused
                         refreshRate:     0,             // turbo — no GUI refresh

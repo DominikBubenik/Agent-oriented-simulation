@@ -55,6 +55,8 @@ namespace Simulation
 		public double WarmUpTime {get; set;}
 		public bool ObservationMode {get; set;}
 		public event Action<string>? OnLoggerOutput;
+		public int MaxEntryQueueLengthCount { get; set; } = 3;
+		public int MaxMedicalQueueLengthCount { get; set; } = 3;
 		
 		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime, ResourceAllocatingStrategy variant, bool observMode = false)
 		{

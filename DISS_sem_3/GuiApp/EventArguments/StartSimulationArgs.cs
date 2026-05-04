@@ -9,7 +9,8 @@ public class StartSimulationArgs(
     double endSimulationTime,
     int nursesCount,
     int doctorsCount,
-    int afterDetectorCount,
+    int entryMax,
+    int medicalMax,
     double timeIntervalSeconds,
     ResourceAllocatingStrategy experimentVariant,
     int refreshRate,
@@ -34,6 +35,8 @@ public class StartSimulationArgs(
     public double EndSimulationTime { get; set; } = endSimulationTime; //v hodinach
     public int NursesCount { get; set; } = nursesCount;
     public int DoctorsCount { get; set; } = doctorsCount;
+    public int EntryMax { get; set; } = entryMax;
+    public int MedicalMax { get; set; } = medicalMax;
     public double TimeIntervalSeconds { get; set; } = timeIntervalSeconds;
     public ResourceAllocatingStrategy ExperimentVariant { get; set; } = experimentVariant;
     public int RefreshRate { get; set; } = refreshRate;
