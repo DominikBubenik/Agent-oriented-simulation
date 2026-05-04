@@ -62,12 +62,12 @@ namespace Agents.AgentBoss
 		{
 			switch (message.Code)
 			{
-			case Mc.PatientArrival:
-				ProcessPatientArrival(message);
-			break;
-
 			case Mc.PatientTreated:
 				ProcessPatientTreated(message);
+			break;
+
+			case Mc.PatientArrival:
+				ProcessPatientArrival(message);
 			break;
 
 			case Mc.Finish:

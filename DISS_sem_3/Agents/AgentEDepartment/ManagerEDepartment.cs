@@ -188,20 +188,8 @@ namespace Agents.AgentEDepartment
 		{
 			switch (message.Code)
 			{
-			case Mc.BetweenAmbulanceTransition:
-				ProcessBetweenAmbulanceTransition(message);
-			break;
-
-			case Mc.SendEntryExamResources:
-				ProcessSendEntryExamResources(message);
-			break;
-
-			case Mc.ExitTransition:
-				ProcessExitTransition(message);
-			break;
-
-			case Mc.SendMedicalTreatResources:
-				ProcessSendMedicalTreatResources(message);
+			case Mc.TreatPatient:
+				ProcessTreatPatient(message);
 			break;
 
 			case Mc.EntranceTransition:
@@ -212,12 +200,24 @@ namespace Agents.AgentEDepartment
 				ProcessEntryExamPatient(message);
 			break;
 
-			case Mc.TreatPatient:
-				ProcessTreatPatient(message);
+			case Mc.ExitTransition:
+				ProcessExitTransition(message);
+			break;
+
+			case Mc.SendEntryExamResources:
+				ProcessSendEntryExamResources(message);
+			break;
+
+			case Mc.BetweenAmbulanceTransition:
+				ProcessBetweenAmbulanceTransition(message);
 			break;
 
 			case Mc.MedicalTreatPatient:
 				ProcessMedicalTreatPatient(message);
+			break;
+
+			case Mc.SendMedicalTreatResources:
+				ProcessSendMedicalTreatResources(message);
 			break;
 
 			default:

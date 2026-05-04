@@ -10,6 +10,7 @@ namespace Agents.AgentResources.InstantAssistants
 	/*!
 	 * otazka tu pomocou nich alokojem zdroje napriklad tie ktore su najmenej vytazene??
 	 */
+
 	//meta! id="82"
 	public class AllocateEntryExamRes : OSPABA.Adviser
 	{
@@ -31,6 +32,9 @@ namespace Agents.AgentResources.InstantAssistants
 					Exp1LeastUtilizedStaff(myMsg);
 					break;
 				case ResourceAllocatingStrategy.Exp2KeepOneNOneD:
+					Exp2KeepOneNOneD(myMsg);
+					break;
+				case ResourceAllocatingStrategy.Exp4WaitAndThen:
 					Exp2KeepOneNOneD(myMsg);
 					break;
 			}
@@ -81,7 +85,7 @@ namespace Agents.AgentResources.InstantAssistants
 			var nurses = MyAgent.Nurses;
 			var rooms = MyAgent.FreeRoomsTypeB;
 			
-			if ((nurses.Count > 1 || myMsg.EntryQueueLength > ((MySimulation)MySim).MaxEntryQueueLengthCount  || (nurses.Count > 0 && myMsg.Patient.ArrivedByAmbulance)) && rooms.Count > 0)
+			if ((nurses.Count > 1 || (myMsg.EntryQueueLength > ((MySimulation)MySim).MaxEntryQueueLengthCount)  || (nurses.Count > 0 && myMsg.Patient.ArrivedByAmbulance)) && rooms.Count > 0 && nurses.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];
 				nurses.RemoveAt(0);

@@ -92,12 +92,12 @@ namespace Agents.AgentEDepartment
 		private void Init()
 		{
 			new ManagerEDepartment(SimId.ManagerEDepartment, MySim, this);
-			AddOwnMessage(Mc.EntranceTransition);
 			AddOwnMessage(Mc.TreatPatient);
+			AddOwnMessage(Mc.EntranceTransition);
 			AddOwnMessage(Mc.EntryExamPatient);
 			AddOwnMessage(Mc.BetweenAmbulanceTransition);
-			AddOwnMessage(Mc.SendMedicalTreatResources);
 			AddOwnMessage(Mc.MedicalTreatPatient);
+			AddOwnMessage(Mc.SendMedicalTreatResources);
 			AddOwnMessage(Mc.SendEntryExamResources);
 			AddOwnMessage(Mc.ExitTransition);
 		}

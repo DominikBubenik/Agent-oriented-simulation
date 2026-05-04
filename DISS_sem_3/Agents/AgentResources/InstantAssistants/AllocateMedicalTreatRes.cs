@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using Agents.AgentResources;
 using DISS_sem_3;
 using DISS_sem_3.Entities;
@@ -10,6 +11,9 @@ namespace Agents.AgentResources.InstantAssistants
 	//meta! id="84"
 	public class AllocateMedicalTreatRes : OSPABA.Adviser
 	{
+		public bool StartToWait { get; set; }
+		private double _lastCheck = 0;
+		private MyMessage? _noticeMsg;
 		public AllocateMedicalTreatRes(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
@@ -29,6 +33,9 @@ namespace Agents.AgentResources.InstantAssistants
 					break;
 				case ResourceAllocatingStrategy.Exp2KeepOneNOneD:
 					Exp2KeepOneNOneD(myMsg);
+					break;
+				case ResourceAllocatingStrategy.Exp4WaitAndThen:
+					Exp4WaitAndThen(myMsg);
 					break;
 			}
 		}
@@ -147,6 +154,69 @@ namespace Agents.AgentResources.InstantAssistants
 			}
 		}
 		
+		private void Exp4WaitAndThen(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var doctors = MyAgent.Doctors;
+			List<Room> rooms;
+			if (myMsg.MedicalWaitingA == null && myMsg.MedicalWaitingB == null)
+			{
+				return;
+			}
+			if (myMsg.Patient.Priority < 3)
+			{
+				rooms = MyAgent.FreeRoomsTypeA;
+			} else if (myMsg.Patient.Priority < 5)
+			{
+				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
+			}
+			else
+			{
+				rooms = MyAgent.FreeRoomsTypeB;
+			}
+
+			if (_lastCheck == 0) _lastCheck = MySim.CurrentTime;
+
+			var enoughResources = nurses.Count > 1 && doctors.Count > 1 && 
+			                      (rooms.Count > 1 || (rooms.Count > 0 && !rooms[0].IsTypeA()));
+			var myCastSim = MySim as MySimulation;
+			// var tooLong = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && myMsg.MedicalQueueLengthB >  myCastSim.MaxMedicalQueueLengthCount;
+			var timePassed = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && ((MySim.CurrentTime - _lastCheck) >= myCastSim.MaxTimeWaitStrategy);
+			var isPriority = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && myMsg.Patient.Priority < 3;
+			
+			if (enoughResources || isPriority || timePassed)
+			{
+				_lastCheck = 0;
+				myMsg.Nurse = nurses[0];
+				nurses.RemoveAt(0);
+
+				myMsg.Doctor = doctors[0];
+				doctors.RemoveAt(0);
+			
+				myMsg.Room = rooms[0];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(0);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				if (_noticeMsg != null)
+				{
+					MyAgent.MyManager.BreakContinualAssistant(new MyMessage(MySim));
+					_noticeMsg = null;
+				}
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				if (_noticeMsg == null)
+				{
+					_noticeMsg = (MyMessage)myMsg.CreateCopy();
+					_noticeMsg.Patient = myMsg.Patient;
+					_noticeMsg.SendRequestToResourseExp4 = true;
+					_noticeMsg.Addressee = MyAgent.FindAssistant(SimId.Exp4WaitAndThen);
+					_noticeMsg.Code = Mc.Start;
+					MyAgent.MyManager.StartContinualAssistant(_noticeMsg);
+				}
+			}
+		}
 		
 		public new AgentResources MyAgent
 		{
@@ -154,23 +224,6 @@ namespace Agents.AgentResources.InstantAssistants
 			{
 				return (AgentResources)base.MyAgent;
 			}
-		}
-		
-		
-		private void AssignStaffAndRoom(MyMessage myMsg, Room room, Nurse nurse, Doctor doctor)
-		{
-			myMsg.Nurse  = nurse;
-			myMsg.Doctor = doctor;
-			myMsg.Room   = room;
-			myMsg.Room.StartOccupancy();
- 
-			MyAgent.Nurses.Remove(nurse);
-			MyAgent.Doctors.Remove(doctor);
-			
-			if (room.Type == 'A')
-				MyAgent.FreeRoomsTypeA.Remove(room);
-			else
-				MyAgent.FreeRoomsTypeB.Remove(room);
 		}
 	}
 }

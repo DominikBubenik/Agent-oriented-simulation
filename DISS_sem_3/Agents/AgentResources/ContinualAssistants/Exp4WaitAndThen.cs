@@ -1,13 +1,13 @@
-using Agents.AgentBoss;
+using Agents.AgentResources;
 using OSPABA;
 using Simulation;
 
-namespace Agents.AgentBoss.ContinualAssistants
+namespace Agents.AgentResources.ContinualAssistants
 {
-	//meta! id="189"
-	public class WarmUp : OSPABA.Process
+	//meta! id="198"
+	public class Exp4WaitAndThen : OSPABA.Process
 	{
-		public WarmUp(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
+		public Exp4WaitAndThen(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
 		}
@@ -18,11 +18,12 @@ namespace Agents.AgentBoss.ContinualAssistants
 			// Setup component for the next replication
 		}
 
-		//meta! sender="AgentBoss", id="190", type="Start"
+		//meta! sender="AgentResources", id="199", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
-			message.Code = Mc.Finish;
-			Hold(MyAgent.MyCastSim().WarmUpTime, message);
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.Finish;
+			Hold(((MySimulation)MySim).TimeToNotice, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -51,11 +52,11 @@ namespace Agents.AgentBoss.ContinualAssistants
 			}
 		}
 		//meta! tag="end"
-		public new AgentBoss MyAgent
+		public new AgentResources MyAgent
 		{
 			get
 			{
-				return (AgentBoss)base.MyAgent;
+				return (AgentResources)base.MyAgent;
 			}
 		}
 	}

@@ -63,21 +63,21 @@ namespace Agents.AgentEnviroment
 		{
 			switch (message.Code)
 			{
-			case Mc.PatientExit:
-				ProcessPatientExit(message);
-			break;
-
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
-				case SimId.AmbulancePatient:
-					ProcessFinishAmbulancePatient(message);
-				break;
-
 				case SimId.WalkInPatient:
 					ProcessFinishWalkInPatient(message);
 				break;
+
+				case SimId.AmbulancePatient:
+					ProcessFinishAmbulancePatient(message);
+				break;
 				}
+			break;
+
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
 			break;
 
 			default:

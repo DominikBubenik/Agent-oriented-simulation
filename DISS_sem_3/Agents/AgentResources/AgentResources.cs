@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentResources.InstantAssistants;
+using Agents.AgentResources.ContinualAssistants;
 using DISS_sem_3.Entities;
 using OpenTK.Platform.Windows;
 
@@ -185,6 +186,7 @@ namespace Agents.AgentResources
 		private void Init()
 		{
 			new ManagerResources(SimId.ManagerResources, MySim, this);
+			new Exp4WaitAndThen(SimId.Exp4WaitAndThen, MySim, this);
 			new AllocateMedicalTreatRes(SimId.AllocateMedicalTreatRes, MySim, this);
 			new AllocateEntryExamRes(SimId.AllocateEntryExamRes, MySim, this);
 			AddOwnMessage(Mc.FreeUpResources);

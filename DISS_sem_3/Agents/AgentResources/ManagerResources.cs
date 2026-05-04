@@ -146,6 +146,12 @@ namespace Agents.AgentResources
 			}
 		}
 
+		//meta! sender="Exp4WaitAndThen", id="199", type="Finish"
+		public void ProcessFinish(MessageForm message)
+		{
+			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(message);
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -155,6 +161,10 @@ namespace Agents.AgentResources
 		{
 			switch (message.Code)
 			{
+			case Mc.Finish:
+				ProcessFinish(message);
+			break;
+
 			case Mc.GetMedicalTreatResources:
 				ProcessGetMedicalTreatResources(message);
 			break;
