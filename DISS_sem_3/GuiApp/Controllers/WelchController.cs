@@ -81,7 +81,7 @@ public class WelchController
                         doctorsCount:    _args.DoctorsCount,
                         afterDetectorCount: 0,          // unused in ED model
                         timeIntervalSeconds: _args.TimeIntervalSeconds,
-                        systemCapacity:  0,             // unused
+                        experimentVariant:  0,             // unused
                         refreshRate:     0,             // turbo — no GUI refresh
                         warmUpProof:     true,          // signals simulation to emit graph events
                         warmUp:          0,

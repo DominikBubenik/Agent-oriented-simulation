@@ -21,7 +21,7 @@ public class SimulationModel
 
     public void StartSimulation(StartSimulationArgs args)
     {
-        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp);
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp, args.ExperimentVariant);
         if (args.ObservationMode)
         {
             _core.WarmUpSystem = false;
@@ -57,7 +57,7 @@ public class SimulationModel
 
     public Animator CreateAnimator(StartSimulationArgs args)
     {
-        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp);
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp, args.ExperimentVariant);
         var animator = new Animator(_core);
         _core.Animator = animator;
         animator.SetBackgroundImage(Config.BACKGROUND_IMG);

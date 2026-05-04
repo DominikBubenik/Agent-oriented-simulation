@@ -22,7 +22,7 @@
         private System.Windows.Forms.Label lblReplications = null!;
         private System.Windows.Forms.TextBox txtReplications = null!;
         private System.Windows.Forms.Label lblSystemCapacity = null!;
-        private System.Windows.Forms.ComboBox cmbSystemCapacity = null!;
+        private System.Windows.Forms.ComboBox cmbExperimentVariant = null!;
         private System.Windows.Forms.CheckBox chkObservationMode = null!;
         private System.Windows.Forms.Label lblEndTime = null!;
         private System.Windows.Forms.TextBox txtEndTime = null!;
@@ -131,7 +131,7 @@
     // INIT CONTROLS
     lblSeed = new Label(); txtSeed = new TextBox();
     lblReplications = new Label(); txtReplications = new TextBox();
-    lblSystemCapacity = new Label(); cmbSystemCapacity = new ComboBox();
+    lblSystemCapacity = new Label(); cmbExperimentVariant = new ComboBox();
     chkObservationMode = new CheckBox();
     chkObservationMode.Checked = true;
 
@@ -290,10 +290,17 @@
     lblSystemCapacity.Anchor = AnchorStyles.Left;
     lblSystemCapacity.Margin = new Padding(5);
 
-    cmbSystemCapacity.Width = 250;
-    cmbSystemCapacity.Anchor = AnchorStyles.Left;
-    cmbSystemCapacity.Margin = new Padding(5);
-    cmbSystemCapacity.DropDownStyle = ComboBoxStyle.DropDownList;
+    cmbExperimentVariant.Width = 250;
+    cmbExperimentVariant.Anchor = AnchorStyles.Left;
+    cmbExperimentVariant.Margin = new Padding(5);
+    cmbExperimentVariant.DropDownStyle = ComboBoxStyle.DropDownList;
+    cmbExperimentVariant.Items.Add("Exp 0 First Available");
+    cmbExperimentVariant.Items.Add("Exp 1 Least utilized");
+    cmbExperimentVariant.Items.Add("1500");
+    cmbExperimentVariant.Items.Add("2000");
+
+// Set default selected item
+    cmbExperimentVariant.SelectedIndex = 0; 
     
     chkObservationMode.Text = "Observation";
 
@@ -308,7 +315,7 @@
     simTable.Controls.Add(lblReplications, 0, 1);
     simTable.Controls.Add(txtReplications, 1, 1);
     simTable.Controls.Add(lblSystemCapacity, 0, 2);
-    simTable.Controls.Add(cmbSystemCapacity, 1, 2);
+    simTable.Controls.Add(cmbExperimentVariant, 1, 2);
     simTable.Controls.Add(chkObservationMode, 1, 3);
 
     grpSimulation.Controls.Add(simTable);

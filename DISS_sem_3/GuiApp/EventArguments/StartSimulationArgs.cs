@@ -1,4 +1,6 @@
-﻿namespace DISS_SEM_GUI.EventsArguments;
+﻿using DISS_sem_3;
+
+namespace DISS_SEM_GUI.EventsArguments;
 
 public class StartSimulationArgs(
     int seed,
@@ -9,7 +11,7 @@ public class StartSimulationArgs(
     int doctorsCount,
     int afterDetectorCount,
     double timeIntervalSeconds,
-    int systemCapacity,
+    ResourceAllocatingStrategy experimentVariant,
     int refreshRate,
     bool warmUpProof,
     double warmUp = 15000,
@@ -33,7 +35,7 @@ public class StartSimulationArgs(
     public int NursesCount { get; set; } = nursesCount;
     public int DoctorsCount { get; set; } = doctorsCount;
     public double TimeIntervalSeconds { get; set; } = timeIntervalSeconds;
-    public int SystemCapacity { get; set; } = systemCapacity;
+    public ResourceAllocatingStrategy ExperimentVariant { get; set; } = experimentVariant;
     public int RefreshRate { get; set; } = refreshRate;
     public bool WarmUpProof { get; set; } = warmUpProof;
     public double WarmUp { get; set; } = warmUp;

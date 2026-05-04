@@ -1,4 +1,5 @@
-﻿using DISS_SEM_GUI.EventsArguments;
+﻿using DISS_sem_3;
+using DISS_SEM_GUI.EventsArguments;
 
 namespace DISS_SEM_GUI;
 
@@ -45,6 +46,8 @@ public partial class MainView : Form
                 chkRandomSeed.CheckedChanged += ChkRandomSeed_CheckedChanged;
         }
         catch { }
+        cmbExperimentVariant.DataSource = Enum.GetValues(typeof(ResourceAllocatingStrategy));
+        cmbExperimentVariant.SelectedItem = ResourceAllocatingStrategy.Exp0FirstAvailable;
     }
 
     private void ChkRandomSeed_CheckedChanged(object? sender, EventArgs e)
@@ -165,7 +168,6 @@ public partial class MainView : Form
         int nursesCount = 3;
         int doctorsCount = 2;
         int after = 2;
-        int experimentVariant = 1000;
         double lambda = 0.08;
         double intervalSeconds = 0;
         double warmUp = 15000; // default warm-up in milliseconds (or whatever unit the simulation expects)
@@ -229,11 +231,8 @@ public partial class MainView : Form
             nursesCount = lVal;
         if (!string.IsNullOrWhiteSpace(txtDoctors.Text) && int.TryParse(txtDoctors.Text, out var bVal))
             doctorsCount = bVal;
-        if (cmbSystemCapacity.SelectedItem != null &&
-            int.TryParse(cmbSystemCapacity.SelectedItem.ToString(), out var capVal))
-        {
-            experimentVariant = capVal;
-        }
+        
+        var experimentVariant = (ResourceAllocatingStrategy)cmbExperimentVariant.SelectedItem;
 
         // Read warmUp from UI if provided
         if (!string.IsNullOrWhiteSpace(txtWarmUp?.Text) && int.TryParse(txtWarmUp.Text, out var wu))
@@ -289,7 +288,7 @@ public partial class MainView : Form
             doctorsCount: doctorsCount,
             afterDetectorCount: after,
             timeIntervalSeconds: intervalSeconds,
-            systemCapacity: experimentVariant,
+            experimentVariant: experimentVariant,
             refreshRate: refreshRate,
             warmUpProof: chkWarmUpProof.Checked,
             warmUp: warmUp,

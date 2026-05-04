@@ -54,7 +54,7 @@ namespace Simulation
 		public bool WarmUpSystem {get; set;} 
 		public double WarmUpTime {get; set;}
 		
-		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime)
+		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime, ResourceAllocatingStrategy variant)
 		{
 			_seed = seed;
 			Seeder = new Random(_seed);
@@ -62,6 +62,7 @@ namespace Simulation
 			InitDoctorCount = doctorsCount;
 			WarmUpSystem = warmUpSystem;
 			WarmUpTime = warmUpTime;
+			ResourceAllocatingStrategy = variant;
 			Init();
 		}
 
@@ -92,8 +93,6 @@ namespace Simulation
 			TotalNursesUtil = new SimpleStat();
 			TotalRoomAUtil = new SimpleStat();
 			TotalRoomBUtil = new SimpleStat();
-
-			ResourceAllocatingStrategy = ResourceAllocatingStrategy.Exp0FirstAvailable;
 			
 			//TODO zrusit potom
 			// WarmUpTime = 604_800;
