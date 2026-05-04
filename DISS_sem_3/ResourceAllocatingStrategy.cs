@@ -3,5 +3,6 @@
 public enum ResourceAllocatingStrategy
 {
     Exp0FirstAvailable,
-    Exp1LeastUtilized
+    Exp1LeastUtilized,
+    Exp2KeepOneNOneD
 }

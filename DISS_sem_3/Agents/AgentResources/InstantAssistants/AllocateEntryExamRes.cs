@@ -30,6 +30,9 @@ namespace Agents.AgentResources.InstantAssistants
 				case ResourceAllocatingStrategy.Exp1LeastUtilized:
 					Exp1LeastUtilizedStaff(myMsg);
 					break;
+				case ResourceAllocatingStrategy.Exp2KeepOneNOneD:
+					Exp2KeepOneNOneD(myMsg);
+					break;
 			}
 		}
 
@@ -62,6 +65,26 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Nurse = nurses.MinBy(n => n.GetWorkingUtilization());
 				nurses.Remove(myMsg.Nurse);
 
+				myMsg.Room = rooms[0];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(0);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+			}
+		}
+		
+		private void Exp2KeepOneNOneD(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.FreeRoomsTypeB;
+			
+			if ((nurses.Count > 1  || (nurses.Count > 0 && myMsg.Patient.ArrivedByAmbulance)) && rooms.Count > 0)
+			{
+				myMsg.Nurse = nurses[0];
+				nurses.RemoveAt(0);
 				myMsg.Room = rooms[0];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
