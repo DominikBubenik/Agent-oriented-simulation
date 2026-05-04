@@ -206,6 +206,12 @@ public partial class TurboWindow : Form
         
         Map("FromEntryToMedicalWalkIn", txtTurboTimeFromEntryToMedicalWalkIn, txtTurboTimeFromEntryToMedicalWalkIn_CI, true);
         Map("FromEntryToMedicalAmbulance", txtTurboTimeFromEntryToMedicalAmbulance, txtTurboTimeFromEntryToMedicalAmbulance_CI, true);
+        
+        Map("TimeFromEntryToMedicalPriority1", txtTurboTimeFromEntryToMedicalPriority1, txtTurboTimeFromEntryToMedicalPriority1_CI, true);
+        Map("TimeFromEntryToMedicalPriority2", txtTurboTimeFromEntryToMedicalPriority2, txtTurboTimeFromEntryToMedicalPriority2_CI, true);
+        Map("TimeFromEntryToMedicalPriority3", txtTurboTimeFromEntryToMedicalPriority3, txtTurboTimeFromEntryToMedicalPriority3_CI, true);
+        Map("TimeFromEntryToMedicalPriority4", txtTurboTimeFromEntryToMedicalPriority4, txtTurboTimeFromEntryToMedicalPriority4_CI, true);
+        Map("TimeFromEntryToMedicalPriority5", txtTurboTimeFromEntryToMedicalPriority5, txtTurboTimeFromEntryToMedicalPriority5_CI, true);
     }
 
     public void SetStatus(string status)

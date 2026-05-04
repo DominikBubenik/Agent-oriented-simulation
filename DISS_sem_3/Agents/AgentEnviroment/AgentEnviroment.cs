@@ -27,6 +27,12 @@ namespace Agents.AgentEnviroment
 		public int TotalPatientsStats { get; set; }
 		public int TotalWalkInPatientsStats { get; set; }
 		public int TotalAmbulancedPatientsStats { get; set; }
+		
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority1 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority2 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority3 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority4 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority5 { get; private set; }
 
 		private ExponentionalGenerator _walkInGenerator;
 		private GammaGenerator _ambulanceGenerator;
@@ -61,6 +67,12 @@ namespace Agents.AgentEnviroment
 			
 			TimeFromEntryToMedicalTreatWalkIn = new SimpleStat();
 			TimeFromEntryToMedicalTreatAmbulance = new SimpleStat();
+			
+			TotalTimeFromEntranceToMedicalTreatPriority1 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority2 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority3 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority4 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority5 = new SimpleStat();
 			
 			AllPatientsInSystem = new Dictionary<string, Patient>();
 			SchedulePatientArrivals();
@@ -112,6 +124,25 @@ namespace Agents.AgentEnviroment
 			else
 			{
 				MedicalTreatWaitingTimePB.AddSample(patient.MedicalQueueWaitingTime);
+			}
+
+			switch (patient.Priority)
+			{
+				case 1:
+					TotalTimeFromEntranceToMedicalTreatPriority1.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case 2:
+					TotalTimeFromEntranceToMedicalTreatPriority2.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case 3:
+					TotalTimeFromEntranceToMedicalTreatPriority3.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case  4:
+					TotalTimeFromEntranceToMedicalTreatPriority4.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case 5:
+					TotalTimeFromEntranceToMedicalTreatPriority5.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
 			}
 			
 			TotalPatientsStats++;

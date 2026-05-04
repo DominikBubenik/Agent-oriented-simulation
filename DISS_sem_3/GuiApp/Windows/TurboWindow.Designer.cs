@@ -112,7 +112,12 @@ partial class TurboWindow
         AddStatRow(17, "RoomB Util", out txtTurboAllRoomBUtil, out txtTurboAllRoomBUtil_CI);
         AddStatRow(18, "EntryToMedicalWalkIn", out txtTurboTimeFromEntryToMedicalWalkIn, out txtTurboTimeFromEntryToMedicalWalkIn_CI);
         AddStatRow(19, "EntryToMedicalAmbulance", out txtTurboTimeFromEntryToMedicalAmbulance, out txtTurboTimeFromEntryToMedicalAmbulance_CI);
-        AddStatRow(20, "Empty", out empty, out empty_CI);
+        AddStatRow(20, "EntryToMedicalPriority1", out txtTurboTimeFromEntryToMedicalPriority1, out txtTurboTimeFromEntryToMedicalPriority1_CI);
+        AddStatRow(21, "EntryToMedicalPriority2", out txtTurboTimeFromEntryToMedicalPriority2, out txtTurboTimeFromEntryToMedicalPriority2_CI);
+        AddStatRow(22, "EntryToMedicalPriority3", out txtTurboTimeFromEntryToMedicalPriority3, out txtTurboTimeFromEntryToMedicalPriority3_CI);
+        AddStatRow(23, "EntryToMedicalPriority4", out txtTurboTimeFromEntryToMedicalPriority4, out txtTurboTimeFromEntryToMedicalPriority4_CI);
+        AddStatRow(24, "EntryToMedicalPriority5", out txtTurboTimeFromEntryToMedicalPriority5, out txtTurboTimeFromEntryToMedicalPriority5_CI);
+        AddStatRow(25, "Empty", out empty, out empty_CI);
 
         this.statsGroup.Controls.Add(statsTable);
 
@@ -184,5 +189,8 @@ partial class TurboWindow
     public TextBox txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI;
     public TextBox txtTurboAllDoctorsUtil, txtTurboAllDoctorsUtil_CI, txtTurboAllNursesUtil, txtTurboAllNursesUtil_CI;
     public TextBox txtTurboAllRoomAUtil, txtTurboAllRoomAUtil_CI, txtTurboAllRoomBUtil, txtTurboAllRoomBUtil_CI, txtTurboTimeFromEntryToMedicalWalkIn,
-        txtTurboTimeFromEntryToMedicalWalkIn_CI, txtTurboTimeFromEntryToMedicalAmbulance, txtTurboTimeFromEntryToMedicalAmbulance_CI, empty, empty_CI;
+        txtTurboTimeFromEntryToMedicalWalkIn_CI, txtTurboTimeFromEntryToMedicalAmbulance, txtTurboTimeFromEntryToMedicalAmbulance_CI, empty, empty_CI,
+        txtTurboTimeFromEntryToMedicalPriority1, txtTurboTimeFromEntryToMedicalPriority1_CI, txtTurboTimeFromEntryToMedicalPriority2, txtTurboTimeFromEntryToMedicalPriority2_CI,
+        txtTurboTimeFromEntryToMedicalPriority3, txtTurboTimeFromEntryToMedicalPriority3_CI, txtTurboTimeFromEntryToMedicalPriority4, txtTurboTimeFromEntryToMedicalPriority4_CI,
+        txtTurboTimeFromEntryToMedicalPriority5, txtTurboTimeFromEntryToMedicalPriority5_CI;
 }

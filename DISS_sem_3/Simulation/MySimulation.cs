@@ -22,11 +22,11 @@ namespace Simulation
 		public SimpleStat TotalTimeInSystem { get; private set; }
 		public SimpleStat TotalTimeInSystemWalkInPatient { get; private set; }
 		public SimpleStat TotalTimeInSystemAmbulancePatient { get; private set; }
-		public SimpleStat TotalTimeInSystemPriority1 { get; private set; }
-		public SimpleStat TotalTimeInSystemPriority2 { get; private set; }
-		public SimpleStat TotalTimeInSystemPriority3 { get; private set; }
-		public SimpleStat TotalTimeInSystemPriority4 { get; private set; }
-		public SimpleStat TotalTimeInSystemPriority5 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority1 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority2 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority3 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority4 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority5 { get; private set; }
 		public SimpleStat TotalEntryQueueLength { get; private set; }
 		// public SimpleStat TotalEntryWaitingTime { get; private set; }
 		public SimpleStat TotalEntryWaitingTimeWalkInP { get; private set; }
@@ -96,9 +96,13 @@ namespace Simulation
 			TotalNursesUtil = new SimpleStat();
 			TotalRoomAUtil = new SimpleStat();
 			TotalRoomBUtil = new SimpleStat();
+
+			TotalTimeFromEntranceToMedicalTreatPriority1 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority2 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority3 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority4 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority5 = new SimpleStat();
 			
-			//TODO zrusit potom
-			// WarmUpTime = 604_800;
 			WarmUpSystem = true;
 			// EndSimulationTime = WarmUpTime + EndSimulationTime;
 		}
@@ -141,6 +145,12 @@ namespace Simulation
 			TotalTimeFromEntryToMedicalTreatAmbulance.AddSample(AgentEnviroment.TimeFromEntryToMedicalTreatAmbulance.GetAverage());
 			
 			TotalEntryQueueLength.AddSample(AgentEDepartment.EntryQueue.GetAverageQueueLength(CurrentTime));
+			
+			TotalTimeFromEntranceToMedicalTreatPriority1.AddSample(AgentEnviroment.TotalTimeFromEntranceToMedicalTreatPriority1.GetAverage());
+			TotalTimeFromEntranceToMedicalTreatPriority2.AddSample(AgentEnviroment.TotalTimeFromEntranceToMedicalTreatPriority2.GetAverage());
+			TotalTimeFromEntranceToMedicalTreatPriority3.AddSample(AgentEnviroment.TotalTimeFromEntranceToMedicalTreatPriority3.GetAverage());
+			TotalTimeFromEntranceToMedicalTreatPriority4.AddSample(AgentEnviroment.TotalTimeFromEntranceToMedicalTreatPriority4.GetAverage());
+			TotalTimeFromEntranceToMedicalTreatPriority5.AddSample(AgentEnviroment.TotalTimeFromEntranceToMedicalTreatPriority5.GetAverage());
 		}
 
 		override public void SimulationFinished()

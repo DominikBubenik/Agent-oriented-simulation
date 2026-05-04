@@ -78,11 +78,11 @@ public class SimulationModel
         var totalTimeInSystem = mySim.TotalTimeInSystem;
         var totalTimeInSystemWalkInPatient = mySim.TotalTimeInSystemWalkInPatient;
         var totalTimeInSystemAmbulancePatient = mySim.TotalTimeInSystemAmbulancePatient;
-        // var totalTimeInSystemPriority1 = mySim.TotalTimeInSystemPriority1;
-        // var totalTimeInSystemPriority2 = mySim.TotalTimeInSystemPriority2;
-        // var totalTimeInSystemPriority3 = mySim.TotalTimeInSystemPriority3;
-        // var totalTimeInSystemPriority4 = mySim.TotalTimeInSystemPriority4;
-        // var totalTimeInSystemPriority5 = mySim.TotalTimeInSystemPriority5;
+        var totalTimeFromEntryToMedicalTreatPriority1 = mySim.TotalTimeFromEntranceToMedicalTreatPriority1;
+        var totalTimeFromEntryToMedicalTreatPriority2 = mySim.TotalTimeFromEntranceToMedicalTreatPriority2;
+        var totalTimeFromEntryToMedicalTreatPriority3 = mySim.TotalTimeFromEntranceToMedicalTreatPriority3;
+        var totalTimeFromEntryToMedicalTreatPriority4 = mySim.TotalTimeFromEntranceToMedicalTreatPriority4;
+        var totalTimeFromEntryToMedicalTreatPriority5 = mySim.TotalTimeFromEntranceToMedicalTreatPriority5;
         // var entryQueueWaitingTime = mySim.TotalEntryWaitingTime;
         var entryQueueWaitingTimeWalkIn = mySim.TotalEntryWaitingTimeWalkInP;
         var entryQueueWaitingTimeAmbulance = mySim.TotalEntryWaitingTimeAmbulanceP;
@@ -120,6 +120,12 @@ public class SimulationModel
         
         dto.Stats["FromEntryToMedicalWalkIn"] = new OneStat(timeFromEntryToMedicalTreatWalkIn.GetConfidenceInterval());
         dto.Stats["FromEntryToMedicalAmbulance"] = new OneStat(timeFromEntryToMedicalTreatAmbulance.GetConfidenceInterval());
+        
+        dto.Stats["TimeFromEntryToMedicalPriority1"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority1.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority2"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority2.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority3"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority3.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority4"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority4.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority5"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority5.GetConfidenceInterval());
 
         OnTurboUI?.Invoke(dto);
     }
