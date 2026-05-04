@@ -123,8 +123,9 @@ namespace Agents.AgentResources.InstantAssistants
 
 			var enoughResources = nurses.Count > 1 && doctors.Count > 1 && 
 			                      (rooms.Count > 1 || (rooms.Count > 0 && !rooms[0].IsTypeA()));
+			var tooLong = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && myMsg.MedicalQueueLengthB > 0;
 			var isPriority = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && myMsg.Patient.Priority < 3;
-			if (enoughResources || isPriority)
+			if (enoughResources || isPriority || tooLong)
 			{
 				myMsg.Nurse = nurses[0];
 				nurses.RemoveAt(0);

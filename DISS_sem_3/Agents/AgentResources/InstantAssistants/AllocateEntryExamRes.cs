@@ -81,7 +81,7 @@ namespace Agents.AgentResources.InstantAssistants
 			var nurses = MyAgent.Nurses;
 			var rooms = MyAgent.FreeRoomsTypeB;
 			
-			if ((nurses.Count > 1  || (nurses.Count > 0 && myMsg.Patient.ArrivedByAmbulance)) && rooms.Count > 0)
+			if ((nurses.Count > 1 || myMsg.EntryQueueLength > 3  || (nurses.Count > 0 && myMsg.Patient.ArrivedByAmbulance)) && rooms.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];
 				nurses.RemoveAt(0);

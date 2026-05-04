@@ -44,6 +44,8 @@ namespace Agents.AgentEDepartment
 			myMsg.MedicalWaitingA = MyAgent.MedicalTreatQueueA.IsEmpty() ? null : MyAgent.MedicalTreatQueueA.Pop();
 			myMsg.MedicalWaitingB = MyAgent.MedicalTreatQueueB.IsEmpty() ? null : MyAgent.MedicalTreatQueueB.Pop();
 			myMsg.EntryWaiting = MyAgent.EntryQueue.IsEmpty() ? null : MyAgent.EntryQueue.Pop();
+			myMsg.EntryQueueLength =  MyAgent.EntryQueue.Count;
+			myMsg.MedicalQueueLengthB = MyAgent.MedicalTreatQueueB.Count;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
@@ -75,6 +77,8 @@ namespace Agents.AgentEDepartment
 			myMsg.EntryWaiting = MyAgent.EntryQueue.IsEmpty() ? null : MyAgent.EntryQueue.Pop();
 			myMsg.MedicalWaitingA = MyAgent.MedicalTreatQueueA.IsEmpty() ? null : MyAgent.MedicalTreatQueueA.Pop();
 			myMsg.MedicalWaitingB = MyAgent.MedicalTreatQueueB.IsEmpty() ? null : MyAgent.MedicalTreatQueueB.Pop();
+			myMsg.EntryQueueLength =  MyAgent.EntryQueue.Count;
+			myMsg.MedicalQueueLengthB = MyAgent.MedicalTreatQueueB.Count;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);

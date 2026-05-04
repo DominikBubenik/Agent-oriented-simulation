@@ -12,6 +12,8 @@ namespace Simulation
 		public Patient? EntryWaiting { get; set; }
 		public Patient? MedicalWaitingA { get; set; }
 		public Patient? MedicalWaitingB { get; set; }
+		public int EntryQueueLength { get; set; }
+		public int MedicalQueueLengthB { get; set; }
 		public MyMessage(OSPABA.Simulation mySim) :
 			base(mySim)
 		{
@@ -40,6 +42,8 @@ namespace Simulation
 			EntryWaiting = original.EntryWaiting;
 			MedicalWaitingA = original.MedicalWaitingA;
 			MedicalWaitingB = original.MedicalWaitingB;
+			EntryQueueLength = original.EntryQueueLength;
+			MedicalQueueLengthB = original.MedicalQueueLengthB;
 		}
 	}
 }
