@@ -14,6 +14,7 @@ public class SimulationModel
     public event Action<SimulationStateDto> OnRefreshUI;
     public event Action<SimulationStatsDto> OnTurboUI;
     public event Action<WelchDto> OnWelchUpdate;
+    public event Action<string, double> OnLoggerUpdate;
     private DateTime _lastRefreshTime = DateTime.MinValue;
     private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60); // ~30 FPS
     private double _lastWelchUpdateTime = 0;
@@ -26,8 +27,10 @@ public class SimulationModel
         {
             _core.WarmUpSystem = false;
             _core.WarmUpTime = 0;
+            _core.ObservationMode = true;
             _core.SetSimSpeed(1.0, 0.05);
-            _core.OnRefreshUI(UpdateGui);   
+            _core.OnRefreshUI(UpdateGui);
+            _core.OnLoggerOutput += OnLoggerChange;
         }
         else if (args.TurboMode)
         {
@@ -215,5 +218,10 @@ public class SimulationModel
     public void SetSimulationSpeed(double interval, double duration)
     {
         _core.SetSimSpeed(interval, duration);
+    }
+
+    public void OnLoggerChange(string message)
+    {
+        OnLoggerUpdate?.Invoke(message, _core.CurrentTime);   
     }
 }

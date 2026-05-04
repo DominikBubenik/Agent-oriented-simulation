@@ -42,6 +42,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 
 				myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
 			}
+			if (MySim is MySimulation sim && sim.ObservationMode) 
+				sim.NotifyLogger($"Patient {myMsg?.Patient.Name} exiting the system");
 			Hold(duration, myMsg);
 		}
 
@@ -54,6 +56,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 					var myMsg = (MyMessage)message;
 					if (MySim.AnimatorExists) myMsg.Patient.AnimObject.Remove();
 					myMsg.Addressee = MyAgent;
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Patient {myMsg?.Patient.Name} Exit the system");
 					AssistantFinished(myMsg);
 					break;
 			}

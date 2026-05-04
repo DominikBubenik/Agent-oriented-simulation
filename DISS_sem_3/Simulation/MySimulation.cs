@@ -53,8 +53,10 @@ namespace Simulation
 		private readonly int _seed;
 		public bool WarmUpSystem {get; set;} 
 		public double WarmUpTime {get; set;}
+		public bool ObservationMode {get; set;}
+		public event Action<string>? OnLoggerOutput;
 		
-		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime, ResourceAllocatingStrategy variant)
+		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime, ResourceAllocatingStrategy variant, bool observMode = false)
 		{
 			_seed = seed;
 			Seeder = new Random(_seed);
@@ -63,6 +65,7 @@ namespace Simulation
 			WarmUpSystem = warmUpSystem;
 			WarmUpTime = warmUpTime;
 			ResourceAllocatingStrategy = variant;
+			ObservationMode = observMode;
 			Init();
 		}
 
@@ -195,6 +198,11 @@ namespace Simulation
 
 		public void SetEndTime(double  endTime) => EndSimulationTime = endTime;
 
+		public void NotifyLogger(string message)
+		{
+			OnLoggerOutput?.Invoke(message);
+		}
+		
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

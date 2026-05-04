@@ -328,20 +328,19 @@ namespace DISS_sem_3
         // Append a log message to the bottom log DataGridView (thread-safe)
         // Keeps history bounded by maxEntries to avoid unlimited growth.
         private const int MaxLogEntries = 2000;
-        public void AppendLog(string message)
+        public void AppendLog(string message, double time)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(() => AppendLog(message));
+                this.Invoke(() => AppendLog(message, time));
                 return;
             }
 
             try
             {
                 if (dgvLog == null) return;
-
-                string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                dgvLog.Rows.Add(time, message);
+                
+                dgvLog.Rows.Add(GlobalLogger.FormatTime(time), message);
 
                 // Keep latest entry visible
                 if (dgvLog.Rows.Count > 0)

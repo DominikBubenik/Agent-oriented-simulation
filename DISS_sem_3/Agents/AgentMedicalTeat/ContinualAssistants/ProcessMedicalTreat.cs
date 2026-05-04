@@ -29,7 +29,10 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 			
 			myMsg.Nurse.StartWork();
 			myMsg.Doctor.StartWork();
+			
 			myMsg.Patient.PatientStatus = PatientStatus.MedicalExam;
+			if (MySim is MySimulation sim && sim.ObservationMode) 
+				sim.NotifyLogger($"Medical treat started P> {myMsg.Patient.Name}; D> {myMsg.Doctor.Id}, N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -48,6 +51,8 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 					myMsg.Doctor.StopWork();
 					myMsg.Patient.PatientStatus = PatientStatus.Exiting;
 					myMsg.Room.StopOccupancy();
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Medical treat finished P> {myMsg.Patient.Name}; D> {myMsg.Doctor.Id}, N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 					AssistantFinished(myMsg);
 					break;
 			}

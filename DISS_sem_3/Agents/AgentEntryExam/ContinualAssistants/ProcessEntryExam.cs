@@ -29,6 +29,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 			
 			myMsg.Room.Patient = myMsg.Patient;
 			myMsg.Room.Patient.PatientStatus = PatientStatus.EntryExam;
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Entry exam started P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -47,7 +48,9 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 					myMsg.Nurse.StopWork();
 					myMsg.Room.StopOccupancy();
 					if(MySim.AnimatorExists) MyAgent.SetPositionAfterExam(myMsg);
-					// myMsg.Addressee = MyAgent; asi zbytocneee
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Entry exam Finished P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
+					
 					AssistantFinished(myMsg);
 					break;
 			}

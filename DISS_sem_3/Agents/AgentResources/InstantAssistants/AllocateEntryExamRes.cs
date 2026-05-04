@@ -40,13 +40,15 @@ namespace Agents.AgentResources.InstantAssistants
 			if (nurses.Count > 0 && rooms.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];
-				// myMsg.Nurse.StartTransfer();
-				// myMsg.Nurse.Activity = StaffActivity.Working;
 				nurses.RemoveAt(0);
 				myMsg.Room = rooms[0];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
-				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
 		
@@ -63,7 +65,11 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Room = rooms[0];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
-				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
 

@@ -58,7 +58,11 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Room = rooms[0];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
-				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
 		
@@ -90,7 +94,10 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Room = rooms[0];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
-				// GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()} doctor {myMsg.Doctor.ToString()}" , MySim.CurrentTime);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			} else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
 		
@@ -113,8 +120,7 @@ namespace Agents.AgentResources.InstantAssistants
  
 			MyAgent.Nurses.Remove(nurse);
 			MyAgent.Doctors.Remove(doctor);
- 
-			// Remove from whichever free list the room belongs to
+			
 			if (room.Type == 'A')
 				MyAgent.FreeRoomsTypeA.Remove(room);
 			else

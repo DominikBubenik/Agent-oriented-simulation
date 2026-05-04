@@ -29,6 +29,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 			if (myMsg.Patient != null)
 			{
 				myMsg.Patient.PatientStatus = PatientStatus.Entering;
+				if (MyAgent.MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"New Patient Arrived {myMsg.Patient.Name}, on way to entry queue");
+				
 				if (MySim.AnimatorExists)
 				{
 					var config = myMsg.Patient.ArrivedByAmbulance ? Config.PATH_AMBULANCE_ENTRY_TO_QUEUE : Config.PATH_WALK_IN_ENTRY_TO_QUEUE;

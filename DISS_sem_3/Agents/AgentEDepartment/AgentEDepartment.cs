@@ -30,10 +30,10 @@ namespace Agents.AgentEDepartment
 		
 		public void EnqueuePatientEntry(Patient patient)
 		{
-			// GlobalLogger.PrintLog(patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
 			patient.StartEntryQueueWait();
 			patient.PatientStatus = PatientStatus.EntryQueue;
 			EntryQueue.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{patient.Name} enqueued, waiting for resources");
 		}
 		
 		public void DequeuePatientEntry(MyMessage myMsg)
@@ -41,6 +41,7 @@ namespace Agents.AgentEDepartment
 			myMsg.Patient = EntryQueue.Dequeue(MySim.CurrentTime);
 			myMsg.Patient.StopEntryWaiting();
 			myMsg.Patient.PatientStatus = PatientStatus.Moving;
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{myMsg.Patient.Name} dequeued, ready for entry exam");
 		}
 		
 		public void DequeuePatientMedicalTreat(MyMessage myMsg)
@@ -55,6 +56,7 @@ namespace Agents.AgentEDepartment
 			}
 			myMsg.Patient.PatientStatus = PatientStatus.Moving;
 			myMsg.Patient.StopMedicalQueueWaiting();
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{myMsg.Patient.Name} dequeued, ready for medical treat");
 		}
 		
 		public void EnqueueAfterEntryExam(Patient patient)
@@ -70,6 +72,8 @@ namespace Agents.AgentEDepartment
 			}
 
 			patient.PatientStatus = PatientStatus.MedicalWait;
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{patient.Name} waiting for medical treat");
+			
 		}
 		
 		public Patient GetWaitingPatientForMedicalTreat(Patient patient)

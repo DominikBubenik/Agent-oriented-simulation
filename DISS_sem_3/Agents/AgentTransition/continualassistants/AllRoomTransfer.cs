@@ -58,6 +58,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 					myMsg.Doctor.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
+			if (MySim is MySimulation sim && sim.ObservationMode) 
+				sim.NotifyLogger($"Ambulace transition started P> {myMsg?.Patient.Name}; D> {myMsg?.Doctor?.Id}, N> {myMsg?.Nurse.Id}, R> {myMsg?.Room.Id}");
 			Hold(maxDuration, myMsg);
 		}
 
@@ -72,6 +74,8 @@ namespace Agents.AgentTransition.ContinualAssistants
 					myMsg.Nurse.StopTransfer();
 					myMsg.Doctor?.StopTransfer();
 					if (MySim.AnimatorExists) MyAgent.SetPositionsInRoom(myMsg);
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Ambulace transition finished P> {myMsg?.Patient.Name}; D> {myMsg?.Doctor?.Id}, N> {myMsg?.Nurse.Id}, R> {myMsg?.Room.Id}");
 					AssistantFinished(myMsg);
 					break;
 			}
