@@ -67,7 +67,7 @@ namespace DISS_sem_3
                 
                 try
                 {
-                    txtEndSimulationTime.Text = TimeSpan.FromSeconds(args.EndSimulationTime).ToString();
+                    txtEndSimulationTime.Text = GlobalLogger.FormatTime(args.EndSimulationTime);
                 }
                 catch { txtEndSimulationTime.Text = args.EndSimulationTime.ToString("F2"); }
 
@@ -83,7 +83,8 @@ namespace DISS_sem_3
         private void BtnRun_Click(object? sender, EventArgs e)
         {
             SetRunRunning(true);
-            
+            ClearExistingLayout();
+            ClearLog();
             CreateLaneTables();
             OnRunRequested?.Invoke(this, EventArgs.Empty);
         }
@@ -157,6 +158,23 @@ namespace DISS_sem_3
             AllPatients = null;
             
             dgvLog?.Rows.Clear();
+        }
+        private void ClearExistingLayout()
+        {
+            // Clear the UI container
+            flpLanes.Controls.Clear();
+
+            // Clear the dictionaries holding room references
+            _roomAGrids.Clear();
+            _roomBGrids.Clear();
+
+            // Null out specific references to ensure we don't update stale grids
+            EntryQueue = null;
+            MedicalQueueA = null;
+            MedicalQueueB = null;
+            AllNurses = null;
+            AllDoctors = null;
+            AllPatients = null;
         }
 
         // Controller will manage the paused state; this setter allows controller to update the UI
@@ -253,7 +271,7 @@ namespace DISS_sem_3
             {
                 // show current simulation time in the textbox only
                 var ts = TimeSpan.FromSeconds(time);
-                txtCurrentTime.Text = ts.ToString();
+                txtCurrentTime.Text = GlobalLogger.FormatTime(time);
             }
             catch
             {
@@ -420,13 +438,26 @@ namespace DISS_sem_3
             panel.Controls.Add(pEntryPatients);
             panel.Controls.Add(pMedicalPatientsA);
             panel.Controls.Add(pMedicalPatientsB);
+            for (int i = 0; i < 5; i++) 
+            {
+                var dgv = CreateRoomGridPlaceholder(i, $"Exam Room A #{i}");
+                _roomAGrids.Add(i, dgv);
+                // flpLanes.Controls.Add(dgv);
+            }
             
+            // 3. Pre-render Room B Grids (example using another count from args)
+            for (int i = 0; i < 7; i++)
+            {
+                var dgv = CreateRoomGridPlaceholder(i, $"Exam Room B #{i}");
+                _roomBGrids.Add(i, dgv);
+                // flpLanes.Controls.Add(dgv);
+            }
             foreach (var entry in _roomAGrids)
             {
                 var pRoomA = MakeLabeledContainer($"Exam Room A #{entry.Key}", entry.Value);
                 panel.Controls.Add(pRoomA);
             }
-
+            
             // 3. Add Room B Grids from Dictionary
             foreach (var entry in _roomBGrids)
             {
