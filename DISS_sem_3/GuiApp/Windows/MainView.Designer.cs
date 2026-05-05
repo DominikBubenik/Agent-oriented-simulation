@@ -23,6 +23,7 @@
         private System.Windows.Forms.TextBox txtReplications = null!;
         private System.Windows.Forms.Label lblSystemCapacity = null!;
         private System.Windows.Forms.ComboBox cmbExperimentVariant = null!;
+        private System.Windows.Forms.CheckBox chkAllocateBestRoom = null!;
         private System.Windows.Forms.CheckBox chkObservationMode = null!;
         private System.Windows.Forms.Label lblEndTime = null!;
         private System.Windows.Forms.TextBox txtEndTime = null!;
@@ -66,8 +67,6 @@
         // Warming proof group
         private System.Windows.Forms.GroupBox grpWarmingProof = null!;
         private System.Windows.Forms.CheckBox chkWarmUpProof = null!;
-        private System.Windows.Forms.Label lblRefreshRate = null!;
-        private System.Windows.Forms.TextBox txtRefreshRate = null!;
         // Warm-up input (ms)
         private System.Windows.Forms.Label lblWarmUp = null!;
         private System.Windows.Forms.TextBox txtWarmUp = null!;
@@ -136,6 +135,7 @@
     lblSeed = new Label(); txtSeed = new TextBox();
     lblReplications = new Label(); txtReplications = new TextBox();
     lblSystemCapacity = new Label(); cmbExperimentVariant = new ComboBox();
+    chkAllocateBestRoom = new  CheckBox();
     chkObservationMode = new CheckBox();
     chkObservationMode.Checked = true;
 
@@ -168,7 +168,6 @@
     // WARMING PROOF init
     grpWarmingProof = new GroupBox();
     chkWarmUpProof = new CheckBox();
-    lblRefreshRate = new Label(); txtRefreshRate = new TextBox();
     // Warm-up input (ms)
     lblWarmUp = new Label(); txtWarmUp = new TextBox();
     
@@ -308,6 +307,7 @@
 // Set default selected item
     cmbExperimentVariant.SelectedIndex = 0; 
     
+    chkAllocateBestRoom.Text = "Allocate best room";
     chkObservationMode.Text = "Observation";
 
     // Put seed textbox and random checkbox next to each other
@@ -322,7 +322,8 @@
     simTable.Controls.Add(txtReplications, 1, 1);
     simTable.Controls.Add(lblSystemCapacity, 0, 2);
     simTable.Controls.Add(cmbExperimentVariant, 1, 2);
-    simTable.Controls.Add(chkObservationMode, 1, 3);
+    simTable.Controls.Add(chkAllocateBestRoom, 0, 3);
+    simTable.Controls.Add(chkObservationMode, 1, 4);
 
     grpSimulation.Controls.Add(simTable);
 
@@ -341,8 +342,6 @@
     
     timeTable.Controls.Add(lblEndTime, 0, 1);
     timeTable.Controls.Add(txtEndTime, 1, 1);
-    timeTable.Controls.Add(lblTimeInterval, 0, 2);
-    timeTable.Controls.Add(txtTimeInterval, 1, 2);
     timeTable.Controls.Add(lblMaxWaitTimeExp4, 0, 3);
     timeTable.Controls.Add(txtMaxWaitTimeExp4, 1, 3);
 
@@ -430,12 +429,9 @@
 
     chkWarmUpProof.Text = "Warm up proof";
     chkWarmUpProof.AutoSize = true;
-    StyleInput(lblRefreshRate, txtRefreshRate, "Refresh Rate (ms)", "0");
 
     warmTable.Controls.Add(chkWarmUpProof, 0, 0);
     warmTable.SetColumnSpan(chkWarmUpProof, 2);
-    warmTable.Controls.Add(lblRefreshRate, 0, 1);
-    warmTable.Controls.Add(txtRefreshRate, 1, 1);
     
     grpWarmingProof.Controls.Add(warmTable);
 
@@ -470,6 +466,7 @@
     pnlControls.Controls.Add(leftPanel);
     
     grpSimulation.Width = 350;
+    grpSimulation.Height = 500;
     grpTime.Width = 250;
     grpResources.Width = 350;
     grpWarmingProof.Width = 400;

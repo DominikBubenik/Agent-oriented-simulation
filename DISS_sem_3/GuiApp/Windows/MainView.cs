@@ -141,6 +141,7 @@ public partial class MainView : Form
         int seed = 12345;
         int replications = 1;
         bool observation;
+        bool allocateBestRoom;
         double startTime = 0;
         double endTime = 627;
         int nursesCount = 3;
@@ -157,59 +158,15 @@ public partial class MainView : Form
             seed = sVal;
         if (!string.IsNullOrWhiteSpace(txtReplications.Text) && int.TryParse(txtReplications.Text, out var rVal))
             replications = rVal;
-        observation = chkObservationMode.Checked;
+        observation = chkObservationMode.Checked;  
+        
+        allocateBestRoom = chkAllocateBestRoom.Checked;
      
         if (!string.IsNullOrWhiteSpace(txtEndTime.Text) && double.TryParse(txtEndTime.Text, out var etVal))
             endTime = etVal * 3600;   
         
         if (!string.IsNullOrWhiteSpace(txtMaxWaitTimeExp4.Text) && double.TryParse(txtMaxWaitTimeExp4.Text, out var exp4Val))
             exp4MaxWaitTime = exp4Val * 60;
-
-        // Parse Time Interval if provided. Accepts either a numeric seconds value or HH:MM:SS (or HH:MM) format.
-        if (!string.IsNullOrWhiteSpace(txtTimeInterval.Text))
-        {
-            var intervalText = txtTimeInterval.Text.Trim();
-
-            // 1. Try numeric parse first (e.g., "3600")
-            if (double.TryParse(intervalText, out var numSec))
-            {
-                intervalSeconds = numSec;
-            }
-            else if (intervalText.Contains(":"))
-            {
-                // 2. Manual split for HH:MM:SS or HH:MM
-                // This treats the first part strictly as HOURS, even if it's 24, 48, or 100.
-                var parts = intervalText.Split(':');
-                try
-                {
-                    double h = 0, m = 0, s = 0;
-
-                    if (parts.Length >= 2) // We have at least HH and MM
-                    {
-                        h = double.Parse(parts[0]);
-                        m = double.Parse(parts[1]);
-
-                        if (parts.Length == 3) // We also have SS
-                        {
-                            s = double.Parse(parts[2]);
-                        }
-
-                        // TotalSeconds = (Hours * 3600) + (Minutes * 60) + Seconds
-                        intervalSeconds = (h * 3600) + (m * 60) + s;
-                    }
-                }
-                catch
-                {
-                    // If parsing fails (e.g., user typed "AA:BB"), intervalSeconds stays 0
-                    intervalSeconds = 0;
-                }
-            }
-
-            // if (intervalSeconds > 0)
-            // {
-            //     endTime = startTime + intervalSeconds;
-            // }
-        }
 
         if (!string.IsNullOrWhiteSpace(txtNurses.Text) && int.TryParse(txtNurses.Text, out var lVal))
             nursesCount = lVal;
@@ -226,47 +183,6 @@ public partial class MainView : Form
         if (!string.IsNullOrWhiteSpace(txtWarmUp?.Text) && int.TryParse(txtWarmUp.Text, out var wu))
             warmUp = wu * 3600;
 
-        // Read warming-proof options (RefreshRate)
-        int refreshRate = 100;
-        if (!string.IsNullOrWhiteSpace(txtRefreshRate.Text) && int.TryParse(txtRefreshRate.Text, out var rr))
-            refreshRate = rr;
-
-        // Find sensitivity inputs
-        bool findSensitivityRequested = false;
-        double findComfortSeconds = 600.0; // default 10 minutes
-        int findDetectorAvg = 20;
-        int findLuggageAvg = 10;
-
-        if (chkFindSensitivityGenerateCsv != null)
-            findSensitivityRequested = chkFindSensitivityGenerateCsv.Checked;
-
-        if (!string.IsNullOrWhiteSpace(txtFindComfortTime.Text))
-        {
-            var t = txtFindComfortTime.Text.Trim();
-            if (double.TryParse(t, out var numeric))
-            {
-                findComfortSeconds = numeric;
-            }
-            else if (t.Contains(':'))
-            {
-                var parts = t.Split(':');
-                try
-                {
-                    int h = 0, m = 0, s = 0;
-                    if (parts.Length >= 1) h = int.Parse(parts[0]);
-                    if (parts.Length >= 2) m = int.Parse(parts[1]);
-                    if (parts.Length >= 3) s = int.Parse(parts[2]);
-                    findComfortSeconds = h * 3600 + m * 60 + s;
-                }
-                catch { findComfortSeconds = 600.0; }
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(txtFindDetectorQueueAvg.Text) && int.TryParse(txtFindDetectorQueueAvg.Text, out var fdet))
-            findDetectorAvg = fdet;
-        if (!string.IsNullOrWhiteSpace(txtFindLuggageQueueAvg.Text) && int.TryParse(txtFindLuggageQueueAvg.Text, out var flag))
-            findLuggageAvg = flag;
-
         return new StartSimulationArgs(
             seed: seed,
             replications: replications,
@@ -278,22 +194,10 @@ public partial class MainView : Form
             medicalMax: medicalMax,
             timeIntervalSeconds: intervalSeconds,
             experimentVariant: experimentVariant,
-            refreshRate: refreshRate,
             warmUpProof: chkWarmUpProof.Checked,
+            allocateBestRoom: allocateBestRoom,
             warmUp: warmUp,
-            exp4WaitTime: exp4MaxWaitTime,
-            sensibilityRequested: chkSensRun.Checked,
-            sensCapacity: !string.IsNullOrWhiteSpace(txtSensCapacity.Text) && int.TryParse(txtSensCapacity.Text, out var sc) ? sc : 1000,
-            sensReplications: !string.IsNullOrWhiteSpace(txtSensReplications.Text) && int.TryParse(txtSensReplications.Text, out var sr) ? sr : 10,
-            sensGraphPoints: !string.IsNullOrWhiteSpace(txtSensGraphPoints.Text) && int.TryParse(txtSensGraphPoints.Text, out var gp) ? gp : 10,
-            findSensitivityRequested: findSensitivityRequested,
-            findComfortSeconds: findComfortSeconds,
-            findEntryQueueAvg: findDetectorAvg,
-            findLuggageQueueAvg: findLuggageAvg
-            ,
-            csvGenerateRequested: chkFindSensitivityGenerateCsv != null && chkFindSensitivityGenerateCsv.Checked,
-            csvDirectory: !string.IsNullOrWhiteSpace(txtCsvDirectory.Text) ? txtCsvDirectory.Text : null,
-            csvFileName: !string.IsNullOrWhiteSpace(txtCsvFileName.Text) ? txtCsvFileName.Text : null
+            exp4WaitTime: exp4MaxWaitTime
          );
     }
 

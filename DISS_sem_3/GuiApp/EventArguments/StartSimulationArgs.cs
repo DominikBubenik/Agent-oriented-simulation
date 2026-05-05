@@ -13,54 +13,25 @@ public class StartSimulationArgs(
     int medicalMax,
     double timeIntervalSeconds,
     ResourceAllocatingStrategy experimentVariant,
-    int refreshRate,
     bool warmUpProof,
     double exp4WaitTime,
+    bool allocateBestRoom = false,
     double warmUp = 15000,
-    bool sensibilityRequested = false,
-    int sensCapacity = 1000,
-    int sensReplications = 10,
-    int sensGraphPoints = 10,
-    bool findSensitivityRequested = false,
-    double findComfortSeconds = 600.0,
-    int findEntryQueueAvg = 20,
-    int findLuggageQueueAvg = 10,
-    bool csvGenerateRequested = false,
-    string? csvDirectory = null,
-    string? csvFileName = null,
     bool turboMode = false)
 {
     public int Seed { get; set; } = seed;
     public int Replications { get; set; } = replications;
     public bool ObservationMode { get; set; } = observationMode;
-    public double EndSimulationTime { get; set; } = endSimulationTime; //v hodinach
+    public bool AllocateBestRoom { get; set; } = allocateBestRoom;
+    public double EndSimulationTime { get; set; } = endSimulationTime;
     public int NursesCount { get; set; } = nursesCount;
     public int DoctorsCount { get; set; } = doctorsCount;
     public int EntryMax { get; set; } = entryMax;
     public int MedicalMax { get; set; } = medicalMax;
     public double TimeIntervalSeconds { get; set; } = timeIntervalSeconds;
     public ResourceAllocatingStrategy ExperimentVariant { get; set; } = experimentVariant;
-    public int RefreshRate { get; set; } = refreshRate;
     public bool WarmUpProof { get; set; } = warmUpProof;
     public double WarmUp { get; set; } = warmUp;
     public double Exp4MaxWaitTime { get; set; } = exp4WaitTime;
-
-    // Sensitivity / sweep options
-    public bool SensibilityRequested { get; set; } = sensibilityRequested;
-    public int SensCapacity { get; set; } = sensCapacity;
-    public int SensReplications { get; set; } = sensReplications;
-    public int SensGraphPoints { get; set; } = sensGraphPoints;
-
-    // Find sensitivity threshold options
-    public bool FindSensitivityRequested { get; set; } = findSensitivityRequested;
-    // comfort threshold in seconds (e.g. 600 = 00:10:00)
-    public double FindComfortSeconds { get; set; } = findComfortSeconds;
-    public int FindEntryQueueAvg { get; set; } = findEntryQueueAvg;
-    public int FindLuggageQueueAvg { get; set; } = findLuggageQueueAvg;
-
-    // CSV generation options
-    public bool CsvGenerateRequested { get; set; } = csvGenerateRequested;
-    public string? CsvDirectory { get; set; } = csvDirectory;
-    public string? CsvFileName { get; set; } = csvFileName;
     public bool TurboMode { get; set; } = turboMode;
 }

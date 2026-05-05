@@ -51,9 +51,7 @@ namespace Agents.AgentResources.InstantAssistants
 			{
 				myMsg.Nurse = nurses[0];
 				nurses.RemoveAt(0);
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
@@ -67,14 +65,12 @@ namespace Agents.AgentResources.InstantAssistants
 			var nurses = MyAgent.Nurses;
 			var rooms = MyAgent.FreeRoomsTypeB;
 			
-			if (nurses.Count > 0 && rooms.Count > 0 )
+			if (nurses.Count > 0 && rooms.Count > 0)
 			{
 				myMsg.Nurse = nurses.MinBy(n => n.GetWorkingUtilization());
 				nurses.Remove(myMsg.Nurse);
 
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
@@ -92,9 +88,7 @@ namespace Agents.AgentResources.InstantAssistants
 			{
 				myMsg.Nurse = nurses[0];
 				nurses.RemoveAt(0);
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
@@ -113,19 +107,7 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Nurse = nurses[0];
 				nurses.RemoveAt(0);
 
-				var bestRoomIndex = 0;
-				for (int i = 0; i < rooms.Count; i++)
-				{
-					var room = rooms[i];
-					if (room.Nurse != null)
-					{
-						bestRoomIndex = i;
-						break;
-					}
-				}
-				myMsg.Room = rooms[bestRoomIndex];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(bestRoomIndex);
+				MyAgent.AllocateRoom(myMsg, rooms);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else

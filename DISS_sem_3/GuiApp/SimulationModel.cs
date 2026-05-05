@@ -34,6 +34,8 @@ public class SimulationModel
         }
         else if (args.TurboMode)
         {
+            _core.WarmUpSystem = true;
+            _core.WarmUpTime = args.WarmUp;
             _core.OnReplicationDidFinish(UpdateTurboWindow);  
             _core.SetMaxSimSpeed();
         }
@@ -55,6 +57,7 @@ public class SimulationModel
             _core.MaxEntryQueueLengthCount = args.EntryMax;
             _core.MaxMedicalQueueLengthCount = args.MedicalMax;
             _core.MaxTimeWaitStrategy = args.Exp4MaxWaitTime;
+            _core.AllocateRoomWithResources = args.AllocateBestRoom;
             _core.SetEndTime(end);
             _core.SimulateAsync(args.Replications, end);
         }

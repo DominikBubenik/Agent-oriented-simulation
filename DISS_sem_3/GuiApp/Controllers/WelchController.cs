@@ -83,8 +83,7 @@ public class WelchController
                         medicalMax: _args.MedicalMax,// unused in ED model
                         timeIntervalSeconds: _args.TimeIntervalSeconds,
                         exp4WaitTime: 0,
-                        experimentVariant:  0,             // unused
-                        refreshRate:     0,             // turbo — no GUI refresh
+                        experimentVariant:  0,             
                         warmUpProof:     true,          // signals simulation to emit graph events
                         warmUp:          0,
                         turboMode:       true

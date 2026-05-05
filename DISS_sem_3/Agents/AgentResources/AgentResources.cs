@@ -158,6 +158,32 @@ namespace Agents.AgentResources
 			return Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
 		}
 		
+		public void AllocateRoom(MyMessage myMsg, List<Room> rooms)
+		{
+			if (MyCastSim().AllocateRoomWithResources)
+			{
+				var bestRoomIndex = 0;
+				for (int i = 0; i < rooms.Count; i++)
+				{
+					var room = rooms[i];
+					if (room.Nurse != null)
+					{
+						bestRoomIndex = i;
+						break;
+					}
+				}
+				myMsg.Room = rooms[bestRoomIndex];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(bestRoomIndex);
+			}
+			else
+			{
+				myMsg.Room = rooms[0];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(0);
+			}
+		}
+		
 		public void Reset()
 		{
 			foreach (var doctor in AllDoctors)
