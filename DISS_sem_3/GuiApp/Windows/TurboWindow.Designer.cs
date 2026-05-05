@@ -170,6 +170,35 @@ partial class TurboWindow
         this.Text = "Simulation Turbo Mode - Real-time Analysis";
         this.ClientSize = new System.Drawing.Size(1400, 850);
     }
+    
+    /**
+    * Kod vygenerovany s pomocou AI, zdokumentovane v kapitole 5
+    */
+    private void InitializeExportUi()
+    {
+        Panel pnlExport = new Panel { Dock = DockStyle.Top, Height = 40, BorderStyle = BorderStyle.FixedSingle };
+        
+        Label lblPath = new Label { Text = "Export Path:", Left = 10, Top = 12, Width = 75 };
+        txtExportPath = new TextBox { Left = 90, Top = 9, Width = 250, ReadOnly = true };
+        btnBrowsePath = new Button { Text = "Browse...", Left = 345, Top = 7, Width = 75 };
+        
+        Label lblFile = new Label { Text = "File Name:", Left = 435, Top = 12, Width = 65 };
+        txtExportFilename = new TextBox { Left = 505, Top = 9, Width = 150, Text = "simulation_results.csv" };
+
+        btnBrowsePath.Click += (s, e) =>
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    txtExportPath.Text = fbd.SelectedPath;
+                }
+            }
+        };
+
+        pnlExport.Controls.AddRange(new Control[] { lblPath, txtExportPath, btnBrowsePath, lblFile, txtExportFilename });
+        this.Controls.Add(pnlExport);
+    }
 
     public ScottPlot.WinForms.FormsPlot formsPlot1, formsPlot2, formsPlot3, formsPlot4, formsPlot5, formsPlot6, formsPlot7, formsPlot8, formsPlot9;
     public ScottPlot.WinForms.FormsPlot formsPlot10, formsPlot11, formsPlot12, formsPlot13, formsPlot14, formsPlot15, formsPlot16, formsPlot17, formsPlot18;
@@ -193,4 +222,7 @@ partial class TurboWindow
         txtTurboTimeFromEntryToMedicalPriority1, txtTurboTimeFromEntryToMedicalPriority1_CI, txtTurboTimeFromEntryToMedicalPriority2, txtTurboTimeFromEntryToMedicalPriority2_CI,
         txtTurboTimeFromEntryToMedicalPriority3, txtTurboTimeFromEntryToMedicalPriority3_CI, txtTurboTimeFromEntryToMedicalPriority4, txtTurboTimeFromEntryToMedicalPriority4_CI,
         txtTurboTimeFromEntryToMedicalPriority5, txtTurboTimeFromEntryToMedicalPriority5_CI;
+    private TextBox txtExportPath = null!;
+    private TextBox txtExportFilename = null!;
+    private Button btnBrowsePath = null!;
 }

@@ -1,4 +1,5 @@
-﻿using Airport_GUI;
+﻿using System.IO;
+using Airport_GUI;
 using DISS_SEM_GUI;
 using DISS_SEM_GUI.EventsArguments;
 
@@ -17,6 +18,8 @@ public class TurboController
     private List<double>[] valsUpper;
 
     private Dictionary<string, StatHistory> _history;
+    private SimulationStatsDto? _latestStats;
+
     
     public void ShowWindow(StartSimulationArgs args)
     {
@@ -41,6 +44,7 @@ public class TurboController
         InitBeforeRun();
         _args.ObservationMode = false;
         _args.TurboMode = true;
+        _latestStats = null;
         _currentModel.StartSimulation(_args);
         try { _turboWindow?.SetStatus("Running"); } catch { }
     }
@@ -60,7 +64,7 @@ public class TurboController
 
     private void OnTurboRefresh(SimulationStatsDto st)
     {
-         // Skip initial replications as requested by UI
+         _latestStats = st;
          if (st.Replication % 10 == 0)
          {
              Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " - " + st.Replication);
@@ -86,6 +90,10 @@ public class TurboController
          _turboWindow?.UpdateDashboard(st.Replication, _history);
          _turboWindow?.UpdateStats(st);
          
+         if (_args != null && st.Replication >= _args.Replications -1)
+         {
+             ExportStatsToCsv();
+         }
     }
     
     private void OnPauseRequested(object? sender, EventArgs e)
@@ -104,6 +112,76 @@ public class TurboController
     {
         _currentModel?.StopSimulation();
         _turboWindow?.SetStatus("Stopped");
+        ExportStatsToCsv();
+    }
+    
+    /**
+     * Kod vygenerovany s pomocou AI, zdokumentovane v kapitole 5
+     */
+    private void ExportStatsToCsv()
+    {
+        if (_latestStats == null || _turboWindow == null) return;
+
+        string filePath = _turboWindow.GetExportFilePath();
+
+        // Definícia metrík a ich príznaku, či ide o čas (rovnako ako v UpdateStats)
+        var metricsToExport = new List<(string EnglishKey, string SlovakName, bool IsTime)>
+        {
+            ("TotalPatientsInSystem", "Celkový počet pacientov", false),
+            ("TotalWalkInInSystem", "Počet pacientov (Peši)", false),
+            ("TotalAmbulancedInSystem", "Počet pacientov (Sanitka)", false),
+            ("TotalTimeInSystem", "Priemerný čas v systéme", true),
+            ("TotalTimeInSystemWalkIn", "Čas v systéme (Peši)", true),
+            ("TotalTimeInSystemAmbulanced", "Čas v systéme (Sanitka)", true),
+            ("EntryQueueWaitWalkIn", "Čakacia doba na vstupe (Peši)", true),
+            ("EntryQueueWaitAmbulanced", "Čakacia doba na vstupe (Sanitka)", true),
+            ("EntryQueueLength", "Priemerná dĺžka radu na vstupe", false),
+            ("MedicalTreatWaitingTimeA", "Čakacia doba na vyšetrenie A", true),
+            ("MedicalTreatWaitingTimeAB", "Čakacia doba na vyšetrenie AB", true),
+            ("MedicalTreatWaitingTimeB", "Čakacia doba na vyšetrenie B", true),
+            ("AllDoctorsUtil", "Využitie lekárov", false),
+            ("AllNursesUtil", "Využitie sestier", false),
+            ("AllRoomAUtil", "Využitie miestností A", false),
+            ("AllRoomBUtil", "Využitie miestností B", false),
+            ("FromEntryToMedicalWalkIn", "Čas od vstupu po oštrenie (peši)", true),
+            ("FromEntryToMedicalAmbulance", "Čas od vstupu po ošetrenie (Sanitka)", true),
+            ("TimeFromEntryToMedicalPriority1", "Čas od vstupu po ošetrenie (Priorita 1)", true),
+            ("TimeFromEntryToMedicalPriority2", "Čas od vstupu po ošetrenie (Priorita 2)", true),
+            ("TimeFromEntryToMedicalPriority3", "Čas od vstupu po ošetrenie (Priorita 3)", true),
+            ("TimeFromEntryToMedicalPriority4", "Čas od vstupu po ošetrenie (Priorita 4)", true),
+            ("TimeFromEntryToMedicalPriority5", "Čas od vstupu po ošetrenie (Priorita 5)", true)
+        };
+
+        try
+        {
+            using (var writer = new StreamWriter(filePath, false, System.Text.Encoding.UTF8))
+            {
+                // Hlavička CSV: English, Slovak, Average, 95% C.I.
+                writer.WriteLine("English Metric,Štatistika,Priemer,95% I.S.");
+                writer.WriteLine($"Simulation Replication,Počet replikácii,{_latestStats.Replication + 1},");
+
+                foreach (var item in metricsToExport)
+                {
+                    if (_latestStats.Stats.TryGetValue(item.EnglishKey, out var s) && s != null)
+                    {
+                        // Formátovanie štatistiky (Statistic)
+                        string avgFormatted = item.IsTime 
+                            ? $"{TimeSpan.FromSeconds(s.Avg):hh\\:mm\\:ss}" 
+                            : s.Avg.ToString("F3");
+
+                        string ciFormatted = $"\"[{s.LowerBound:F2} - {s.UpperBound:F2}]\"";
+
+                        // Zápis v poradí: English, Slovak, Statistic (Average), CI
+                        writer.WriteLine($"{item.EnglishKey},{item.SlovakName},{avgFormatted},{ciFormatted}");
+                    }
+                }
+            }
+            Console.WriteLine($"CSV Exported to: {filePath}");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export error: {ex.Message}");
+        }
     }
     
     private void OnWindowClosed(object? sender, FormClosedEventArgs e)

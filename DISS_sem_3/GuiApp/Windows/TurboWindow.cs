@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 using DISS_SEM_GUI.EventsArguments;
 using MainLogic;
 
@@ -24,6 +25,7 @@ public partial class TurboWindow : Form
     public TurboWindow()
     {
         InitializeComponent();
+        InitializeExportUi();
 
         // Wire buttons safely to events
         btnRun.Click += (s, e) => OnRunRequested?.Invoke(this, EventArgs.Empty);
@@ -224,5 +226,15 @@ public partial class TurboWindow : Form
     {
         string text = txtTurboSkipPercent.Text.Replace("%", "").Trim();
         return double.TryParse(text, out double val) ? Math.Clamp(val / 100.0, 0, 0.95) : 0.05;
+    }
+    
+    /**
+    * Kod vygenerovany s pomocou AI, zdokumentovane v kapitole 5
+    */
+    public string GetExportFilePath()
+    {
+        string dir = string.IsNullOrWhiteSpace(txtExportPath.Text) ? AppDomain.CurrentDomain.BaseDirectory : txtExportPath.Text;
+        string file = string.IsNullOrWhiteSpace(txtExportFilename.Text) ? "simulation_results.csv" : txtExportFilename.Text;
+        return Path.Combine(dir, file);
     }
 }
