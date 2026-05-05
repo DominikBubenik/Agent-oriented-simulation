@@ -37,6 +37,9 @@ namespace Agents.AgentResources.InstantAssistants
 				case ResourceAllocatingStrategy.Exp4WaitAndThen:
 					Exp2KeepOneNOneD(myMsg);
 					break;
+				case ResourceAllocatingStrategy.Exp5RoomWithResources:
+					Exp5RoomWithResources(myMsg);
+					break;
 			}
 		}
 
@@ -93,6 +96,37 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+			}
+		}
+		
+		private void Exp5RoomWithResources(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.FreeRoomsTypeB;
+						
+			if (nurses.Count > 0 && rooms.Count > 0)
+			{
+				myMsg.Nurse = nurses[0];
+				nurses.RemoveAt(0);
+
+				var bestRoomIndex = 0;
+				for (int i = 0; i < rooms.Count; i++)
+				{
+					var room = rooms[i];
+					if (room.Nurse != null)
+					{
+						bestRoomIndex = i;
+						break;
+					}
+				}
+				myMsg.Room = rooms[bestRoomIndex];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(bestRoomIndex);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
 			{

@@ -83,10 +83,10 @@ namespace Agents.AgentTransition.ContinualAssistants
 					myMsg.Addressee = MyAgent;
 					myMsg.Patient.CurrentRoom = myMsg.Room;
 					
-					myMsg.Nurse.StopTransfer();
+					if (myMsg.Nurse.Activity == StaffActivity.Moving) myMsg.Nurse.StopTransfer();
 					myMsg.Nurse.CurrentRoom = myMsg.Room;
 					
-					myMsg.Doctor.StopTransfer();
+					if (myMsg.Doctor.Activity == StaffActivity.Moving) myMsg.Doctor.StopTransfer();
 					myMsg.Doctor.CurrentRoom = myMsg.Room;
 					
 					if (MySim.AnimatorExists) MyAgent.SetPositionsInRoom(myMsg);

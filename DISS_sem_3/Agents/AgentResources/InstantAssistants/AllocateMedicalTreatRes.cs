@@ -37,9 +37,12 @@ namespace Agents.AgentResources.InstantAssistants
 				case ResourceAllocatingStrategy.Exp4WaitAndThen:
 					Exp4WaitAndThen(myMsg);
 					break;
+				case ResourceAllocatingStrategy.Exp5RoomWithResources:
+					Exp5RoomWithResources(myMsg);
+					break;
 			}
 		}
-		
+
 		private void Exp0FirstAvailable(MyMessage myMsg)
 		{
 			var nurses = MyAgent.Nurses;
@@ -215,6 +218,66 @@ namespace Agents.AgentResources.InstantAssistants
 					_noticeMsg.Code = Mc.Start;
 					MyAgent.MyManager.StartContinualAssistant(_noticeMsg);
 				}
+			}
+		}
+		
+		private void Exp5RoomWithResources(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var doctors = MyAgent.Doctors;
+			List<Room> rooms;
+			if (myMsg.Patient.Priority < 3)
+			{
+				rooms = MyAgent.FreeRoomsTypeA;
+			} else if (myMsg.Patient.Priority < 5)
+			{
+				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
+			}
+			else
+			{
+				rooms = MyAgent.FreeRoomsTypeB;
+			}
+			
+			if (nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0)
+			{
+				myMsg.Nurse = nurses[0];
+				nurses.RemoveAt(0);
+
+				myMsg.Doctor = doctors[0];
+				doctors.RemoveAt(0);
+
+				var bestRoomIndex = 0;
+				var score = 0;
+				var bestScore = 0;
+				for (int i = 0; i < rooms.Count; i++)
+				{
+					var room = rooms[i];
+					if (room.Nurse != null && room.Doctor != null)
+					{
+						bestRoomIndex = i;
+						break;
+					}
+
+					if (room.Nurse != null)
+					{
+						score = 1;
+					}
+
+					if (room.Doctor != null) score = 2;
+					if (score > bestScore)
+					{
+						bestRoomIndex = i;
+						bestScore = score;
+					}
+				}
+				myMsg.Room = rooms[bestRoomIndex];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(bestRoomIndex);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
 		

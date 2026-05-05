@@ -6,5 +6,6 @@ public enum ResourceAllocatingStrategy
     Exp1LeastUtilized,
     Exp2KeepOneNOneD,
     Exp3KeepJustOneD,
-    Exp4WaitAndThen
+    Exp4WaitAndThen,
+    Exp5RoomWithResources
 }
