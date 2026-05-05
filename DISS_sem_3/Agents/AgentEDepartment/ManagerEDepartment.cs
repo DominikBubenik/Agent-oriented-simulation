@@ -1,3 +1,4 @@
+using DISS_sem_3;
 using DISS_sem_3.Entities;
 using MainLogic;
 using OSPABA;
@@ -159,7 +160,30 @@ namespace Agents.AgentEDepartment
 		public void ProcessSendMedicalTreatResources(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			MyAgent.DequeuePatientMedicalTreat(myMsg);
+			if (((MySimulation)MySim).ResourceAllocatingStrategy == ResourceAllocatingStrategy.Exp4WaitAndThen)
+			{
+				if ((!MyAgent.MedicalTreatQueueA.IsEmpty() && myMsg.Patient.Priority < 3 ) || !MyAgent.MedicalTreatQueueB.IsEmpty())
+				{
+					MyAgent.DequeuePatientMedicalTreat(myMsg);
+				}
+				else
+				{
+					myMsg.EntryWaiting = MyAgent.EntryQueue.IsEmpty() ? null : MyAgent.EntryQueue.Pop();
+					myMsg.MedicalWaitingA = MyAgent.MedicalTreatQueueA.IsEmpty() ? null : MyAgent.MedicalTreatQueueA.Pop();
+					myMsg.MedicalWaitingB = MyAgent.MedicalTreatQueueB.IsEmpty() ? null : MyAgent.MedicalTreatQueueB.Pop();
+					myMsg.EntryQueueLength =  MyAgent.EntryQueue.Count;
+					myMsg.MedicalQueueLengthB = MyAgent.MedicalTreatQueueB.Count;
+					myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
+					myMsg.Code = Mc.FreeUpResources;
+					Notice(myMsg);
+					return;
+				}
+			}
+			else
+			{
+				MyAgent.DequeuePatientMedicalTreat(myMsg);
+			}
+
 			
 			//tu treba pridat ten request response aby bolo jednoznacne odkial idu 
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);

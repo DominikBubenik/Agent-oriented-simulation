@@ -159,10 +159,10 @@ namespace Agents.AgentResources.InstantAssistants
 			var nurses = MyAgent.Nurses;
 			var doctors = MyAgent.Doctors;
 			List<Room> rooms;
-			if (myMsg.MedicalWaitingA == null && myMsg.MedicalWaitingB == null)
-			{
-				return;
-			}
+			// if (myMsg.MedicalWaitingA == null && myMsg.MedicalWaitingB == null)
+			// {
+			// 	return;
+			// }
 			if (myMsg.Patient.Priority < 3)
 			{
 				rooms = MyAgent.FreeRoomsTypeA;

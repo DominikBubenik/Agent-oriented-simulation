@@ -149,7 +149,14 @@ namespace Agents.AgentResources
 		//meta! sender="Exp4WaitAndThen", id="199", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
-			((Adviser)MyAgent.FindAssistant(SimId.AllocateEntryExamRes)).Execute(message);
+			var myMsg =  (MyMessage)message;
+			((Adviser)MyAgent.FindAssistant(SimId.AllocateMedicalTreatRes)).Execute(message);
+			if (myMsg.Nurse != null && myMsg.Room != null && myMsg.Doctor != null)
+			{
+				myMsg.Code = Mc.SendMedicalTreatResources;
+				myMsg.Addressee = MyAgent.Parent;
+				Notice(myMsg);
+			}
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
