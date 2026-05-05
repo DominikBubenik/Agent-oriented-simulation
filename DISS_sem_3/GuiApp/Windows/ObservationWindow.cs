@@ -297,9 +297,25 @@ namespace DISS_sem_3
                 UpdateMedicalStuffsGrid(AllNurses, state.AllNurses.Cast<MedicalStaff>().ToList());
                 UpdateMedicalStuffsGrid(AllDoctors, state.AllDoctors.Cast<MedicalStaff>().ToList());
                 UpdatePassengersGrid(AllPatients, state.AllPatients);
+                
+                UpdateGridStats(EntryQueue, state.EntryQueue.Count, state.EntryQueueAvgLength.ToString("F2"));
+                UpdateGridStats(MedicalQueueA, state.MedicalTreatQueueA.Count, state.MedicalQueueAvgLengthA.ToString("F2"));
+                UpdateGridStats(MedicalQueueB, state.MedicalTreatQueueB.Count, state.MedicalQueueAvgLengthB.ToString("F2"));
+        
+                // For All Patients (If your state DTO has an average property, replace "-" with it)
+                string avgPatients = "-"; 
+                // Example: string avgPatients = state.AveragePatients.ToString("F2");
+                UpdateGridStats(AllPatients, state.AllPatients.Count, avgPatients);
+                
+                foreach (var room in state.ARooms)
+                {
+                    UpdateOrCreateRoomGrid(room, "Room A");
+                }
 
-                foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
-                foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
+                foreach (var room in state.BRooms)
+                {
+                    UpdateOrCreateRoomGrid(room, "Room B");
+                }
             }
             finally {
                 this.ResumeLayout(); 
@@ -316,7 +332,7 @@ namespace DISS_sem_3
                 {
                     dgv.Rows.Add(room.Id, "Empty", "---", "---");
                 }
-
+                UpdateGridStats(dgv, room.CurrentStatus == RoomStatus.Free ? 0 : 1, room.GetUtilization().ToString("F2"));
                 var row = dgv.Rows[0];
                 UpdateCellIfChanged(row.Cells[1], room.Patient?.ToString() ?? "Empty");
                 UpdateCellIfChanged(row.Cells[2], room.Nurse?.ToString() ?? "---");
@@ -418,6 +434,8 @@ namespace DISS_sem_3
 
                 dgv.Top = stats.Bottom + 2;
                 dgv.Left = 0;
+                
+                dgv.Tag = stats;
 
                 p.Controls.Add(lbl);
                 p.Controls.Add(stats);
@@ -474,6 +492,14 @@ namespace DISS_sem_3
 
             // extract stats labels (they are the second control in each panel)
             Label? passengersStats = pEntryPatients.Controls.OfType<Label>().Skip(1).FirstOrDefault();
+        }
+        
+        private void UpdateGridStats(DataGridView? dgv, int currentCount, string average = "-")
+        {
+            if (dgv?.Tag is Label statsLabel)
+            {
+                statsLabel.Text = $"Avg: {average}   Cur: {currentCount}";
+            }
         }
 
         private void UpdatePassengersGrid(DataGridView? dgv, List<Patient> patients)
