@@ -25,9 +25,13 @@ namespace Agents.AgentTransition.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Code = Mc.Finish;
-			var duration = MyAgent.GetAllRoomTransferDuration();
-			if (myMsg.Patient != null)
+			var duration = 0.0;
+			var maxDuration = duration;
+			if (myMsg.Patient != null && !myMsg.Room.Equals(myMsg.Patient.CurrentRoom))
 			{
+				duration = MyAgent.GetAllRoomTransferDuration();
+				maxDuration = duration;
+				// myMsg.Patient.CurrentRoom = myMsg.Room;
 				myMsg.Patient.PatientStatus = PatientStatus.Moving;
 				if (MySim.AnimatorExists)
 				{
@@ -35,25 +39,38 @@ namespace Agents.AgentTransition.ContinualAssistants
 					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
-			if (myMsg.Nurse != null)
+			if (myMsg.Nurse != null && !myMsg.Room.Equals(myMsg.Nurse.CurrentRoom))
 			{
-				myMsg.Nurse.Activity = StaffActivity.Moving;
+				myMsg.Nurse.StartTransfer();
+				if (myMsg.Nurse.CurrentRoom != null) myMsg.Nurse.CurrentRoom.Nurse = null;
+				myMsg.Nurse.CurrentRoom = myMsg.Room;
+				myMsg.Room.Nurse =  myMsg.Nurse;
+				duration = MyAgent.GetAllRoomTransferDuration();
+				if (duration > maxDuration) maxDuration = duration; 
 				if (MySim.AnimatorExists)
 				{
 					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
 					myMsg.Nurse.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
-			if (myMsg.Doctor != null)
+			if (myMsg.Doctor != null && !myMsg.Room.Equals(myMsg.Doctor.CurrentRoom))
 			{
-				myMsg.Doctor.Activity = StaffActivity.Moving;
+				myMsg.Doctor.StartTransfer();
+				if (myMsg.Doctor.CurrentRoom != null) myMsg.Doctor.CurrentRoom.Doctor = null; 
+				myMsg.Doctor.CurrentRoom = myMsg.Room;
+				// myMsg.Doctor.CurrentRoom.Doctor = myMsg.Doctor;
+				myMsg.Room.Doctor =  myMsg.Doctor;
+				duration = MyAgent.GetAllRoomTransferDuration();
+				if (duration > maxDuration) maxDuration = duration; 
 				if (MySim.AnimatorExists)
 				{
 					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
 					myMsg.Doctor.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
 				}
 			}
-			Hold(duration, myMsg);
+			if (MySim is MySimulation sim && sim.ObservationMode) 
+				sim.NotifyLogger($"Ambulace transition started P> {myMsg?.Patient.Name}; D> {myMsg?.Doctor?.Id}, N> {myMsg?.Nurse.Id}, R> {myMsg?.Room.Id}");
+			Hold(maxDuration, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -64,6 +81,17 @@ namespace Agents.AgentTransition.ContinualAssistants
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
 					myMsg.Addressee = MyAgent;
+					myMsg.Patient.CurrentRoom = myMsg.Room;
+					
+					myMsg.Nurse.StopTransfer();
+					myMsg.Nurse.CurrentRoom = myMsg.Room;
+					
+					myMsg.Doctor.StopTransfer();
+					myMsg.Doctor.CurrentRoom = myMsg.Room;
+					
+					if (MySim.AnimatorExists) MyAgent.SetPositionsInRoom(myMsg);
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Ambulace transition finished P> {myMsg?.Patient.Name}; D> {myMsg?.Doctor?.Id}, N> {myMsg?.Nurse.Id}, R> {myMsg?.Room.Id}");
 					AssistantFinished(myMsg);
 					break;
 			}

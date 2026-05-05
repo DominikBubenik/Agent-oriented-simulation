@@ -1,4 +1,6 @@
-﻿namespace DISS_SEM_GUI.EventsArguments;
+﻿using DISS_sem_3;
+
+namespace DISS_SEM_GUI.EventsArguments;
 
 public class StartSimulationArgs(
     int seed,
@@ -7,12 +9,14 @@ public class StartSimulationArgs(
     double endSimulationTime,
     int nursesCount,
     int doctorsCount,
-    int afterDetectorCount,
+    int entryMax,
+    int medicalMax,
     double timeIntervalSeconds,
-    int systemCapacity,
+    ResourceAllocatingStrategy experimentVariant,
     int refreshRate,
     bool warmUpProof,
-    int warmUp = 15000,
+    double exp4WaitTime,
+    double warmUp = 15000,
     bool sensibilityRequested = false,
     int sensCapacity = 1000,
     int sensReplications = 10,
@@ -32,11 +36,14 @@ public class StartSimulationArgs(
     public double EndSimulationTime { get; set; } = endSimulationTime; //v hodinach
     public int NursesCount { get; set; } = nursesCount;
     public int DoctorsCount { get; set; } = doctorsCount;
+    public int EntryMax { get; set; } = entryMax;
+    public int MedicalMax { get; set; } = medicalMax;
     public double TimeIntervalSeconds { get; set; } = timeIntervalSeconds;
-    public int SystemCapacity { get; set; } = systemCapacity;
+    public ResourceAllocatingStrategy ExperimentVariant { get; set; } = experimentVariant;
     public int RefreshRate { get; set; } = refreshRate;
     public bool WarmUpProof { get; set; } = warmUpProof;
-    public int WarmUp { get; set; } = warmUp;
+    public double WarmUp { get; set; } = warmUp;
+    public double Exp4MaxWaitTime { get; set; } = exp4WaitTime;
 
     // Sensitivity / sweep options
     public bool SensibilityRequested { get; set; } = sensibilityRequested;

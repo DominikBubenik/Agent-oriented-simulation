@@ -29,8 +29,9 @@ public class Config
     public static readonly PointF AMBULANCE_ENTRANCE_POSITION = new PointF(655, 70);
     public static readonly PointF EXIT_ENTRANCE_POSITION = new PointF(655, 1200);
     public static readonly PointF BASE_POSITION_DOCTORS = new PointF(555, 70);
+    public static readonly PointF BASE_POSITION_NURSES = new PointF(555, 140);
     public static readonly PointF ENTRY_QUEUE_POSITION = new PointF(800, 550);
-    public static readonly PointF MEDICAL_QUEUE_A_POSITION = new PointF(800, 600);
+    public static readonly PointF MEDICAL_QUEUE_A_POSITION = new PointF(800, 650);
     public static readonly PointF MEDICAL_QUEUE_B_POSITION = new PointF(800, 650);
     public const float HALLWAY_Y = 500;
 
@@ -60,6 +61,22 @@ public class Config
     public static readonly PointF ROOM_A_2 = new PointF(220, 780);
     public static readonly PointF ROOM_A_3 = new PointF(220, 995);
     public static readonly PointF ROOM_A_4 = new PointF(220, 1210);
+
+    public static readonly PointF[] ROOMS_A = new PointF[]
+    {
+        ROOM_A_0, ROOM_A_1, ROOM_A_2, ROOM_A_3, ROOM_A_4
+    };
+
+    public static readonly PointF[] ROOMS_B = new PointF[]
+    {
+        ROOM_B_0, ROOM_B_1, ROOM_B_2, ROOM_B_3, ROOM_B_4, ROOM_B_5, ROOM_B_6
+    };
+    
+    public static readonly PointF[] ROOMS_B_AFTER_EXAM_POSITION = new PointF[]
+    {
+        new PointF(565, ROOM_B_0.Y - 40), new PointF(ROOM_B_1.X + 115, ROOM_B_1.Y + 347), new PointF(ROOM_B_2.X + 115,ROOM_B_2.Y + 347), new PointF(ROOM_B_3.X + 115, ROOM_B_3.Y + 347),
+        new PointF(ROOM_B_4.X + 115, ROOM_B_4.Y - 140), new PointF(ROOM_B_5.X + 115, ROOM_B_5.Y - 140), new PointF(ROOM_B_6.X + 115, ROOM_B_6.Y - 140)
+    };
     
     public static readonly PointF[][] PATH_ROOM_B_EXIT = new PointF[][]
     {
@@ -240,6 +257,7 @@ public class Config
             ROOM_A_4            
         }
     };
+    //TODO pohyb po exam
     public static readonly PointF[][] PATH_MEDICAL_A_QUEUE_TO_ROOM_A = new PointF[][]
     {
         // ROOM A0

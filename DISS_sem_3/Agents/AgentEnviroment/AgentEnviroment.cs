@@ -13,14 +13,26 @@ namespace Agents.AgentEnviroment
 		public SimpleStat TimeInSystemWalkInPatient { get; private set; }
 		public SimpleStat TimeInSystemAmbulancePatient { get; private set; }
 
-		public int TreatedPatientsCount { get; set; }
 		public Dictionary<string, Patient> AllPatientsInSystem { get; private set; }
 
 		public SimpleStat EntranceWaitingTimeAmbulanceP { get; private set; }
 		public SimpleStat EntranceWaitingTimeWalkInP { get; private set; }
 
-		public SimpleStat MedicalTreatWaitingTimeAmbulanceP { get; private set; }
-		public SimpleStat MedicalTreatWaitingTimeWalkInP { get; private set; }
+		public SimpleStat MedicalTreatWaitingTimePA { get; private set; }
+		public SimpleStat MedicalTreatWaitingTimePAB { get; private set; }
+		public SimpleStat MedicalTreatWaitingTimePB { get; private set; }
+		
+		public SimpleStat TimeFromEntryToMedicalTreatWalkIn { get; private set; }
+		public SimpleStat TimeFromEntryToMedicalTreatAmbulance { get; private set; }
+		public int TotalPatientsStats { get; set; }
+		public int TotalWalkInPatientsStats { get; set; }
+		public int TotalAmbulancedPatientsStats { get; set; }
+		
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority1 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority2 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority3 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority4 { get; private set; }
+		public SimpleStat TotalTimeFromEntranceToMedicalTreatPriority5 { get; private set; }
 
 		private ExponentionalGenerator _walkInGenerator;
 		private GammaGenerator _ambulanceGenerator;
@@ -40,14 +52,27 @@ namespace Agents.AgentEnviroment
 			TimeInSystem = new SimpleStat();
 			TimeInSystemWalkInPatient = new SimpleStat();
 			TimeInSystemAmbulancePatient = new SimpleStat();
+			
 
-			TreatedPatientsCount = 0;
+			TotalPatientsStats = 0;
+			TotalWalkInPatientsStats = 0;
+			TotalAmbulancedPatientsStats = 0;
 
-			EntranceWaitingTimeAmbulanceP = new SimpleStat();
 			EntranceWaitingTimeWalkInP = new SimpleStat();
+			EntranceWaitingTimeAmbulanceP = new SimpleStat();
 
-			MedicalTreatWaitingTimeAmbulanceP = new SimpleStat();
-			MedicalTreatWaitingTimeWalkInP = new SimpleStat();
+			MedicalTreatWaitingTimePA = new SimpleStat();
+			MedicalTreatWaitingTimePAB = new SimpleStat();
+			MedicalTreatWaitingTimePB = new SimpleStat();
+			
+			TimeFromEntryToMedicalTreatWalkIn = new SimpleStat();
+			TimeFromEntryToMedicalTreatAmbulance = new SimpleStat();
+			
+			TotalTimeFromEntranceToMedicalTreatPriority1 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority2 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority3 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority4 = new SimpleStat();
+			TotalTimeFromEntranceToMedicalTreatPriority5 = new SimpleStat();
 			
 			AllPatientsInSystem = new Dictionary<string, Patient>();
 			SchedulePatientArrivals();
@@ -70,17 +95,57 @@ namespace Agents.AgentEnviroment
 
 		public void PatientExit(Patient patient)
 		{
+			AllPatientsInSystem.Remove(patient.Name);
+			if (patient.ArrivalTime < MyCastSim().WarmUpTime) return;
+			
 			TimeInSystem.AddSample(MySim.CurrentTime - patient.ArrivalTime);
 			if (patient.ArrivedByAmbulance)
 			{
+				TotalAmbulancedPatientsStats++;
 				TimeInSystemAmbulancePatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+				EntranceWaitingTimeAmbulanceP.AddSample(patient.EntryQueueWaitingTime);
+				TimeFromEntryToMedicalTreatAmbulance.AddSample(patient.TimeFromEnterToMedicTreat);
 			}
 			else
 			{
+				TotalWalkInPatientsStats++;
 				TimeInSystemWalkInPatient.AddSample(MySim.CurrentTime - patient.ArrivalTime);
+				EntranceWaitingTimeWalkInP.AddSample(patient.EntryQueueWaitingTime);
+				TimeFromEntryToMedicalTreatWalkIn.AddSample(patient.TimeFromEnterToMedicTreat);
 			}
-			AllPatientsInSystem.Remove(patient.Name);
-			TreatedPatientsCount++;
+
+			if (patient.Priority < 3)
+			{
+				MedicalTreatWaitingTimePA.AddSample(patient.MedicalQueueWaitingTime);
+			} else if (patient.Priority < 5)
+			{
+				MedicalTreatWaitingTimePAB.AddSample(patient.MedicalQueueWaitingTime);
+			}
+			else
+			{
+				MedicalTreatWaitingTimePB.AddSample(patient.MedicalQueueWaitingTime);
+			}
+
+			switch (patient.Priority)
+			{
+				case 1:
+					TotalTimeFromEntranceToMedicalTreatPriority1.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case 2:
+					TotalTimeFromEntranceToMedicalTreatPriority2.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case 3:
+					TotalTimeFromEntranceToMedicalTreatPriority3.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case  4:
+					TotalTimeFromEntranceToMedicalTreatPriority4.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+				case 5:
+					TotalTimeFromEntranceToMedicalTreatPriority5.AddSample(patient.TimeFromEnterToMedicTreat);
+					break;
+			}
+			
+			TotalPatientsStats++;
 		}
 
 		public double GetNextWalkIn() => _walkInGenerator.Generate();
@@ -97,5 +162,22 @@ namespace Agents.AgentEnviroment
 		//meta! tag="end"
 		
 		private MySimulation MyCastSim() => (MySimulation)MySim;
+
+		public void Reset()
+		{
+			TimeInSystem.Reset();
+			TimeInSystemWalkInPatient.Reset();
+			TimeInSystemAmbulancePatient.Reset();
+			TimeFromEntryToMedicalTreatWalkIn.Reset();
+			TimeFromEntryToMedicalTreatAmbulance.Reset();
+			EntranceWaitingTimeWalkInP.Reset();
+			EntranceWaitingTimeAmbulanceP.Reset();
+			MedicalTreatWaitingTimePA.Reset();
+			MedicalTreatWaitingTimePAB.Reset();
+			MedicalTreatWaitingTimePB.Reset();
+			TotalPatientsStats = 0;
+			TotalWalkInPatientsStats = 0;
+			TotalAmbulancedPatientsStats = 0;
+		}
 	}
 }

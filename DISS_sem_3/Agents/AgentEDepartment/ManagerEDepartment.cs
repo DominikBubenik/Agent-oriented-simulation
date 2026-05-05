@@ -1,3 +1,4 @@
+using DISS_sem_3;
 using DISS_sem_3.Entities;
 using MainLogic;
 using OSPABA;
@@ -25,22 +26,10 @@ namespace Agents.AgentEDepartment
 			}
 		}
 
-		//meta! userInfo="Removed from model"
-		public void ProcessMedicalTreatResources(MessageForm message)
-		{
-			// var myMsg = (MyMessage)message;
-			// MyAgent.DequeuePatientMedicalTreat(myMsg);
-			//
-			// //tu treba pridat ten request response aby bolo jednoznacne odkial idu 
-			// myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			// myMsg.Code = Mc.BetweenAmbulanceTransition;
-			// Request(myMsg);
-		}
-
 		//meta! sender="AgentBoss", id="23", type="Notice"
 		public void ProcessTreatPatient(MessageForm message)
 		{
-			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			var myMsg = (MyMessage)message;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
 			myMsg.Code = Mc.EntranceTransition;
 			Request(myMsg);
@@ -52,49 +41,70 @@ namespace Agents.AgentEDepartment
 			var myMsg = (MyMessage)message;
 			MyAgent.EnqueueAfterEntryExam(myMsg.Patient);
 			
-			var patient = MyAgent.GetWaitingPatientForMedicalTreat(myMsg.Patient);
+			// var patient = MyAgent.GetWaitingPatientForMedicalTreat(myMsg.Patient);
+			myMsg.MedicalWaitingA = MyAgent.MedicalTreatQueueA.IsEmpty() ? null : MyAgent.MedicalTreatQueueA.Pop();
+			myMsg.MedicalWaitingB = MyAgent.MedicalTreatQueueB.IsEmpty() ? null : MyAgent.MedicalTreatQueueB.Pop();
+			myMsg.EntryWaiting = MyAgent.EntryQueue.IsEmpty() ? null : MyAgent.EntryQueue.Pop();
+			myMsg.EntryQueueLength =  MyAgent.EntryQueue.Count;
+			myMsg.MedicalQueueLengthB = MyAgent.MedicalTreatQueueB.Count;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
 			
 			//TODO premyslet
-			var initiateMTResources = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
-			initiateMTResources.Patient = patient;
-			initiateMTResources.Code = Mc.GetMedicalTreatResources;
-			initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
-			Notice(initiateMTResources);
 			
-			//tu bude najskor medicaltreat a potom bude entry exam znovu
-			if (!MyAgent.EntryQueue.IsEmpty())
-			{
-				var initiateEntryExam = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
-				initiateEntryExam.Code = Mc.GetEntryExamResources;
-				initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
-				Notice(initiateEntryExam);
-			}
+			// var initiateMTResources = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
+			// initiateMTResources.Patient = patient;
+			// initiateMTResources.Code = Mc.GetMedicalTreatResources;
+			// initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
+			// Notice(initiateMTResources);
+			//
+			// //tu bude najskor medicaltreat a potom bude entry exam znovu
+			// if (!MyAgent.EntryQueue.IsEmpty())
+			// {
+			// 	var initiateEntryExam = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
+			// 	initiateEntryExam.Code = Mc.GetEntryExamResources;
+			// 	initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
+			// 	Notice(initiateEntryExam);
+			// }
 		
 			
-		}
-
-		//meta! userInfo="Removed from model"
-		public void ProcessEntryExamResources(MessageForm message)
-		{
-			// //tuto ho zoberiem z radu lebo az teraz sa priradia resource
-			// var myMsg = (MyMessage)message;
-			// MyAgent.DequeuePatientEntry(myMsg);
-			//
-			// myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			// myMsg.Code = Mc.BetweenAmbulanceTransition;
-			// Request(myMsg);
 		}
 
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"
 		public void ProcessMedicalTreatPatient(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
+			myMsg.EntryWaiting = MyAgent.EntryQueue.IsEmpty() ? null : MyAgent.EntryQueue.Pop();
+			myMsg.MedicalWaitingA = MyAgent.MedicalTreatQueueA.IsEmpty() ? null : MyAgent.MedicalTreatQueueA.Pop();
+			myMsg.MedicalWaitingB = MyAgent.MedicalTreatQueueB.IsEmpty() ? null : MyAgent.MedicalTreatQueueB.Pop();
+			myMsg.EntryQueueLength =  MyAgent.EntryQueue.Count;
+			myMsg.MedicalQueueLengthB = MyAgent.MedicalTreatQueueB.Count;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
+
+			// if (!MyAgent.MedicalTreatQueueA.IsEmpty())
+			// {
+			// 	var initiateNext = (MyMessage)myMsg.CreateCopy();
+			// 	initiateNext.Patient = MyAgent.MedicalTreatQueueA.Pop();
+			// 	initiateNext.Code = Mc.GetMedicalTreatResources;
+			// 	Notice(initiateNext);				
+			// } 
+			// if (!MyAgent.MedicalTreatQueueB.IsEmpty())
+			// {
+			// 	var initiateNext = (MyMessage)myMsg.CreateCopy();
+			// 	initiateNext.Patient = MyAgent.MedicalTreatQueueB.Pop();
+			// 	initiateNext.Code = Mc.GetMedicalTreatResources;
+			// 	Notice(initiateNext);	
+			// }
+			// if (!MyAgent.EntryQueue.IsEmpty())
+			// {
+			// 	var initiateNext = (MyMessage)myMsg.CreateCopy();
+			// 	// initiateNext.Patient = MyAgent.MedicalTreatQueueB.Pop();
+			// 	initiateNext.Code = Mc.GetEntryExamResources;
+			// 	Notice(initiateNext);
+			// }
 			
 			var exitMsg = (MyMessage)myMsg.CreateCopy();
 			exitMsg.Patient = myMsg.Patient;
@@ -114,7 +124,7 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="111", type="Response"
 		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
-			var myMsg = (MyMessage)message; //odstranil som copy
+			var myMsg = (MyMessage)message; 
 			if (myMsg.Doctor == null)
 			{
 				myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
@@ -131,7 +141,7 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="136", type="Response"
 		public void ProcessEntranceTransition(MessageForm message)
 		{
-			var myMsg = (MyMessage)((MyMessage)message).CreateCopy();
+			var myMsg = (MyMessage)message;
 			MyAgent.EnqueuePatientEntry(myMsg.Patient);
 			myMsg.Code = Mc.GetEntryExamResources;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
@@ -150,9 +160,30 @@ namespace Agents.AgentEDepartment
 		public void ProcessSendMedicalTreatResources(MessageForm message)
 		{
 			var myMsg = (MyMessage)message;
-			MyAgent.DequeuePatientMedicalTreat(myMsg);
+			if (((MySimulation)MySim).ResourceAllocatingStrategy == ResourceAllocatingStrategy.Exp4WaitAndThen)
+			{
+				if ((!MyAgent.MedicalTreatQueueA.IsEmpty() && myMsg.Patient.Priority < 3 ) || !MyAgent.MedicalTreatQueueB.IsEmpty())
+				{
+					MyAgent.DequeuePatientMedicalTreat(myMsg);
+				}
+				else
+				{
+					myMsg.EntryWaiting = MyAgent.EntryQueue.IsEmpty() ? null : MyAgent.EntryQueue.Pop();
+					myMsg.MedicalWaitingA = MyAgent.MedicalTreatQueueA.IsEmpty() ? null : MyAgent.MedicalTreatQueueA.Pop();
+					myMsg.MedicalWaitingB = MyAgent.MedicalTreatQueueB.IsEmpty() ? null : MyAgent.MedicalTreatQueueB.Pop();
+					myMsg.EntryQueueLength =  MyAgent.EntryQueue.Count;
+					myMsg.MedicalQueueLengthB = MyAgent.MedicalTreatQueueB.Count;
+					myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
+					myMsg.Code = Mc.FreeUpResources;
+					Notice(myMsg);
+					return;
+				}
+			}
+			else
+			{
+				MyAgent.DequeuePatientMedicalTreat(myMsg);
+			}
 			
-			//tu treba pridat ten request response aby bolo jednoznacne odkial idu 
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
 			myMsg.Code = Mc.BetweenAmbulanceTransition;
 			Request(myMsg);
@@ -161,12 +192,16 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentResources", id="180", type="Notice"
 		public void ProcessSendEntryExamResources(MessageForm message)
 		{
-			//tuto ho zoberiem z radu lebo az teraz sa priradia resource
 			var myMsg = (MyMessage)message;
 			MyAgent.DequeuePatientEntry(myMsg);
+
+			myMsg.Patient.CurrentRoom = myMsg.Room;
 			
-			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			myMsg.Code = Mc.BetweenAmbulanceTransition;
+			if (myMsg.Nurse.CurrentRoom != null) myMsg.Nurse.CurrentRoom.Nurse = null;
+			myMsg.Room.Nurse = myMsg.Nurse;
+			myMsg.Nurse.CurrentRoom = myMsg.Room;
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
+			myMsg.Code = Mc.EntryExamPatient;
 			Request(myMsg);
 		}
 
@@ -179,6 +214,22 @@ namespace Agents.AgentEDepartment
 		{
 			switch (message.Code)
 			{
+			case Mc.TreatPatient:
+				ProcessTreatPatient(message);
+			break;
+
+			case Mc.EntranceTransition:
+				ProcessEntranceTransition(message);
+			break;
+
+			case Mc.EntryExamPatient:
+				ProcessEntryExamPatient(message);
+			break;
+
+			case Mc.ExitTransition:
+				ProcessExitTransition(message);
+			break;
+
 			case Mc.SendEntryExamResources:
 				ProcessSendEntryExamResources(message);
 			break;
@@ -187,28 +238,12 @@ namespace Agents.AgentEDepartment
 				ProcessBetweenAmbulanceTransition(message);
 			break;
 
-			case Mc.ExitTransition:
-				ProcessExitTransition(message);
-			break;
-
-			case Mc.EntranceTransition:
-				ProcessEntranceTransition(message);
+			case Mc.MedicalTreatPatient:
+				ProcessMedicalTreatPatient(message);
 			break;
 
 			case Mc.SendMedicalTreatResources:
 				ProcessSendMedicalTreatResources(message);
-			break;
-
-			case Mc.EntryExamPatient:
-				ProcessEntryExamPatient(message);
-			break;
-
-			case Mc.TreatPatient:
-				ProcessTreatPatient(message);
-			break;
-
-			case Mc.MedicalTreatPatient:
-				ProcessMedicalTreatPatient(message);
 			break;
 
 			default:

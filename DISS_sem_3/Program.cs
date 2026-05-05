@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DISS_SEM_GUI;
 using Simulation;
 
@@ -11,13 +12,11 @@ static class Program
     [STAThread]
     static void Main()
     {
+        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
         
-        var sim = new MySimulation(0);
-        // sim.Simulate(1);
-        // return;
         var view = new MainView();
         var controller = new SimulationController(view);
         

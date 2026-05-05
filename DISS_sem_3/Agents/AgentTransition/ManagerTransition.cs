@@ -93,9 +93,25 @@ namespace Agents.AgentTransition
 		{
 			switch (message.Code)
 			{
+			case Mc.BetweenAmbulanceTransition:
+				ProcessBetweenAmbulanceTransition(message);
+			break;
+
+			case Mc.EntranceTransition:
+				ProcessEntranceTransition(message);
+			break;
+
+			case Mc.ExitTransition:
+				ProcessExitTransition(message);
+			break;
+
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
+				case SimId.AllRoomTransfer:
+					ProcessFinishAllRoomTransfer(message);
+				break;
+
 				case SimId.EntryPatient:
 					ProcessFinishEntryPatient(message);
 				break;
@@ -103,23 +119,7 @@ namespace Agents.AgentTransition
 				case SimId.ExitDepartment:
 					ProcessFinishExitDepartment(message);
 				break;
-
-				case SimId.AllRoomTransfer:
-					ProcessFinishAllRoomTransfer(message);
-				break;
 				}
-			break;
-
-			case Mc.BetweenAmbulanceTransition:
-				ProcessBetweenAmbulanceTransition(message);
-			break;
-
-			case Mc.ExitTransition:
-				ProcessExitTransition(message);
-			break;
-
-			case Mc.EntranceTransition:
-				ProcessEntranceTransition(message);
 			break;
 
 			default:

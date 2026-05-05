@@ -18,7 +18,7 @@ public class FinishedScanningEvent(AirportSimulationCore core, Luggage luggage, 
             waitingPassenger.CurrentlyHolding++;
             if (waitingPassenger.CurrentlyHolding == waitingPassenger.LuggageCount)
             {
-                GlobalLogger.PrintLog($"Passenger exit system {waitingPassenger.ToString()}", _core.CurrentSimulationTime);
+                // GlobalLogger.PrintLog($"Passenger exit system {waitingPassenger.ToString()}", _core.CurrentSimulationTime);
                 Lane.DequeueItemFromQueue(GetAirportCore().CommonWaitForLuggageQueueStats, Lane.WaitForLuggageQueue, _core.CurrentSimulationTime);
                 GetAirportCore().avgTimeInSystem.AddSample(_core.CurrentSimulationTime - waitingPassenger.ArrivalTime);
             }

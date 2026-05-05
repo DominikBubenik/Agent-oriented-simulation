@@ -1,7 +1,9 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentResources.InstantAssistants;
+using Agents.AgentResources.ContinualAssistants;
 using DISS_sem_3.Entities;
+using OpenTK.Platform.Windows;
 
 namespace Agents.AgentResources
 {
@@ -85,15 +87,97 @@ namespace Agents.AgentResources
 				{
 					FreeRoomsTypeB.Add(myMsg.Room);
 				}
-				myMsg.Room.Nurse = null;
-				myMsg.Room.Doctor = null;
+				// myMsg.Room.Nurse = null;
+				// myMsg.Room.Doctor = null;
 				myMsg.Room.Patient = null;
-				myMsg.Room.CurrentStatus = RoomStatus.Empty;
+				myMsg.Room.CurrentStatus = RoomStatus.Free;
 			}
 			
 			myMsg.Nurse = null;
 			myMsg.Room = null;
 			myMsg.Doctor = null;
+		}
+
+		public double GetUtilAllDoctors()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var doc in AllDoctors)
+			{
+				cumulativeUtil += doc.GetWorkingUtilization();
+			}
+			return cumulativeUtil / AllDoctors.Count;
+		}
+		
+		public double GetUtilAllNurses()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var nurse in AllNurses)
+			{
+				cumulativeUtil += nurse.GetWorkingUtilization();
+			}
+			return cumulativeUtil / AllNurses.Count;
+		}
+		
+		public double GetUtilAllRoomsA()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var room in AllRoomsTypeA)
+			{
+				cumulativeUtil += room.GetUtilization();
+			}
+			return cumulativeUtil / AllRoomsTypeA.Count;
+		}
+		
+		public double GetUtilAllRoomsB()
+		{
+			var cumulativeUtil = 0.0;
+			foreach (var room in AllRoomsTypeB)
+			{
+				cumulativeUtil += room.GetUtilization();
+			}
+			return cumulativeUtil / AllRoomsTypeB.Count;
+		}
+		
+		public bool FreeResForMedicalA()
+		{
+			return Doctors.Count > 0 && Nurses.Count > 0 && FreeRoomsTypeA.Count > 0;
+		}
+
+		public bool FreeResForMedicalAB()
+		{
+			return Doctors.Count > 0 && Nurses.Count > 0 && (FreeRoomsTypeA.Count > 0 || FreeRoomsTypeB.Count > 0);
+		}
+
+		public bool FreeResForMedicalB()
+		{
+			return Doctors.Count > 0 && Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
+		}
+		
+		public bool FreeResForEntryExam()
+		{
+			return Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
+		}
+		
+		public void Reset()
+		{
+			foreach (var doctor in AllDoctors)
+			{
+				doctor.Reset();
+			}
+
+			foreach (var nurse in AllNurses)
+			{
+				nurse.Reset();
+			}
+
+			foreach (var room in AllRoomsTypeA)
+			{
+				room.Reset();
+			}
+			foreach (var room in AllRoomsTypeB)
+			{
+				room.Reset();
+			}
 		}
 
 		private MySimulation MyCastSim() => (MySimulation)MySim; 
@@ -102,6 +186,7 @@ namespace Agents.AgentResources
 		private void Init()
 		{
 			new ManagerResources(SimId.ManagerResources, MySim, this);
+			new Exp4WaitAndThen(SimId.Exp4WaitAndThen, MySim, this);
 			new AllocateMedicalTreatRes(SimId.AllocateMedicalTreatRes, MySim, this);
 			new AllocateEntryExamRes(SimId.AllocateEntryExamRes, MySim, this);
 			AddOwnMessage(Mc.FreeUpResources);

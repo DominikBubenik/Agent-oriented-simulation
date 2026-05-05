@@ -24,11 +24,15 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Room.Nurse = myMsg.Nurse;
-			myMsg.Room.Patient = myMsg.Patient;
-			myMsg.Room.Doctor = myMsg.Doctor;
-			myMsg.Nurse.Activity = StaffActivity.Working;
-			myMsg.Doctor.Activity = StaffActivity.Working;
+			// myMsg.Room.Patient = myMsg.Patient;
+			// myMsg.Room.Doctor = myMsg.Doctor;
+			
+			myMsg.Nurse.StartWork();
+			myMsg.Doctor.StartWork();
+			
 			myMsg.Patient.PatientStatus = PatientStatus.MedicalExam;
+			if (MySim is MySimulation sim && sim.ObservationMode) 
+				sim.NotifyLogger($"Medical treat started P> {myMsg.Patient.Name}; D> {myMsg.Doctor.Id}, N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -43,9 +47,12 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
 					myMsg.Addressee = MyAgent;
-					myMsg.Nurse.Activity = StaffActivity.Not_Working;
-					myMsg.Doctor.Activity = StaffActivity.Not_Working;
+					myMsg.Nurse.StopWork();
+					myMsg.Doctor.StopWork();
 					myMsg.Patient.PatientStatus = PatientStatus.Exiting;
+					myMsg.Room.StopOccupancy();
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Medical treat finished P> {myMsg.Patient.Name}; D> {myMsg.Doctor.Id}, N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 					AssistantFinished(myMsg);
 					break;
 			}

@@ -14,25 +14,11 @@ public class Patient : Entity
     public string Name { get; set; }
     public double EntryQueueWaitingTime { get; private set; }
     public double MedicalQueueWaitingTime { get; private set; }
+    public double TimeFromEnterToMedicTreat { get; set; }
     public PatientStatus PatientStatus { get; set; }
     public AnimImageItem AnimObject { get; private set; }
-    public Patient(OSPABA.Simulation mySim, double arrivalTime, bool arrivedByAmbulance) : base(mySim)
-    {
-        ArrivalTime = arrivalTime;
-        ArrivedByAmbulance = arrivedByAmbulance;
-        if (arrivedByAmbulance)
-        {
-            Priority = 0;
-            Name = "am-patient-" + Id;
-            AnimObject = new AnimImageItem(Config.AMBULANCE_PATIENT_IMG);
-        }
-        else
-        {
-            Name = "wa-patient-" + Id;
-            AnimObject = new AnimImageItem(Config.WALK_IN_PATIENT_IMG);
-        }
-        if (MySim.AnimatorExists) MySim.Animator.Register(AnimObject);
-    }
+    public Room? CurrentRoom { get; set; }
+  
 
     public Patient(int id, OSPABA.Simulation mySim, double arrivalTime, bool arrivedByAmbulance) : base(id, mySim)
     {
@@ -42,14 +28,19 @@ public class Patient : Entity
         {
             Priority = 0;
             Name = "am-patient-" + Id;
-            AnimObject = new AnimImageItem(Config.AMBULANCE_PATIENT_IMG);
         }
         else
         {
             Name = "wa-patient-" + Id;
-            AnimObject = new AnimImageItem(Config.WALK_IN_PATIENT_IMG);
         }
-        if (MySim.AnimatorExists) MySim.Animator.Register(AnimObject);
+
+        if (MySim.AnimatorExists)
+        {
+            AnimObject = ArrivedByAmbulance
+                ? new AnimImageItem(Config.AMBULANCE_PATIENT_IMG)
+                : new AnimImageItem(Config.WALK_IN_PATIENT_IMG);
+            MySim.Animator.Register(AnimObject);
+        }
     }
 
     public override string ToString()
@@ -62,19 +53,20 @@ public class Patient : Entity
     {
         _entryQueueStartWait = MySim.CurrentTime;
     }
-    
-    public void StartMedicalQueueWait()
-    {
-        _medicalQueueStartWait = MySim.CurrentTime;
-    }
 
     public void StopEntryWaiting()
     {
         EntryQueueWaitingTime = MySim.CurrentTime - _entryQueueStartWait;
     }
-    
+
+    public void StartMedicalQueueWait()
+    {
+        _medicalQueueStartWait = MySim.CurrentTime;
+    }
+
     public void StopMedicalQueueWaiting()
     {
         MedicalQueueWaitingTime = MySim.CurrentTime - _medicalQueueStartWait;
+        TimeFromEnterToMedicTreat = MySim.CurrentTime - ArrivalTime;
     }
 }

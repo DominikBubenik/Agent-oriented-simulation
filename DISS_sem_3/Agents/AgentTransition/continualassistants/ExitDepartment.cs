@@ -1,6 +1,7 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentTransition;
+using DISS_sem_3.Entities;
 
 namespace Agents.AgentTransition.ContinualAssistants
 {
@@ -24,18 +25,25 @@ namespace Agents.AgentTransition.ContinualAssistants
 			var myMsg = (MyMessage)message;
 			var duration = MyAgent.ExitSystemDuration();
 			myMsg.Code = Mc.Finish;
+			myMsg.Patient.PatientStatus = PatientStatus.Exiting;
 			PointF[] config;
-			if (myMsg.Room != null)
+			if (MySim.AnimatorExists)
 			{
-				var id = myMsg.Room.Id;
-				config = myMsg.Room.IsTypeA() ? Config.PATH_ROOM_A_EXIT[id] : Config.PATH_ROOM_B_EXIT[id];
+				if (myMsg.Room != null)
+				{
+					var id = myMsg.Room.Id;
+					config = myMsg.Room.IsTypeA() ? Config.PATH_ROOM_A_EXIT[id] : Config.PATH_ROOM_B_EXIT[id];
+				}
+				else
+				{
+					config = new[]
+						{ myMsg.Patient.AnimObject.GetPosition(MySim.CurrentTime), Config.EXIT_ENTRANCE_POSITION };
+				}
+
+				myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
 			}
-			else
-			{
-				config = new[]
-					{ myMsg.Patient.AnimObject.GetPosition(MySim.CurrentTime), Config.EXIT_ENTRANCE_POSITION };
-			}
-			myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
+			if (MySim is MySimulation sim && sim.ObservationMode) 
+				sim.NotifyLogger($"Patient {myMsg?.Patient.Name} exiting the system");
 			Hold(duration, myMsg);
 		}
 
@@ -46,7 +54,10 @@ namespace Agents.AgentTransition.ContinualAssistants
 			{
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
+					if (MySim.AnimatorExists) myMsg.Patient.AnimObject.Remove();
 					myMsg.Addressee = MyAgent;
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Patient {myMsg?.Patient.Name} Exit the system");
 					AssistantFinished(myMsg);
 					break;
 			}

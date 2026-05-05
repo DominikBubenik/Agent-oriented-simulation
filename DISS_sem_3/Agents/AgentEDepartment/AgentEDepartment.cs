@@ -30,10 +30,10 @@ namespace Agents.AgentEDepartment
 		
 		public void EnqueuePatientEntry(Patient patient)
 		{
-			GlobalLogger.PrintLog(patient.ToString() + "is entring queue of length " + EntryQueue.Count, MySim.CurrentTime);
 			patient.StartEntryQueueWait();
 			patient.PatientStatus = PatientStatus.EntryQueue;
 			EntryQueue.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{patient.Name} enqueued, waiting for resources");
 		}
 		
 		public void DequeuePatientEntry(MyMessage myMsg)
@@ -41,12 +41,12 @@ namespace Agents.AgentEDepartment
 			myMsg.Patient = EntryQueue.Dequeue(MySim.CurrentTime);
 			myMsg.Patient.StopEntryWaiting();
 			myMsg.Patient.PatientStatus = PatientStatus.Moving;
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{myMsg.Patient.Name} dequeued, ready for entry exam");
 		}
 		
 		public void DequeuePatientMedicalTreat(MyMessage myMsg)
 		{
-			var pat = myMsg.Patient;
-			if (myMsg.Patient.Priority < 3)
+			if (myMsg.Patient.Priority < 3 && myMsg.Room.IsTypeA())
 			{
 				myMsg.Patient = MedicalTreatQueueA.Dequeue(MySim.CurrentTime);
 			}
@@ -54,10 +54,9 @@ namespace Agents.AgentEDepartment
 			{
 				myMsg.Patient = MedicalTreatQueueB.Dequeue(MySim.CurrentTime);
 			}
-
-			if (pat.Name != myMsg.Patient.Name) throw new Exception();
 			myMsg.Patient.PatientStatus = PatientStatus.Moving;
 			myMsg.Patient.StopMedicalQueueWaiting();
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{myMsg.Patient.Name} dequeued, ready for medical treat");
 		}
 		
 		public void EnqueueAfterEntryExam(Patient patient)
@@ -72,24 +71,33 @@ namespace Agents.AgentEDepartment
 				MedicalTreatQueueB.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
 			}
 
-			patient.PatientStatus = PatientStatus.MedicalQueue;
+			patient.PatientStatus = PatientStatus.MedicalWait;
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{patient.Name} waiting for medical treat");
+			
 		}
 		
 		public Patient GetWaitingPatientForMedicalTreat(Patient patient)
 		{
 			return patient.Priority < 3 ? MedicalTreatQueueA.Pop() : MedicalTreatQueueB.Pop();
 		}
+		
+		public void Reset()
+		{
+			EntryQueue.Reset(MySim.CurrentTime);
+			MedicalTreatQueueA.Reset(MySim.CurrentTime);
+			MedicalTreatQueueB.Reset(MySim.CurrentTime);
+		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()
 		{
 			new ManagerEDepartment(SimId.ManagerEDepartment, MySim, this);
-			AddOwnMessage(Mc.EntranceTransition);
 			AddOwnMessage(Mc.TreatPatient);
+			AddOwnMessage(Mc.EntranceTransition);
 			AddOwnMessage(Mc.EntryExamPatient);
 			AddOwnMessage(Mc.BetweenAmbulanceTransition);
-			AddOwnMessage(Mc.SendMedicalTreatResources);
 			AddOwnMessage(Mc.MedicalTreatPatient);
+			AddOwnMessage(Mc.SendMedicalTreatResources);
 			AddOwnMessage(Mc.SendEntryExamResources);
 			AddOwnMessage(Mc.ExitTransition);
 		}

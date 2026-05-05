@@ -1,5 +1,6 @@
 using OSPABA;
 using Simulation;
+using Agents.AgentBoss.ContinualAssistants;
 
 namespace Agents.AgentBoss
 {
@@ -16,12 +17,22 @@ namespace Agents.AgentBoss
 		{
 			base.PrepareReplication();
 			// Setup component for the next replication
+			if (MyCastSim().WarmUpSystem)
+			{
+				var message = new MyMessage(MySim);
+				message.Addressee = FindAssistant(SimId.WarmUp);
+				message.Code = Mc.Start;
+				MyManager.StartContinualAssistant(message);	
+			}
 		}
+		
+		public MySimulation MyCastSim() => (MySimulation)MySim;
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()
 		{
 			new ManagerBoss(SimId.ManagerBoss, MySim, this);
+			new WarmUp(SimId.WarmUp, MySim, this);
 			AddOwnMessage(Mc.PatientArrival);
 			AddOwnMessage(Mc.PatientTreated);
 		}

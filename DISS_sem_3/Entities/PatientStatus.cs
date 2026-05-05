@@ -6,7 +6,8 @@ public enum PatientStatus
     Moving,
     EntryQueue,
     EntryExam,
-    MedicalQueue,
+    MedicalWait,
+    MedicalTreat,
     MedicalExam,
     Exiting
 }

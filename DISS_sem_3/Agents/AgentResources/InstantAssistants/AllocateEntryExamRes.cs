@@ -10,6 +10,7 @@ namespace Agents.AgentResources.InstantAssistants
 	/*!
 	 * otazka tu pomocou nich alokojem zdroje napriklad tie ktore su najmenej vytazene??
 	 */
+
 	//meta! id="82"
 	public class AllocateEntryExamRes : OSPABA.Adviser
 	{
@@ -27,6 +28,15 @@ namespace Agents.AgentResources.InstantAssistants
 				case ResourceAllocatingStrategy.Exp0FirstAvailable:
 					Exp0FirstAvailable(myMsg);
 					break;
+				case ResourceAllocatingStrategy.Exp1LeastUtilized:
+					Exp1LeastUtilizedStaff(myMsg);
+					break;
+				case ResourceAllocatingStrategy.Exp2KeepOneNOneD:
+					Exp2KeepOneNOneD(myMsg);
+					break;
+				case ResourceAllocatingStrategy.Exp4WaitAndThen:
+					Exp2KeepOneNOneD(myMsg);
+					break;
 			}
 		}
 
@@ -37,13 +47,56 @@ namespace Agents.AgentResources.InstantAssistants
 			if (nurses.Count > 0 && rooms.Count > 0)
 			{
 				myMsg.Nurse = nurses[0];
-				myMsg.Nurse.IsWorking = true;
-				myMsg.Nurse.Activity = StaffActivity.Working;
 				nurses.RemoveAt(0);
 				myMsg.Room = rooms[0];
-				myMsg.Room.CurrentStatus = RoomStatus.Occupied;
+				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(0);
-				GlobalLogger.PrintLog($"room {myMsg.Room.ToString()}  nurse {myMsg.Nurse.ToString()}" , MySim.CurrentTime);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+			}
+		}
+		
+		private void Exp1LeastUtilizedStaff(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.FreeRoomsTypeB;
+			
+			if (nurses.Count > 0 && rooms.Count > 0 )
+			{
+				myMsg.Nurse = nurses.MinBy(n => n.GetWorkingUtilization());
+				nurses.Remove(myMsg.Nurse);
+
+				myMsg.Room = rooms[0];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(0);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+			}
+		}
+		
+		private void Exp2KeepOneNOneD(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.FreeRoomsTypeB;
+			
+			if ((nurses.Count > 1 || (myMsg.EntryQueueLength > ((MySimulation)MySim).MaxEntryQueueLengthCount)  || (nurses.Count > 0 && myMsg.Patient.ArrivedByAmbulance)) && rooms.Count > 0 && nurses.Count > 0)
+			{
+				myMsg.Nurse = nurses[0];
+				nurses.RemoveAt(0);
+				myMsg.Room = rooms[0];
+				myMsg.Room.StartOccupancy();
+				rooms.RemoveAt(0);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"EntryExam Resources allocated Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
 

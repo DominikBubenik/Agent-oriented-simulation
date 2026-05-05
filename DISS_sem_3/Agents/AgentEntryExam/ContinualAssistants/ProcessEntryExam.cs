@@ -25,10 +25,11 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Room.Nurse = myMsg.Nurse;
-			myMsg.Nurse.Activity = StaffActivity.Working;
+			myMsg.Nurse.StartWork();
+			
 			myMsg.Room.Patient = myMsg.Patient;
 			myMsg.Room.Patient.PatientStatus = PatientStatus.EntryExam;
-			MyAgent.AssignPriority(myMsg.Patient);
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Entry exam started P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
 			myMsg.Code = Mc.Finish;
@@ -42,9 +43,14 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 			{
 				case Mc.Finish:
 					var myMsg = (MyMessage)message;
-					myMsg.Addressee = MyAgent;
-					myMsg.Nurse.Activity = StaffActivity.Not_Working;
-					myMsg.Patient.PatientStatus = PatientStatus.Moving;
+					MyAgent.AssignPriority(myMsg.Patient);
+					myMsg.Patient.PatientStatus = PatientStatus.MedicalWait;
+					myMsg.Nurse.StopWork();
+					myMsg.Room.StopOccupancy();
+					if(MySim.AnimatorExists) MyAgent.SetPositionAfterExam(myMsg);
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Entry exam Finished P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
+					
 					AssistantFinished(myMsg);
 					break;
 			}

@@ -31,12 +31,6 @@ namespace Agents.AgentBoss
 			Notice(message);
 		}
 
-		//meta! userInfo="Removed from model"
-		public void ProcessTreatPatient(MessageForm message)
-		{
-			
-		}
-
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
 		{
@@ -53,6 +47,12 @@ namespace Agents.AgentBoss
 			Notice(message);
 		}
 
+		//meta! sender="WarmUp", id="190", type="Finish"
+		public void ProcessFinish(MessageForm message)
+		{
+			MyAgent.MyCastSim().ResetStatistics();
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -62,12 +62,16 @@ namespace Agents.AgentBoss
 		{
 			switch (message.Code)
 			{
+			case Mc.PatientTreated:
+				ProcessPatientTreated(message);
+			break;
+
 			case Mc.PatientArrival:
 				ProcessPatientArrival(message);
 			break;
 
-			case Mc.PatientTreated:
-				ProcessPatientTreated(message);
+			case Mc.Finish:
+				ProcessFinish(message);
 			break;
 
 			default:

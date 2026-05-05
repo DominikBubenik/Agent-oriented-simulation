@@ -99,8 +99,8 @@ namespace DISS_sem_3
             ConfigureParam(lblReplications, txtReplications, "Replications:");
             ConfigureParam(lblObservation, txtObservation, "Observation:");
             ConfigureParam(lblEndSimulationTime, txtEndSimulationTime, "End Time:");
-            ConfigureParam(lblNurses, txtNurses, "Lanes:");
-            ConfigureParam(lblDoctors, txtDoctors, "Before Det:");
+            ConfigureParam(lblNurses, txtNurses, "Nurses:");
+            ConfigureParam(lblDoctors, txtDoctors, "Doctors");
 
             // Sleep controls: TrackBars and value labels
             this.trackInterval = new TrackBar();
@@ -214,7 +214,7 @@ namespace DISS_sem_3
             // 
             this.txtCurrentTime.Top = 10;
             this.txtCurrentTime.Left = 230;
-            this.txtCurrentTime.Width = 120;
+            this.txtCurrentTime.Width = 180;
             this.txtCurrentTime.ReadOnly = true;
 
             // 
@@ -299,6 +299,8 @@ namespace DISS_sem_3
             dgvPassengers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvPassengers.Columns.Add("id", header);
             dgvPassengers.Columns.Add("Activity", "Current Activity");
+            dgvPassengers.Columns.Add("Util", "Utilization");
+            dgvPassengers.Columns.Add("Room", "Room");
             return dgvPassengers;
         }
         
@@ -314,6 +316,7 @@ namespace DISS_sem_3
             dgv.Columns.Add("Patient", "Patient");
             dgv.Columns.Add("Nurse", "Nurse");
             dgv.Columns.Add("Doctor", "Doctor");
+            dgv.Columns.Add("Util", "Utilization");
             return dgv;
         }
     }

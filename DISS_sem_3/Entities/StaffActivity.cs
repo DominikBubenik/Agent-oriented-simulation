@@ -4,5 +4,6 @@ public enum StaffActivity
 {
     Working,
     Moving,
+    Standing,
     Not_Working
 }

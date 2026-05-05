@@ -6,6 +6,7 @@ using DISS_SEM_GUI.EventsArguments;
 
 /**
  * Kod upraveny s pomocou AI, zdokumentovane v kapitole 2
+ * Kod upraveny s pomocou AI, zdokumentovane v kapitole 4
  */
 namespace DISS_sem_3
 {
@@ -67,7 +68,7 @@ namespace DISS_sem_3
                 
                 try
                 {
-                    txtEndSimulationTime.Text = TimeSpan.FromSeconds(args.EndSimulationTime).ToString();
+                    txtEndSimulationTime.Text = GlobalLogger.FormatTime(args.EndSimulationTime);
                 }
                 catch { txtEndSimulationTime.Text = args.EndSimulationTime.ToString("F2"); }
 
@@ -83,7 +84,8 @@ namespace DISS_sem_3
         private void BtnRun_Click(object? sender, EventArgs e)
         {
             SetRunRunning(true);
-            
+            ClearExistingLayout();
+            ClearLog();
             CreateLaneTables();
             OnRunRequested?.Invoke(this, EventArgs.Empty);
         }
@@ -157,6 +159,23 @@ namespace DISS_sem_3
             AllPatients = null;
             
             dgvLog?.Rows.Clear();
+        }
+        private void ClearExistingLayout()
+        {
+            // Clear the UI container
+            flpLanes.Controls.Clear();
+
+            // Clear the dictionaries holding room references
+            _roomAGrids.Clear();
+            _roomBGrids.Clear();
+
+            // Null out specific references to ensure we don't update stale grids
+            EntryQueue = null;
+            MedicalQueueA = null;
+            MedicalQueueB = null;
+            AllNurses = null;
+            AllDoctors = null;
+            AllPatients = null;
         }
 
         // Controller will manage the paused state; this setter allows controller to update the UI
@@ -253,7 +272,7 @@ namespace DISS_sem_3
             {
                 // show current simulation time in the textbox only
                 var ts = TimeSpan.FromSeconds(time);
-                txtCurrentTime.Text = ts.ToString();
+                txtCurrentTime.Text = GlobalLogger.FormatTime(time);
             }
             catch
             {
@@ -279,9 +298,25 @@ namespace DISS_sem_3
                 UpdateMedicalStuffsGrid(AllNurses, state.AllNurses.Cast<MedicalStaff>().ToList());
                 UpdateMedicalStuffsGrid(AllDoctors, state.AllDoctors.Cast<MedicalStaff>().ToList());
                 UpdatePassengersGrid(AllPatients, state.AllPatients);
+                
+                UpdateGridStats(EntryQueue, state.EntryQueue.Count, state.EntryQueueAvgLength.ToString("F2"));
+                UpdateGridStats(MedicalQueueA, state.MedicalTreatQueueA.Count, state.MedicalQueueAvgLengthA.ToString("F2"));
+                UpdateGridStats(MedicalQueueB, state.MedicalTreatQueueB.Count, state.MedicalQueueAvgLengthB.ToString("F2"));
+        
+                // For All Patients (If your state DTO has an average property, replace "-" with it)
+                string avgPatients = "-"; 
+                // Example: string avgPatients = state.AveragePatients.ToString("F2");
+                UpdateGridStats(AllPatients, state.AllPatients.Count, avgPatients);
+                
+                foreach (var room in state.ARooms)
+                {
+                    UpdateOrCreateRoomGrid(room, "Room A");
+                }
 
-                foreach (var room in state.ARooms) UpdateOrCreateRoomGrid(room, "Room A");
-                foreach (var room in state.BRooms) UpdateOrCreateRoomGrid(room, "Room B");
+                foreach (var room in state.BRooms)
+                {
+                    UpdateOrCreateRoomGrid(room, "Room B");
+                }
             }
             finally {
                 this.ResumeLayout(); 
@@ -298,31 +333,31 @@ namespace DISS_sem_3
                 {
                     dgv.Rows.Add(room.Id, "Empty", "---", "---");
                 }
-
+                UpdateGridStats(dgv, room.CurrentStatus == RoomStatus.Free ? 0 : 1, room.GetUtilization().ToString("F2"));
                 var row = dgv.Rows[0];
                 UpdateCellIfChanged(row.Cells[1], room.Patient?.ToString() ?? "Empty");
                 UpdateCellIfChanged(row.Cells[2], room.Nurse?.ToString() ?? "---");
                 UpdateCellIfChanged(row.Cells[3], room.Doctor?.ToString() ?? "---");
+                UpdateCellIfChanged(row.Cells[4], room.GetUtilization().ToString("F2") ?? "---");
             }
         }
 
         // Append a log message to the bottom log DataGridView (thread-safe)
         // Keeps history bounded by maxEntries to avoid unlimited growth.
         private const int MaxLogEntries = 2000;
-        public void AppendLog(string message)
+        public void AppendLog(string message, double time)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(() => AppendLog(message));
+                this.Invoke(() => AppendLog(message, time));
                 return;
             }
 
             try
             {
                 if (dgvLog == null) return;
-
-                string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                dgvLog.Rows.Add(time, message);
+                
+                dgvLog.Rows.Add(GlobalLogger.FormatTime(time), message);
 
                 // Keep latest entry visible
                 if (dgvLog.Rows.Count > 0)
@@ -400,6 +435,8 @@ namespace DISS_sem_3
 
                 dgv.Top = stats.Bottom + 2;
                 dgv.Left = 0;
+                
+                dgv.Tag = stats;
 
                 p.Controls.Add(lbl);
                 p.Controls.Add(stats);
@@ -419,13 +456,26 @@ namespace DISS_sem_3
             panel.Controls.Add(pEntryPatients);
             panel.Controls.Add(pMedicalPatientsA);
             panel.Controls.Add(pMedicalPatientsB);
+            for (int i = 0; i < 5; i++) 
+            {
+                var dgv = CreateRoomGridPlaceholder(i, $"Exam Room A #{i}");
+                _roomAGrids.Add(i, dgv);
+                // flpLanes.Controls.Add(dgv);
+            }
             
+            // 3. Pre-render Room B Grids (example using another count from args)
+            for (int i = 0; i < 7; i++)
+            {
+                var dgv = CreateRoomGridPlaceholder(i, $"Exam Room B #{i}");
+                _roomBGrids.Add(i, dgv);
+                // flpLanes.Controls.Add(dgv);
+            }
             foreach (var entry in _roomAGrids)
             {
                 var pRoomA = MakeLabeledContainer($"Exam Room A #{entry.Key}", entry.Value);
                 panel.Controls.Add(pRoomA);
             }
-
+            
             // 3. Add Room B Grids from Dictionary
             foreach (var entry in _roomBGrids)
             {
@@ -443,6 +493,14 @@ namespace DISS_sem_3
 
             // extract stats labels (they are the second control in each panel)
             Label? passengersStats = pEntryPatients.Controls.OfType<Label>().Skip(1).FirstOrDefault();
+        }
+        
+        private void UpdateGridStats(DataGridView? dgv, int currentCount, string average = "-")
+        {
+            if (dgv?.Tag is Label statsLabel)
+            {
+                statsLabel.Text = $"Avg: {average}   Cur: {currentCount}";
+            }
         }
 
         private void UpdatePassengersGrid(DataGridView? dgv, List<Patient> patients)
@@ -503,6 +561,8 @@ namespace DISS_sem_3
                 // Tip: Only update if the value changed to reduce repaints
                 UpdateCellIfChanged(row.Cells[0], p.Id);
                 UpdateCellIfChanged(row.Cells[1], p.Activity.ToString());
+                UpdateCellIfChanged(row.Cells[2], p.GetWorkingUtilization().ToString("F2"));
+                UpdateCellIfChanged(row.Cells[3], $"{p.CurrentRoom?.Type} {p.CurrentRoom?.Id}");
             }
         }
         

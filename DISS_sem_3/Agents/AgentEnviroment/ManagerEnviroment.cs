@@ -36,9 +36,6 @@ namespace Agents.AgentEnviroment
 			message.Addressee = MyAgent.Parent;
 			message.Code = Mc.PatientArrival;
 			Notice(message);
-			
-			var newMessage = (MyMessage)message.CreateCopy();
-			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! sender="WalkInPatient", id="20", type="Finish"
@@ -47,9 +44,6 @@ namespace Agents.AgentEnviroment
 			message.Addressee = MyAgent.Parent;
 			message.Code = Mc.PatientArrival;
 			Notice(message);
-			
-			var newMessage = (MyMessage)message.CreateCopy();
-			// Console.WriteLine($"pateint {newMessage.Patient.ToString()}");
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -69,21 +63,21 @@ namespace Agents.AgentEnviroment
 		{
 			switch (message.Code)
 			{
-			case Mc.PatientExit:
-				ProcessPatientExit(message);
-			break;
-
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
-				case SimId.AmbulancePatient:
-					ProcessFinishAmbulancePatient(message);
-				break;
-
 				case SimId.WalkInPatient:
 					ProcessFinishWalkInPatient(message);
 				break;
+
+				case SimId.AmbulancePatient:
+					ProcessFinishAmbulancePatient(message);
+				break;
 				}
+			break;
+
+			case Mc.PatientExit:
+				ProcessPatientExit(message);
 			break;
 
 			default:

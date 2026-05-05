@@ -22,18 +22,22 @@
         private System.Windows.Forms.Label lblReplications = null!;
         private System.Windows.Forms.TextBox txtReplications = null!;
         private System.Windows.Forms.Label lblSystemCapacity = null!;
-        private System.Windows.Forms.ComboBox cmbSystemCapacity = null!;
+        private System.Windows.Forms.ComboBox cmbExperimentVariant = null!;
         private System.Windows.Forms.CheckBox chkObservationMode = null!;
         private System.Windows.Forms.Label lblEndTime = null!;
         private System.Windows.Forms.TextBox txtEndTime = null!;
         private System.Windows.Forms.Label lblTimeInterval = null!;
         private System.Windows.Forms.TextBox txtTimeInterval = null!;
-        private System.Windows.Forms.Label lblCurrentTime = null!;
-        private System.Windows.Forms.TextBox txtCurrentTime = null!;
+        private System.Windows.Forms.Label lblMaxWaitTimeExp4 = null!;
+        private System.Windows.Forms.TextBox txtMaxWaitTimeExp4 = null!;
         private System.Windows.Forms.Label lblNurses = null!;
         private System.Windows.Forms.TextBox txtNurses = null!;
         private System.Windows.Forms.Label lblDoctors = null!;
         private System.Windows.Forms.TextBox txtDoctors = null!;
+        private System.Windows.Forms.Label lblMaxEntryQueue = null!;
+        private System.Windows.Forms.TextBox txtMaxEntryQueue = null!;
+        private System.Windows.Forms.Label lblMaxMedicalQueue = null!;
+        private System.Windows.Forms.TextBox txtMaxMedicalQueue = null!;
         // Sensitivity controls
          private System.Windows.Forms.GroupBox grpSensitivity = null!;
          private System.Windows.Forms.Label lblSensCapacity = null!;
@@ -131,17 +135,19 @@
     // INIT CONTROLS
     lblSeed = new Label(); txtSeed = new TextBox();
     lblReplications = new Label(); txtReplications = new TextBox();
-    lblSystemCapacity = new Label(); cmbSystemCapacity = new ComboBox();
+    lblSystemCapacity = new Label(); cmbExperimentVariant = new ComboBox();
     chkObservationMode = new CheckBox();
     chkObservationMode.Checked = true;
 
     lblEndTime = new Label(); txtEndTime = new TextBox();
     lblTimeInterval = new Label(); txtTimeInterval = new TextBox();
-    lblCurrentTime = new Label(); txtCurrentTime = new TextBox();
+    lblMaxWaitTimeExp4 = new Label(); txtMaxWaitTimeExp4 = new TextBox();
 
     // Initialize resource inputs (were declared earlier)
     lblNurses = new Label(); txtNurses = new TextBox();
     lblDoctors = new Label(); txtDoctors = new TextBox();
+    lblMaxEntryQueue = new Label(); txtMaxEntryQueue = new TextBox();
+    lblMaxMedicalQueue = new Label(); txtMaxMedicalQueue = new TextBox();
 
     // Sensibility init
     grpSensitivity = new GroupBox();
@@ -212,6 +218,14 @@
     btnTurbo.Height = 50;
     btnTurbo.Font = new Font("Segoe UI", 11, FontStyle.Bold);
     btnTurbo.Click += TurboBtnClick;
+    
+    // BUTTON WELCH
+    Button btnWelch = new Button();
+    btnWelch.Text = "Welch";
+    btnWelch.Width = 120;
+    btnWelch.Height = 50;
+    btnWelch.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+    btnWelch.Click += WelchBtnClick;
 
     FlowLayoutPanel leftPanel = new FlowLayoutPanel();
     leftPanel.Dock = DockStyle.Left;
@@ -221,6 +235,7 @@
     leftPanel.Controls.Add(btnSensitivity);
     leftPanel.Controls.Add(btnObservation);
     leftPanel.Controls.Add(btnTurbo);
+    leftPanel.Controls.Add(btnWelch);
     // Keep a simple checkbox in main view to toggle sensitivity mode
     chkSensRun.Text = "Run Sensitivity";
     chkSensRun.AutoSize = true;
@@ -281,10 +296,17 @@
     lblSystemCapacity.Anchor = AnchorStyles.Left;
     lblSystemCapacity.Margin = new Padding(5);
 
-    cmbSystemCapacity.Width = 250;
-    cmbSystemCapacity.Anchor = AnchorStyles.Left;
-    cmbSystemCapacity.Margin = new Padding(5);
-    cmbSystemCapacity.DropDownStyle = ComboBoxStyle.DropDownList;
+    cmbExperimentVariant.Width = 250;
+    cmbExperimentVariant.Anchor = AnchorStyles.Left;
+    cmbExperimentVariant.Margin = new Padding(5);
+    cmbExperimentVariant.DropDownStyle = ComboBoxStyle.DropDownList;
+    cmbExperimentVariant.Items.Add("Exp 0 First Available");
+    cmbExperimentVariant.Items.Add("Exp 1 Least utilized");
+    cmbExperimentVariant.Items.Add("1500");
+    cmbExperimentVariant.Items.Add("2000");
+
+// Set default selected item
+    cmbExperimentVariant.SelectedIndex = 0; 
     
     chkObservationMode.Text = "Observation";
 
@@ -299,7 +321,7 @@
     simTable.Controls.Add(lblReplications, 0, 1);
     simTable.Controls.Add(txtReplications, 1, 1);
     simTable.Controls.Add(lblSystemCapacity, 0, 2);
-    simTable.Controls.Add(cmbSystemCapacity, 1, 2);
+    simTable.Controls.Add(cmbExperimentVariant, 1, 2);
     simTable.Controls.Add(chkObservationMode, 1, 3);
 
     grpSimulation.Controls.Add(simTable);
@@ -310,23 +332,23 @@
 
     SetupTable(timeTable);
 
-    StyleInput(lblEndTime, txtEndTime, "End Time", "86400");
+    StyleInput(lblEndTime, txtEndTime, "End Time", "672");
     // Time Interval input accepts HH:MM:SS or numeric seconds. If provided it will set End = Start + Interval
     StyleInput(lblTimeInterval, txtTimeInterval, "Time Interval (HH:MM:SS)", "24:00:00");
     // Current simulation time (read-only) - will be updated from the controller/model
-    lblCurrentTime = new Label(); txtCurrentTime = new TextBox();
-    txtCurrentTime.ReadOnly = true;
-    StyleInput(lblCurrentTime, txtCurrentTime, "Current Time", "00:00:00");
+    lblMaxWaitTimeExp4 = new Label(); txtMaxWaitTimeExp4 = new TextBox();
+    StyleInput(lblMaxWaitTimeExp4, txtMaxWaitTimeExp4, "Exp 4 max WaitTime (minutes)", "0.5");
     
     timeTable.Controls.Add(lblEndTime, 0, 1);
     timeTable.Controls.Add(txtEndTime, 1, 1);
     timeTable.Controls.Add(lblTimeInterval, 0, 2);
     timeTable.Controls.Add(txtTimeInterval, 1, 2);
-    timeTable.Controls.Add(lblCurrentTime, 0, 3);
-    timeTable.Controls.Add(txtCurrentTime, 1, 3);
+    timeTable.Controls.Add(lblMaxWaitTimeExp4, 0, 3);
+    timeTable.Controls.Add(txtMaxWaitTimeExp4, 1, 3);
+
 
     // Add Warm-up input into the Time group (row 4)
-    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (ms)", "20000");
+    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (hours)", "168");
     timeTable.Controls.Add(lblWarmUp, 0, 4);
     timeTable.Controls.Add(txtWarmUp, 1, 4);
 
@@ -338,13 +360,19 @@
 
     SetupTable(resTable);
 
-    StyleInput(lblNurses, txtNurses, "Nurses", "10");
-    StyleInput(lblDoctors, txtDoctors, "Doctors", "5");
+    StyleInput(lblNurses, txtNurses, "Nurses", "8");
+    StyleInput(lblDoctors, txtDoctors, "Doctors", "6");
+    StyleInput(lblMaxEntryQueue, txtMaxEntryQueue, "MaxEntryQueue", "3");
+    StyleInput(lblMaxMedicalQueue, txtMaxMedicalQueue, "MaxMedicalQueue", "0");
 
     resTable.Controls.Add(lblNurses, 0, 0);
     resTable.Controls.Add(txtNurses, 1, 0);
     resTable.Controls.Add(lblDoctors, 0, 1);
-    resTable.Controls.Add(txtDoctors, 1, 1);
+    resTable.Controls.Add(txtDoctors, 1, 1); 
+    resTable.Controls.Add(lblMaxEntryQueue, 0, 2);
+    resTable.Controls.Add(txtMaxEntryQueue, 1, 2); 
+    resTable.Controls.Add(lblMaxMedicalQueue, 0, 3);
+    resTable.Controls.Add(txtMaxMedicalQueue, 1, 3);
 
     grpResources.Controls.Add(resTable);
 

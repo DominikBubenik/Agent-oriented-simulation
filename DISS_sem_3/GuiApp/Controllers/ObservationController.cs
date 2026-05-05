@@ -25,6 +25,7 @@ public class ObservationController
         _observWindow.OnStopRequested += OnStopRequested;
         _observWindow.OnChangeSpeed += OnChangeSpeed;
         _currentModel.OnRefreshUI += OnObservRefresh;
+        _currentModel.OnLoggerUpdate += OnLoggerOutput;
         
         _observWindow.FormClosed += OnWindowClosed;
         _observWindow.Show();
@@ -109,5 +110,10 @@ public class ObservationController
         {
             Console.WriteLine("Controller cleanup failed: " + ex.Message);
         }
+    }
+
+    private void OnLoggerOutput(string message, double time)
+    {
+        _observWindow.AppendLog(message, time);
     }
 }

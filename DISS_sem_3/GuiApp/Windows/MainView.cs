@@ -1,4 +1,5 @@
-﻿using DISS_SEM_GUI.EventsArguments;
+﻿using DISS_sem_3;
+using DISS_SEM_GUI.EventsArguments;
 
 namespace DISS_SEM_GUI;
 
@@ -18,6 +19,7 @@ public partial class MainView : Form
     public event EventHandler? OnOpenSensitivityRequested;
     public event EventHandler? OnOpenObservationRequested;
     public event EventHandler? OnOpenTurboRequested;
+    public event EventHandler? OnOpenWelchRequested;
     private bool _paused;
 
     // Charts moved to separate ChartsWindow. MainView no longer stores plot data.
@@ -44,6 +46,8 @@ public partial class MainView : Form
                 chkRandomSeed.CheckedChanged += ChkRandomSeed_CheckedChanged;
         }
         catch { }
+        cmbExperimentVariant.DataSource = Enum.GetValues(typeof(ResourceAllocatingStrategy));
+        cmbExperimentVariant.SelectedItem = ResourceAllocatingStrategy.Exp0FirstAvailable;
     }
 
     private void ChkRandomSeed_CheckedChanged(object? sender, EventArgs e)
@@ -125,28 +129,11 @@ public partial class MainView : Form
     public void TurboBtnClick(object? sender, EventArgs e)
     {
         OnOpenTurboRequested?.Invoke(this, EventArgs.Empty);
-    }
-
-    // Thread-safe method to update the current simulation time textbox.
-    public void UpdateSimulationTime(double time)
+    } 
+    
+    public void WelchBtnClick(object? sender, EventArgs e)
     {
-        if (this.InvokeRequired)
-        {
-            this.Invoke(() => UpdateSimulationTime(time));
-            return;
-        }
-
-        // If the time represents seconds, format it as hh:mm:ss
-        try
-        {
-            var ts = TimeSpan.FromSeconds(time);
-            txtCurrentTime.Text = ts.ToString();
-        }
-        catch
-        {
-            // Fallback: show numeric value
-            txtCurrentTime.Text = time.ToString("F2");
-        }
+        OnOpenWelchRequested?.Invoke(this, EventArgs.Empty);
     }
 
     public StartSimulationArgs GetCurrentArguments()
@@ -158,11 +145,13 @@ public partial class MainView : Form
         double endTime = 627;
         int nursesCount = 3;
         int doctorsCount = 2;
+        int entryMax = 2;
+        int medicalMax = 2;
+        double exp4MaxWaitTime = 0.5;
         int after = 2;
-        int experimentVariant = 1000;
         double lambda = 0.08;
         double intervalSeconds = 0;
-        int warmUp = 15000; // default warm-up in milliseconds (or whatever unit the simulation expects)
+        double warmUp = 15000; // default warm-up in milliseconds (or whatever unit the simulation expects)
 
         if (!string.IsNullOrWhiteSpace(txtSeed.Text) && int.TryParse(txtSeed.Text, out var sVal))
             seed = sVal;
@@ -171,7 +160,10 @@ public partial class MainView : Form
         observation = chkObservationMode.Checked;
      
         if (!string.IsNullOrWhiteSpace(txtEndTime.Text) && double.TryParse(txtEndTime.Text, out var etVal))
-            endTime = etVal;
+            endTime = etVal * 3600;   
+        
+        if (!string.IsNullOrWhiteSpace(txtMaxWaitTimeExp4.Text) && double.TryParse(txtMaxWaitTimeExp4.Text, out var exp4Val))
+            exp4MaxWaitTime = exp4Val * 60;
 
         // Parse Time Interval if provided. Accepts either a numeric seconds value or HH:MM:SS (or HH:MM) format.
         if (!string.IsNullOrWhiteSpace(txtTimeInterval.Text))
@@ -222,16 +214,17 @@ public partial class MainView : Form
         if (!string.IsNullOrWhiteSpace(txtNurses.Text) && int.TryParse(txtNurses.Text, out var lVal))
             nursesCount = lVal;
         if (!string.IsNullOrWhiteSpace(txtDoctors.Text) && int.TryParse(txtDoctors.Text, out var bVal))
-            doctorsCount = bVal;
-        if (cmbSystemCapacity.SelectedItem != null &&
-            int.TryParse(cmbSystemCapacity.SelectedItem.ToString(), out var capVal))
-        {
-            experimentVariant = capVal;
-        }
+            doctorsCount = bVal; 
+        if (!string.IsNullOrWhiteSpace(txtMaxEntryQueue.Text) && int.TryParse(txtMaxEntryQueue.Text, out var entry))
+            entryMax = entry;
+        if (!string.IsNullOrWhiteSpace(txtMaxMedicalQueue.Text) && int.TryParse(txtMaxMedicalQueue.Text, out var medical))
+            medicalMax = medical;
+        
+        var experimentVariant = (ResourceAllocatingStrategy)cmbExperimentVariant.SelectedItem;
 
         // Read warmUp from UI if provided
         if (!string.IsNullOrWhiteSpace(txtWarmUp?.Text) && int.TryParse(txtWarmUp.Text, out var wu))
-            warmUp = wu;
+            warmUp = wu * 3600;
 
         // Read warming-proof options (RefreshRate)
         int refreshRate = 100;
@@ -281,12 +274,14 @@ public partial class MainView : Form
             endSimulationTime: endTime,
             nursesCount: nursesCount,
             doctorsCount: doctorsCount,
-            afterDetectorCount: after,
+            entryMax: entryMax,
+            medicalMax: medicalMax,
             timeIntervalSeconds: intervalSeconds,
-            systemCapacity: experimentVariant,
+            experimentVariant: experimentVariant,
             refreshRate: refreshRate,
             warmUpProof: chkWarmUpProof.Checked,
             warmUp: warmUp,
+            exp4WaitTime: exp4MaxWaitTime,
             sensibilityRequested: chkSensRun.Checked,
             sensCapacity: !string.IsNullOrWhiteSpace(txtSensCapacity.Text) && int.TryParse(txtSensCapacity.Text, out var sc) ? sc : 1000,
             sensReplications: !string.IsNullOrWhiteSpace(txtSensReplications.Text) && int.TryParse(txtSensReplications.Text, out var sr) ? sr : 10,
