@@ -58,7 +58,6 @@ namespace Simulation
 		public int MaxEntryQueueLengthCount { get; set; } = 3;
 		public int MaxMedicalQueueLengthCount { get; set; } = 3;
 		public double MaxTimeWaitStrategy { get; set; } = 30;
-		public double TimeToNotice { get; set; } = 30;
 		
 		public MySimulation(int seed, int nursesCount, int doctorsCount, bool warmUpSystem, double warmUpTime, ResourceAllocatingStrategy variant, bool observMode = false)
 		{

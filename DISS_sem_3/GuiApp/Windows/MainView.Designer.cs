@@ -28,8 +28,8 @@
         private System.Windows.Forms.TextBox txtEndTime = null!;
         private System.Windows.Forms.Label lblTimeInterval = null!;
         private System.Windows.Forms.TextBox txtTimeInterval = null!;
-        private System.Windows.Forms.Label lblCurrentTime = null!;
-        private System.Windows.Forms.TextBox txtCurrentTime = null!;
+        private System.Windows.Forms.Label lblMaxWaitTimeExp4 = null!;
+        private System.Windows.Forms.TextBox txtMaxWaitTimeExp4 = null!;
         private System.Windows.Forms.Label lblNurses = null!;
         private System.Windows.Forms.TextBox txtNurses = null!;
         private System.Windows.Forms.Label lblDoctors = null!;
@@ -141,7 +141,7 @@
 
     lblEndTime = new Label(); txtEndTime = new TextBox();
     lblTimeInterval = new Label(); txtTimeInterval = new TextBox();
-    lblCurrentTime = new Label(); txtCurrentTime = new TextBox();
+    lblMaxWaitTimeExp4 = new Label(); txtMaxWaitTimeExp4 = new TextBox();
 
     // Initialize resource inputs (were declared earlier)
     lblNurses = new Label(); txtNurses = new TextBox();
@@ -336,16 +336,16 @@
     // Time Interval input accepts HH:MM:SS or numeric seconds. If provided it will set End = Start + Interval
     StyleInput(lblTimeInterval, txtTimeInterval, "Time Interval (HH:MM:SS)", "24:00:00");
     // Current simulation time (read-only) - will be updated from the controller/model
-    lblCurrentTime = new Label(); txtCurrentTime = new TextBox();
-    txtCurrentTime.ReadOnly = true;
-    StyleInput(lblCurrentTime, txtCurrentTime, "Current Time", "00:00:00");
+    lblMaxWaitTimeExp4 = new Label(); txtMaxWaitTimeExp4 = new TextBox();
+    StyleInput(lblMaxWaitTimeExp4, txtMaxWaitTimeExp4, "Exp 4 max WaitTime (minutes)", "0.5");
     
     timeTable.Controls.Add(lblEndTime, 0, 1);
     timeTable.Controls.Add(txtEndTime, 1, 1);
     timeTable.Controls.Add(lblTimeInterval, 0, 2);
     timeTable.Controls.Add(txtTimeInterval, 1, 2);
-    timeTable.Controls.Add(lblCurrentTime, 0, 3);
-    timeTable.Controls.Add(txtCurrentTime, 1, 3);
+    timeTable.Controls.Add(lblMaxWaitTimeExp4, 0, 3);
+    timeTable.Controls.Add(txtMaxWaitTimeExp4, 1, 3);
+
 
     // Add Warm-up input into the Time group (row 4)
     StyleInput(lblWarmUp, txtWarmUp, "Warm-up (hours)", "168");

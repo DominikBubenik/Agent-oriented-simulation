@@ -54,6 +54,7 @@ public class SimulationModel
             if (args.TurboMode) end += args.WarmUp;
             _core.MaxEntryQueueLengthCount = args.EntryMax;
             _core.MaxMedicalQueueLengthCount = args.MedicalMax;
+            _core.MaxTimeWaitStrategy = args.Exp4MaxWaitTime;
             _core.SetEndTime(end);
             _core.SimulateAsync(args.Replications, end);
         }

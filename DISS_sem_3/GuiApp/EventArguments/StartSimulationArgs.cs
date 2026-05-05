@@ -15,6 +15,7 @@ public class StartSimulationArgs(
     ResourceAllocatingStrategy experimentVariant,
     int refreshRate,
     bool warmUpProof,
+    double exp4WaitTime,
     double warmUp = 15000,
     bool sensibilityRequested = false,
     int sensCapacity = 1000,
@@ -42,6 +43,7 @@ public class StartSimulationArgs(
     public int RefreshRate { get; set; } = refreshRate;
     public bool WarmUpProof { get; set; } = warmUpProof;
     public double WarmUp { get; set; } = warmUp;
+    public double Exp4MaxWaitTime { get; set; } = exp4WaitTime;
 
     // Sensitivity / sweep options
     public bool SensibilityRequested { get; set; } = sensibilityRequested;

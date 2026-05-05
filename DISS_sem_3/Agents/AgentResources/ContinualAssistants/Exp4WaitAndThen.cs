@@ -23,7 +23,7 @@ namespace Agents.AgentResources.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Code = Mc.Finish;
-			Hold(((MySimulation)MySim).TimeToNotice, myMsg);
+			Hold(((MySimulation)MySim).MaxTimeWaitStrategy, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

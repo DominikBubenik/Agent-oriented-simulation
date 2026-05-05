@@ -136,28 +136,6 @@ public partial class MainView : Form
         OnOpenWelchRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    // Thread-safe method to update the current simulation time textbox.
-    public void UpdateSimulationTime(double time)
-    {
-        if (this.InvokeRequired)
-        {
-            this.Invoke(() => UpdateSimulationTime(time));
-            return;
-        }
-
-        // If the time represents seconds, format it as hh:mm:ss
-        try
-        {
-            var ts = TimeSpan.FromSeconds(time);
-            txtCurrentTime.Text = ts.ToString();
-        }
-        catch
-        {
-            // Fallback: show numeric value
-            txtCurrentTime.Text = time.ToString("F2");
-        }
-    }
-
     public StartSimulationArgs GetCurrentArguments()
     {
         int seed = 12345;
@@ -169,6 +147,7 @@ public partial class MainView : Form
         int doctorsCount = 2;
         int entryMax = 2;
         int medicalMax = 2;
+        double exp4MaxWaitTime = 0.5;
         int after = 2;
         double lambda = 0.08;
         double intervalSeconds = 0;
@@ -181,7 +160,10 @@ public partial class MainView : Form
         observation = chkObservationMode.Checked;
      
         if (!string.IsNullOrWhiteSpace(txtEndTime.Text) && double.TryParse(txtEndTime.Text, out var etVal))
-            endTime = etVal * 3600;
+            endTime = etVal * 3600;   
+        
+        if (!string.IsNullOrWhiteSpace(txtMaxWaitTimeExp4.Text) && double.TryParse(txtMaxWaitTimeExp4.Text, out var exp4Val))
+            exp4MaxWaitTime = exp4Val * 60;
 
         // Parse Time Interval if provided. Accepts either a numeric seconds value or HH:MM:SS (or HH:MM) format.
         if (!string.IsNullOrWhiteSpace(txtTimeInterval.Text))
@@ -299,6 +281,7 @@ public partial class MainView : Form
             refreshRate: refreshRate,
             warmUpProof: chkWarmUpProof.Checked,
             warmUp: warmUp,
+            exp4WaitTime: exp4MaxWaitTime,
             sensibilityRequested: chkSensRun.Checked,
             sensCapacity: !string.IsNullOrWhiteSpace(txtSensCapacity.Text) && int.TryParse(txtSensCapacity.Text, out var sc) ? sc : 1000,
             sensReplications: !string.IsNullOrWhiteSpace(txtSensReplications.Text) && int.TryParse(txtSensReplications.Text, out var sr) ? sr : 10,
