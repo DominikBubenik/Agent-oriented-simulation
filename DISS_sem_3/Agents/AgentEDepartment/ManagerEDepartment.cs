@@ -183,9 +183,7 @@ namespace Agents.AgentEDepartment
 			{
 				MyAgent.DequeuePatientMedicalTreat(myMsg);
 			}
-
 			
-			//tu treba pridat ten request response aby bolo jednoznacne odkial idu 
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
 			myMsg.Code = Mc.BetweenAmbulanceTransition;
 			Request(myMsg);
@@ -194,10 +192,14 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentResources", id="180", type="Notice"
 		public void ProcessSendEntryExamResources(MessageForm message)
 		{
-			//tuto ho zoberiem z radu lebo az teraz sa priradia resource
 			var myMsg = (MyMessage)message;
 			MyAgent.DequeuePatientEntry(myMsg);
+
+			myMsg.Patient.CurrentRoom = myMsg.Room;
 			
+			if (myMsg.Nurse.CurrentRoom != null) myMsg.Nurse.CurrentRoom.Nurse = null;
+			myMsg.Room.Nurse = myMsg.Nurse;
+			myMsg.Nurse.CurrentRoom = myMsg.Room;
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
 			myMsg.Code = Mc.EntryExamPatient;
 			Request(myMsg);

@@ -6,6 +6,7 @@ using DISS_SEM_GUI.EventsArguments;
 
 /**
  * Kod upraveny s pomocou AI, zdokumentovane v kapitole 2
+ * Kod upraveny s pomocou AI, zdokumentovane v kapitole 4
  */
 namespace DISS_sem_3
 {
@@ -561,6 +562,7 @@ namespace DISS_sem_3
                 UpdateCellIfChanged(row.Cells[0], p.Id);
                 UpdateCellIfChanged(row.Cells[1], p.Activity.ToString());
                 UpdateCellIfChanged(row.Cells[2], p.GetWorkingUtilization().ToString("F2"));
+                UpdateCellIfChanged(row.Cells[3], $"{p.CurrentRoom?.Type} {p.CurrentRoom?.Id}");
             }
         }
         

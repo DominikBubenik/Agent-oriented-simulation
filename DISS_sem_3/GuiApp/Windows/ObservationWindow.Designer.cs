@@ -300,6 +300,7 @@ namespace DISS_sem_3
             dgvPassengers.Columns.Add("id", header);
             dgvPassengers.Columns.Add("Activity", "Current Activity");
             dgvPassengers.Columns.Add("Util", "Utilization");
+            dgvPassengers.Columns.Add("Room", "Room");
             return dgvPassengers;
         }
         

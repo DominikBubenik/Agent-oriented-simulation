@@ -24,8 +24,8 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 		{
 			var myMsg = (MyMessage)message;
 			myMsg.Room.Nurse = myMsg.Nurse;
-			myMsg.Room.Patient = myMsg.Patient;
-			myMsg.Room.Doctor = myMsg.Doctor;
+			// myMsg.Room.Patient = myMsg.Patient;
+			// myMsg.Room.Doctor = myMsg.Doctor;
 			
 			myMsg.Nurse.StartWork();
 			myMsg.Doctor.StartWork();

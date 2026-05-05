@@ -87,8 +87,8 @@ namespace Agents.AgentResources
 				{
 					FreeRoomsTypeB.Add(myMsg.Room);
 				}
-				myMsg.Room.Nurse = null;
-				myMsg.Room.Doctor = null;
+				// myMsg.Room.Nurse = null;
+				// myMsg.Room.Doctor = null;
 				myMsg.Room.Patient = null;
 				myMsg.Room.CurrentStatus = RoomStatus.Free;
 			}

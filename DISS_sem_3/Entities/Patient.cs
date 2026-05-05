@@ -17,6 +17,7 @@ public class Patient : Entity
     public double TimeFromEnterToMedicTreat { get; set; }
     public PatientStatus PatientStatus { get; set; }
     public AnimImageItem AnimObject { get; private set; }
+    public Room? CurrentRoom { get; set; }
   
 
     public Patient(int id, OSPABA.Simulation mySim, double arrivalTime, bool arrivedByAmbulance) : base(id, mySim)

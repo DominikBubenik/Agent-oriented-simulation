@@ -56,8 +56,9 @@ public class Room : Entity
         TotalOccupancyTime = 0;
     }
     
-    public bool Equals(Room room)
+    public bool Equals(Room? room)
     {
+        if (room == null) return false;
         return Id == room.Id && Type ==  room.Type;
     }
 

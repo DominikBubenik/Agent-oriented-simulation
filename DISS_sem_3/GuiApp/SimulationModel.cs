@@ -16,7 +16,7 @@ public class SimulationModel
     public event Action<WelchDto> OnWelchUpdate;
     public event Action<string, double> OnLoggerUpdate;
     private DateTime _lastRefreshTime = DateTime.MinValue;
-    private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60); // ~30 FPS
+    private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60);
     private double _lastWelchUpdateTime = 0;
     private const double WELCH_INTERVAL = 600.0;
 
