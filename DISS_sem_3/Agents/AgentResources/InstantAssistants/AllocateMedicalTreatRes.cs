@@ -190,7 +190,6 @@ namespace Agents.AgentResources.InstantAssistants
 				{
 					_noticeMsg = (MyMessage)myMsg.CreateCopy();
 					_noticeMsg.Patient = myMsg.Patient;
-					_noticeMsg.SendRequestToResourseExp4 = true;
 					_noticeMsg.Addressee = MyAgent.FindAssistant(SimId.Exp4WaitAndThen);
 					_noticeMsg.Code = Mc.Start;
 					MyAgent.MyManager.StartContinualAssistant(_noticeMsg);
@@ -215,7 +214,7 @@ namespace Agents.AgentResources.InstantAssistants
 			
 			if (MyAgent.Nurses.Count > 0 && rooms.Count > 0 && MyAgent.Doctors.Count > 0)
 			{
-				AssignStaff(myMsg);
+				// AssignStaff(myMsg);
 
 				MyAgent.AllocateRoom(myMsg, rooms, true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");

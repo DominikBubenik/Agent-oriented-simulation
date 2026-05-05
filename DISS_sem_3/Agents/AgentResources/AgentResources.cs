@@ -2,6 +2,7 @@ using OSPABA;
 using Simulation;
 using Agents.AgentResources.InstantAssistants;
 using Agents.AgentResources.ContinualAssistants;
+using DISS_sem_3;
 using DISS_sem_3.Entities;
 using OpenTK.Platform.Windows;
 
@@ -160,7 +161,7 @@ namespace Agents.AgentResources
 		
 		public void AllocateRoom(MyMessage myMsg, List<Room> rooms, bool doctorNeeded = false)
 		{
-			if (MyCastSim().AllocateRoomWithResources)
+			if (MyCastSim().ResourceAllocatingStrategy == ResourceAllocatingStrategy.Exp5RoomWithResources)//MyCastSim().AllocateRoomWithResources || 
 			{
 				var bestRoomIndex = 0;
 				var score = 0;
@@ -184,6 +185,30 @@ namespace Agents.AgentResources
 							bestScore = score;
 						}
 					}
+					myMsg.Room = rooms[bestRoomIndex];
+					myMsg.Room.StartOccupancy();
+					rooms.RemoveAt(bestRoomIndex);
+					if (myMsg.Room.Nurse != null)
+					{
+						myMsg.Nurse = myMsg.Room.Nurse;
+						Nurses.Remove(myMsg.Nurse);
+					}
+					else
+					{
+						myMsg.Nurse = Nurses[0];
+						Nurses.RemoveAt(0);
+					}
+
+					if (myMsg.Room.Doctor != null)
+					{
+						myMsg.Doctor = myMsg.Room.Doctor;
+						Doctors.Remove(myMsg.Doctor);
+					}
+					else
+					{
+						myMsg.Doctor = Doctors[0];
+						Doctors.RemoveAt(0);
+					}
 				}
 				else
 				{
@@ -196,11 +221,20 @@ namespace Agents.AgentResources
 							break;
 						}
 					}
+					myMsg.Room = rooms[bestRoomIndex];
+					myMsg.Room.StartOccupancy();
+					rooms.RemoveAt(bestRoomIndex);
+					if (myMsg.Room.Nurse != null)
+					{
+						myMsg.Nurse = myMsg.Room.Nurse;
+						Nurses.Remove(myMsg.Nurse);
+					}
+					else
+					{
+						myMsg.Nurse = Nurses[0];
+						Nurses.RemoveAt(0);
+					}
 				}
-
-				myMsg.Room = rooms[bestRoomIndex];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(bestRoomIndex);
 			}
 			else
 			{

@@ -29,6 +29,7 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 			
 			myMsg.Room.Patient = myMsg.Patient;
 			myMsg.Room.Patient.PatientStatus = PatientStatus.EntryExam;
+			if(MySim.AnimatorExists) MyAgent.SetPositionBeforeExam(myMsg);
 			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Entry exam started P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
 			
 			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();

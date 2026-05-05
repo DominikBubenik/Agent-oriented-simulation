@@ -79,7 +79,20 @@ namespace Agents.AgentTransition
 				myMsg.Nurse.AnimObject.SetPosition(MySim.CurrentTime, position.X, position.Y + 100);
 				if (myMsg.Doctor != null) myMsg.Doctor.AnimObject.SetPosition(MySim.CurrentTime, position.X, position.Y + 200);
 			}
-			
+		}
+
+		public void StartAnimationMedicalStaff(double duration, Room room, MedicalStaff medic)
+		{
+			if (medic.CurrentRoom != null)
+			{
+				var config = Config.GetPathFromAmbulanceToAmbulance(medic.CurrentRoom, room);
+				medic.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
+			}
+			else
+			{
+				var config = room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
+				medic.AnimObject.StartAnim(MySim.CurrentTime, duration, config[room.Id]);
+			}
 		}
 	}
 }

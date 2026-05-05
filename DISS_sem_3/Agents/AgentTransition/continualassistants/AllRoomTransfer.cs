@@ -35,38 +35,37 @@ namespace Agents.AgentTransition.ContinualAssistants
 				myMsg.Patient.PatientStatus = PatientStatus.Moving;
 				if (MySim.AnimatorExists)
 				{
-					var config = MyAgent.GetConfigForPatientTransfer(myMsg.Room, myMsg.Patient);
-					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
+					var config = Config.GetPathFromAmbulanceToAmbulance(myMsg.Patient.CurrentRoom, myMsg.Room);
+					myMsg.Patient.AnimObject.StartAnim(MySim.CurrentTime, duration, config);
 				}
 			}
 			if (myMsg.Nurse != null && !myMsg.Room.Equals(myMsg.Nurse.CurrentRoom))
 			{
 				myMsg.Nurse.StartTransfer();
-				if (myMsg.Nurse.CurrentRoom != null) myMsg.Nurse.CurrentRoom.Nurse = null;
-				myMsg.Nurse.CurrentRoom = myMsg.Room;
-				myMsg.Room.Nurse =  myMsg.Nurse;
 				duration = MyAgent.GetAllRoomTransferDuration();
 				if (duration > maxDuration) maxDuration = duration; 
 				if (MySim.AnimatorExists)
 				{
-					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
-					myMsg.Nurse.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
+					MyAgent.StartAnimationMedicalStaff(duration, myMsg.Room, myMsg.Nurse);
 				}
+				if (myMsg.Nurse.CurrentRoom != null) myMsg.Nurse.CurrentRoom.Nurse = null;
+				myMsg.Nurse.CurrentRoom = myMsg.Room;
+				myMsg.Room.Nurse =  myMsg.Nurse;
 			}
 			if (myMsg.Doctor != null && !myMsg.Room.Equals(myMsg.Doctor.CurrentRoom))
 			{
+				duration = MyAgent.GetAllRoomTransferDuration();
+				if (duration > maxDuration) maxDuration = duration; 
+				if (MySim.AnimatorExists)
+				{
+					MyAgent.StartAnimationMedicalStaff(duration, myMsg.Room, myMsg.Doctor);
+				}
+				
 				myMsg.Doctor.StartTransfer();
 				if (myMsg.Doctor.CurrentRoom != null) myMsg.Doctor.CurrentRoom.Doctor = null; 
 				myMsg.Doctor.CurrentRoom = myMsg.Room;
 				// myMsg.Doctor.CurrentRoom.Doctor = myMsg.Doctor;
 				myMsg.Room.Doctor =  myMsg.Doctor;
-				duration = MyAgent.GetAllRoomTransferDuration();
-				if (duration > maxDuration) maxDuration = duration; 
-				if (MySim.AnimatorExists)
-				{
-					var config = myMsg.Room.IsTypeA() ? Config.PATH_MEDICAL_STAFF_TO_ROOM_A : Config.PATH_MEDICAL_STAFF_TO_ROOM_B;
-					myMsg.Doctor.AnimObject.StartAnim(MySim.CurrentTime, duration, config[myMsg.Room.Id]);
-				}
 			}
 			if (MySim is MySimulation sim && sim.ObservationMode) 
 				sim.NotifyLogger($"Ambulace transition started P> {myMsg?.Patient.Name}; D> {myMsg?.Doctor?.Id}, N> {myMsg?.Nurse.Id}, R> {myMsg?.Room.Id}");

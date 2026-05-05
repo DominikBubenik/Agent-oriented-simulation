@@ -14,7 +14,7 @@ namespace Simulation
 		public Patient? MedicalWaitingB { get; set; }
 		public int EntryQueueLength { get; set; }
 		public int MedicalQueueLengthB { get; set; }
-		public bool SendRequestToResourseExp4 { get; set; }
+
 		public MyMessage(OSPABA.Simulation mySim) :
 			base(mySim)
 		{

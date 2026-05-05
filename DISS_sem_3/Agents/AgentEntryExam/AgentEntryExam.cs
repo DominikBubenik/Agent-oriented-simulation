@@ -80,5 +80,20 @@ namespace Agents.AgentEntryExam
 		{
 			myMsg.Patient.AnimObject.SetPosition(MySim.CurrentTime, Config.ROOMS_B_AFTER_EXAM_POSITION[myMsg.Room.Id]);
 		}
+		
+		public void SetPositionBeforeExam(MyMessage myMsg)
+		{
+			if (myMsg.Room.Id == 0)
+			{
+				myMsg.Patient.AnimObject.SetPosition(MySim.CurrentTime, Config.ROOM_B_0);
+				myMsg.Nurse.AnimObject.SetPosition(MySim.CurrentTime, Config.ROOM_B_0.X + 100, Config.ROOM_B_0.Y);
+			}
+			else
+			{
+				var position = Config.ROOMS_B[myMsg.Room.Id];
+				myMsg.Patient.AnimObject.SetPosition(MySim.CurrentTime, position);
+				myMsg.Nurse.AnimObject.SetPosition(MySim.CurrentTime, position.X, position.Y + 100);
+			}
+		}
 	}
 }

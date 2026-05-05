@@ -104,11 +104,8 @@ namespace Agents.AgentResources.InstantAssistants
 						
 			if (nurses.Count > 0 && rooms.Count > 0)
 			{
-				myMsg.Nurse = nurses[0];
-				nurses.RemoveAt(0);
-
 				MyAgent.AllocateRoom(myMsg, rooms);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated  Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
 			{

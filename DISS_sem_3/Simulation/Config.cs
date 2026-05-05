@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using DISS_sem_3.Entities;
 
 namespace Simulation;
 
@@ -226,7 +227,15 @@ public class Config
             ROOM_B_6  
         }
     };
-    
+
+    public static PointF[] GetPathFromAmbulanceToAmbulance(Room roomFrom, Room roomTo)
+    {
+        if (roomFrom.IsTypeA() && roomTo.IsTypeA()) return [ROOMS_A[roomFrom.Id], new PointF(655, 550), ROOMS_A[roomTo.Id]];
+        if (roomFrom.IsTypeA())  return [ROOMS_A[roomFrom.Id], new PointF(655, 550), ROOMS_B[roomTo.Id]];
+        if (roomTo.IsTypeA())  return [ROOMS_B[roomFrom.Id], new PointF(655, 550), ROOMS_A[roomTo.Id]];
+        return [ROOMS_B[roomFrom.Id], new PointF(655, 550), ROOMS_B[roomTo.Id]];
+    }
+
     public static readonly PointF[][] PATH_MEDICAL_STAFF_TO_ROOM_A = new PointF[][]
     {
         new PointF[]{ 
