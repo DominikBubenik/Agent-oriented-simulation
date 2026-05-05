@@ -124,7 +124,7 @@ namespace Agents.AgentEDepartment
 		//meta! sender="AgentTransition", id="111", type="Response"
 		public void ProcessBetweenAmbulanceTransition(MessageForm message)
 		{
-			var myMsg = (MyMessage)message; //odstranil som copy
+			var myMsg = (MyMessage)message; 
 			if (myMsg.Doctor == null)
 			{
 				myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
@@ -198,8 +198,8 @@ namespace Agents.AgentEDepartment
 			var myMsg = (MyMessage)message;
 			MyAgent.DequeuePatientEntry(myMsg);
 			
-			myMsg.Addressee = MySim.FindAgent(SimId.AgentTransition);
-			myMsg.Code = Mc.BetweenAmbulanceTransition;
+			myMsg.Addressee = MySim.FindAgent(SimId.AgentEntryExam);
+			myMsg.Code = Mc.EntryExamPatient;
 			Request(myMsg);
 		}
 
