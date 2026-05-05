@@ -33,6 +33,9 @@ namespace Agents.AgentResources.InstantAssistants
 					break;
 				case ResourceAllocatingStrategy.Exp2KeepOneNOneD:
 					Exp2KeepOneNOneD(myMsg);
+					break;	
+				case ResourceAllocatingStrategy.Exp3KeepJustOneNurse:
+					Exp2KeepOneNOneD(myMsg);
 					break;
 				case ResourceAllocatingStrategy.Exp4WaitAndThen:
 					Exp2KeepOneNOneD(myMsg);
