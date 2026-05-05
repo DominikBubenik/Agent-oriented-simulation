@@ -62,15 +62,9 @@ namespace Agents.AgentResources.InstantAssistants
 			
 			if (nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0)
 			{
-				myMsg.Nurse = nurses[0];
-				nurses.RemoveAt(0);
+				AssignStaff(myMsg);
 
-				myMsg.Doctor = doctors[0];
-				doctors.RemoveAt(0);
-
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms, true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
@@ -104,9 +98,7 @@ namespace Agents.AgentResources.InstantAssistants
 				myMsg.Doctor = doctors.MinBy(d => d.GetWorkingUtilization());
 				doctors.Remove(myMsg.Doctor);
 
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms, true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			} else
 			{
@@ -140,15 +132,9 @@ namespace Agents.AgentResources.InstantAssistants
 			
 			if (enoughResources || isPriority || tooLong)
 			{
-				myMsg.Nurse = nurses[0];
-				nurses.RemoveAt(0);
+				AssignStaff(myMsg);
 
-				myMsg.Doctor = doctors[0];
-				doctors.RemoveAt(0);
-
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms, true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
@@ -162,10 +148,7 @@ namespace Agents.AgentResources.InstantAssistants
 			var nurses = MyAgent.Nurses;
 			var doctors = MyAgent.Doctors;
 			List<Room> rooms;
-			// if (myMsg.MedicalWaitingA == null && myMsg.MedicalWaitingB == null)
-			// {
-			// 	return;
-			// }
+
 			if (myMsg.Patient.Priority < 3)
 			{
 				rooms = MyAgent.FreeRoomsTypeA;
@@ -190,15 +173,9 @@ namespace Agents.AgentResources.InstantAssistants
 			if (enoughResources || isPriority || timePassed)
 			{
 				_lastCheck = 0;
-				myMsg.Nurse = nurses[0];
-				nurses.RemoveAt(0);
-
-				myMsg.Doctor = doctors[0];
-				doctors.RemoveAt(0);
+				AssignStaff(myMsg);
 			
-				myMsg.Room = rooms[0];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(0);
+				MyAgent.AllocateRoom(myMsg, rooms, true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 				if (_noticeMsg != null)
 				{
@@ -223,8 +200,6 @@ namespace Agents.AgentResources.InstantAssistants
 		
 		private void Exp5RoomWithResources(MyMessage myMsg)
 		{
-			var nurses = MyAgent.Nurses;
-			var doctors = MyAgent.Doctors;
 			List<Room> rooms;
 			if (myMsg.Patient.Priority < 3)
 			{
@@ -238,41 +213,11 @@ namespace Agents.AgentResources.InstantAssistants
 				rooms = MyAgent.FreeRoomsTypeB;
 			}
 			
-			if (nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0)
+			if (MyAgent.Nurses.Count > 0 && rooms.Count > 0 && MyAgent.Doctors.Count > 0)
 			{
-				myMsg.Nurse = nurses[0];
-				nurses.RemoveAt(0);
+				AssignStaff(myMsg);
 
-				myMsg.Doctor = doctors[0];
-				doctors.RemoveAt(0);
-
-				var bestRoomIndex = 0;
-				var score = 0;
-				var bestScore = 0;
-				for (int i = 0; i < rooms.Count; i++)
-				{
-					var room = rooms[i];
-					if (room.Nurse != null && room.Doctor != null)
-					{
-						bestRoomIndex = i;
-						break;
-					}
-
-					if (room.Nurse != null)
-					{
-						score = 1;
-					}
-
-					if (room.Doctor != null) score = 2;
-					if (score > bestScore)
-					{
-						bestRoomIndex = i;
-						bestScore = score;
-					}
-				}
-				myMsg.Room = rooms[bestRoomIndex];
-				myMsg.Room.StartOccupancy();
-				rooms.RemoveAt(bestRoomIndex);
+				MyAgent.AllocateRoom(myMsg, rooms, true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else
@@ -280,7 +225,16 @@ namespace Agents.AgentResources.InstantAssistants
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
 			}
 		}
-		
+
+		private void AssignStaff(MyMessage myMsg)
+		{
+			myMsg.Nurse = MyAgent.Nurses[0];
+			MyAgent.Nurses.RemoveAt(0);
+
+			myMsg.Doctor = MyAgent.Doctors[0];
+			MyAgent.Doctors.RemoveAt(0);
+		}
+
 		public new AgentResources MyAgent
 		{
 			get

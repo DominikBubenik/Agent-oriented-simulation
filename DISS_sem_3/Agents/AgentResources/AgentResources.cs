@@ -158,20 +158,46 @@ namespace Agents.AgentResources
 			return Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
 		}
 		
-		public void AllocateRoom(MyMessage myMsg, List<Room> rooms)
+		public void AllocateRoom(MyMessage myMsg, List<Room> rooms, bool doctorNeeded = false)
 		{
 			if (MyCastSim().AllocateRoomWithResources)
 			{
 				var bestRoomIndex = 0;
-				for (int i = 0; i < rooms.Count; i++)
+				var score = 0;
+				var bestScore = 0;
+				if (doctorNeeded)
 				{
-					var room = rooms[i];
-					if (room.Nurse != null)
+					for (int i = 0; i < rooms.Count; i++)
 					{
-						bestRoomIndex = i;
-						break;
+						var room = rooms[i];
+						if (room.Nurse != null && room.Doctor != null)
+						{
+							bestRoomIndex = i;
+							break;
+						}
+						if (room.Nurse != null) score = 1;
+						if (room.Doctor != null) score = 2;
+						
+						if (score > bestScore)
+						{
+							bestRoomIndex = i;
+							bestScore = score;
+						}
 					}
 				}
+				else
+				{
+					for (int i = 0; i < rooms.Count; i++)
+					{
+						var room = rooms[i];
+						if (room.Nurse != null)
+						{
+							bestRoomIndex = i;
+							break;
+						}
+					}
+				}
+
 				myMsg.Room = rooms[bestRoomIndex];
 				myMsg.Room.StartOccupancy();
 				rooms.RemoveAt(bestRoomIndex);
