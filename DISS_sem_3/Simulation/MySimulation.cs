@@ -193,16 +193,6 @@ namespace Simulation
 				order++;
 			}
 		}
-		
-		// private AnimTextItem CreateTextAnimObject(PointF pos, string text, OSPAnimator. AnimTypeface font, int size)
-		// {
-		// 	AnimTextItem animObject = new AnimTextItem(text);
-		//
-		// 	animObject.Font = (font);
-		// 	animObject.Size = (size);
-		// 	animObject.SetPosition(pos);
-		// 	return animObject;
-		// }
 
 		public void ResetStatistics()
 		{

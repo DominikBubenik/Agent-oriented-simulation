@@ -33,6 +33,7 @@ namespace Agents.AgentEDepartment
 			patient.StartEntryQueueWait();
 			patient.PatientStatus = PatientStatus.EntryQueue;
 			EntryQueue.Enqueue(patient, patient.Priority, patient.ArrivalTime, MySim.CurrentTime);
+			if (MySim.AnimatorExists) OrganizeEntryQueue();
 			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"{patient.Name} enqueued, waiting for resources");
 		}
 		
@@ -76,9 +77,17 @@ namespace Agents.AgentEDepartment
 			
 		}
 		
-		public Patient GetWaitingPatientForMedicalTreat(Patient patient)
+		private void OrganizeEntryQueue()
 		{
-			return patient.Priority < 3 ? MedicalTreatQueueA.Pop() : MedicalTreatQueueB.Pop();
+			var order = 0;
+			var patients = EntryQueue.GetAllItems();
+			var startPosition = Config.ENTRY_QUEUE_POSITION;
+			foreach (var patient in patients)
+			{
+				startPosition.X += 50;
+				patient.AnimObject.SetPosition(MySim.CurrentTime, startPosition);
+				order++;
+			}
 		}
 		
 		public void Reset()
