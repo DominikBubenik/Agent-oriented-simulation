@@ -7,5 +7,6 @@ public enum ResourceAllocatingStrategy
     Exp2KeepOneNOneD,
     Exp3KeepJustOneNurse,
     Exp4WaitAndThen,
-    Exp5RoomWithResources
+    Exp5RoomWithResources,
+    BestVariant
 }

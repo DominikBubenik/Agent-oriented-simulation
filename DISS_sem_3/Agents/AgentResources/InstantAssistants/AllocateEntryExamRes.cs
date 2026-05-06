@@ -43,6 +43,9 @@ namespace Agents.AgentResources.InstantAssistants
 				case ResourceAllocatingStrategy.Exp5RoomWithResources:
 					Exp5RoomWithResources(myMsg);
 					break;
+				case ResourceAllocatingStrategy.BestVariant:
+					BestVariant(myMsg);
+					break;
 			}
 		}
 
@@ -108,6 +111,26 @@ namespace Agents.AgentResources.InstantAssistants
 			if (nurses.Count > 0 && rooms.Count > 0)
 			{
 				MyAgent.AllocateRoom(myMsg, rooms);
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated  Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+			}
+			else
+			{
+				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+			}
+		}
+		
+		private void BestVariant(MyMessage myMsg)
+		{
+			var nurses = MyAgent.Nurses;
+			var rooms = MyAgent.FreeRoomsTypeB;
+
+			var allAvailable = nurses.Count > 0 && rooms.Count > 0;
+			var enoughResources = nurses.Count > 1 && rooms.Count > 1;
+			var queueIsTooLong = ((myMsg.EntryQueueLength > ((MySimulation)MySim).MaxEntryQueueLengthCount) ||
+			                      (myMsg.Patient.ArrivedByAmbulance));
+			if (allAvailable && (queueIsTooLong || enoughResources))
+			{
+				MyAgent.AllocateRoom(myMsg, rooms, bestVariant: true);
 				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated  Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
 			}
 			else

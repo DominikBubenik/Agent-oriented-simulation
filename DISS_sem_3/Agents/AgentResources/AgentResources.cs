@@ -159,9 +159,9 @@ namespace Agents.AgentResources
 			return Nurses.Count > 0 && FreeRoomsTypeB.Count > 0;
 		}
 		
-		public void AllocateRoom(MyMessage myMsg, List<Room> rooms, bool doctorNeeded = false)
+		public void AllocateRoom(MyMessage myMsg, List<Room> rooms, bool doctorNeeded = false, bool bestVariant = false)
 		{
-			if (MyCastSim().ResourceAllocatingStrategy == ResourceAllocatingStrategy.Exp5RoomWithResources)//MyCastSim().AllocateRoomWithResources || 
+			if (MyCastSim().ResourceAllocatingStrategy == ResourceAllocatingStrategy.Exp5RoomWithResources || bestVariant)//MyCastSim().AllocateRoomWithResources || 
 			{
 				var bestRoomIndex = 0;
 				var score = 0;
