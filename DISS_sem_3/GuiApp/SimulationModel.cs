@@ -1,0 +1,239 @@
+﻿using DISS_sem_3.Entities;
+using DISS_SEM_GUI.EventsArguments;
+using OSPAnimator;
+using Simulation;
+
+namespace DISS_sem_3;
+/**
+ * Kod upraveny s pomocou AI, zdokumentovane v kapitole 2
+ */
+public class SimulationModel
+{
+    private MySimulation? _core;
+    
+    public event Action<SimulationStateDto> OnRefreshUI;
+    public event Action<SimulationStatsDto> OnTurboUI;
+    public event Action<WelchDto> OnWelchUpdate;
+    public event Action<string, double> OnLoggerUpdate;
+    private DateTime _lastRefreshTime = DateTime.MinValue;
+    private readonly TimeSpan _refreshInterval = TimeSpan.FromMilliseconds(60);
+    private double _lastWelchUpdateTime = 0;
+    private const double WELCH_INTERVAL = 600.0;
+
+    public void StartSimulation(StartSimulationArgs args)
+    {
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp, args.ExperimentVariant);
+        if (args.ObservationMode)
+        {
+            _core.WarmUpSystem = false;
+            _core.WarmUpTime = 0;
+            _core.ObservationMode = true;
+            _core.SetSimSpeed(1.0, 0.05);
+            _core.OnRefreshUI(UpdateGui);
+            _core.OnLoggerOutput += OnLoggerChange;
+        }
+        else if (args.TurboMode)
+        {
+            _core.WarmUpSystem = true;
+            _core.WarmUpTime = args.WarmUp;
+            _core.OnReplicationDidFinish(UpdateTurboWindow);  
+            _core.SetMaxSimSpeed();
+        }
+        
+        if (args.WarmUpProof)
+        {
+            _core.OnRefreshUI(UpdateWelch);   
+            _core.SetSimSpeed(1.0, 0.000001);
+            _core.SetEndTime(args.EndSimulationTime);
+            _core.WarmUpSystem = false;
+            _core.WarmUpTime = 0;
+            // _core.Simulate(args.Replications, args.EndSimulationTime);
+            Task.Run(() => _core.Simulate(args.Replications, args.EndSimulationTime));
+        }
+        else
+        {
+            var end = args.EndSimulationTime;
+            if (args.TurboMode) end += args.WarmUp;
+            _core.MaxEntryQueueLengthCount = args.EntryMax;
+            _core.MaxMedicalQueueLengthCount = args.MedicalMax;
+            _core.MaxTimeWaitStrategy = args.Exp4MaxWaitTime;
+            _core.AllocateRoomWithResources = args.AllocateBestRoom;
+            _core.SetEndTime(end);
+            _core.SimulateAsync(args.Replications, end);
+        }
+        Console.WriteLine(DateTime.Now);
+    }
+
+    public Animator CreateAnimator(StartSimulationArgs args)
+    {
+        _core ??= new MySimulation(args.Seed, args.NursesCount, args.DoctorsCount, args.WarmUpProof, args.WarmUp, args.ExperimentVariant);
+        var animator = new Animator(_core);
+        _core.Animator = animator;
+        animator.SetBackgroundImage(Config.BACKGROUND_IMG);
+        return animator;
+    }
+
+    private void UpdateTurboWindow(OSPABA.Simulation Sim)
+    {
+        var mySim = (MySimulation)Sim;
+        var dto = new SimulationStatsDto { Replication = mySim.CurrentReplication };
+
+        var totalPInSystem = mySim.TotalPatientCount;
+        var totalWalkinPInSystem = mySim.TotalWalkInPatientCount;
+        var totalAmbulancedPInSystem = mySim.TotalAmbulancePatientCount;
+        var totalTimeInSystem = mySim.TotalTimeInSystem;
+        var totalTimeInSystemWalkInPatient = mySim.TotalTimeInSystemWalkInPatient;
+        var totalTimeInSystemAmbulancePatient = mySim.TotalTimeInSystemAmbulancePatient;
+        var totalTimeFromEntryToMedicalTreatPriority1 = mySim.TotalTimeFromEntranceToMedicalTreatPriority1;
+        var totalTimeFromEntryToMedicalTreatPriority2 = mySim.TotalTimeFromEntranceToMedicalTreatPriority2;
+        var totalTimeFromEntryToMedicalTreatPriority3 = mySim.TotalTimeFromEntranceToMedicalTreatPriority3;
+        var totalTimeFromEntryToMedicalTreatPriority4 = mySim.TotalTimeFromEntranceToMedicalTreatPriority4;
+        var totalTimeFromEntryToMedicalTreatPriority5 = mySim.TotalTimeFromEntranceToMedicalTreatPriority5;
+        // var entryQueueWaitingTime = mySim.TotalEntryWaitingTime;
+        var entryQueueWaitingTimeWalkIn = mySim.TotalEntryWaitingTimeWalkInP;
+        var entryQueueWaitingTimeAmbulance = mySim.TotalEntryWaitingTimeAmbulanceP;
+        var entryQueueLength = mySim.TotalEntryQueueLength;
+        var medicalTreatWaitTimeA = mySim.TotalMedicalTreatWaitingTimePatientsA;
+        var medicalTreatWaitTimeAB = mySim.TotalMedicalTreatWaitingTimePatientsAB;
+        var medicalTreatWaitTimeB = mySim.TotalMedicalTreatWaitingTimePatientsB;
+        var allDoctorsUtil = mySim.TotalDoctorsUtil;
+        var allNursesUtil = mySim.TotalNursesUtil;
+        var allRoomAUtl = mySim.TotalRoomAUtil;
+        var allRoomBUtil = mySim.TotalRoomBUtil;
+        var timeFromEntryToMedicalTreatWalkIn = mySim.TotalTimeFromEntryToMedicalTreatWalkIn;
+        var timeFromEntryToMedicalTreatAmbulance = mySim.TotalTimeFromEntryToMedicalTreatAmbulance;
+
+        dto.Stats["TotalPatientsInSystem"] = new OneStat(totalPInSystem.GetConfidenceInterval());
+        dto.Stats["TotalWalkInInSystem"] = new OneStat(totalWalkinPInSystem.GetConfidenceInterval());
+        dto.Stats["TotalAmbulancedInSystem"] = new OneStat(totalAmbulancedPInSystem.GetConfidenceInterval());
+        
+        dto.Stats["TotalTimeInSystem"] = new OneStat(totalTimeInSystem.GetConfidenceInterval());
+        dto.Stats["TotalTimeInSystemWalkIn"] = new OneStat(totalTimeInSystemWalkInPatient.GetConfidenceInterval());
+        dto.Stats["TotalTimeInSystemAmbulanced"] = new OneStat(totalTimeInSystemAmbulancePatient.GetConfidenceInterval());
+        
+        dto.Stats["EntryQueueWaitWalkIn"] = new OneStat(entryQueueWaitingTimeWalkIn.GetConfidenceInterval());
+        dto.Stats["EntryQueueWaitAmbulanced"] = new OneStat(entryQueueWaitingTimeAmbulance.GetConfidenceInterval());
+        dto.Stats["EntryQueueLength"] = new OneStat(entryQueueLength.GetConfidenceInterval());
+        
+        dto.Stats["MedicalTreatWaitingTimeA"] = new OneStat(medicalTreatWaitTimeA.GetConfidenceInterval());
+        dto.Stats["MedicalTreatWaitingTimeAB"] = new OneStat(medicalTreatWaitTimeAB.GetConfidenceInterval());
+        dto.Stats["MedicalTreatWaitingTimeB"] = new OneStat(medicalTreatWaitTimeB.GetConfidenceInterval());
+        
+        dto.Stats["AllDoctorsUtil"] = new OneStat(allDoctorsUtil.GetConfidenceInterval());
+        dto.Stats["AllNursesUtil"] = new OneStat(allNursesUtil.GetConfidenceInterval());
+        dto.Stats["AllRoomAUtil"] = new OneStat(allRoomAUtl.GetConfidenceInterval());
+        dto.Stats["AllRoomBUtil"] = new OneStat(allRoomBUtil.GetConfidenceInterval());
+        
+        dto.Stats["FromEntryToMedicalWalkIn"] = new OneStat(timeFromEntryToMedicalTreatWalkIn.GetConfidenceInterval());
+        dto.Stats["FromEntryToMedicalAmbulance"] = new OneStat(timeFromEntryToMedicalTreatAmbulance.GetConfidenceInterval());
+        
+        dto.Stats["TimeFromEntryToMedicalPriority1"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority1.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority2"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority2.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority3"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority3.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority4"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority4.GetConfidenceInterval());
+        dto.Stats["TimeFromEntryToMedicalPriority5"] = new OneStat(totalTimeFromEntryToMedicalTreatPriority5.GetConfidenceInterval());
+
+        OnTurboUI?.Invoke(dto);
+    }
+
+    // // public void OnRefreshUI(Simu)
+    public void UpdateGui(OSPABA.Simulation Sim)
+    {
+        // if (DateTime.Now - _lastRefreshTime < _refreshInterval) 
+        //     return;
+
+        _lastRefreshTime = DateTime.Now;
+        var mySim = (MySimulation)Sim;
+        var state = new SimulationStateDto
+        {
+            CurrentTime = mySim.CurrentTime,
+            EntryQueue = mySim.AgentEDepartment.EntryQueue.GetAllItems(),
+            EntryQueueAvgLength = mySim.AgentEDepartment.EntryQueue.GetAverageQueueLength(mySim.CurrentTime),
+            MedicalTreatQueueA = mySim.AgentEDepartment.MedicalTreatQueueA.GetAllItems(),
+            MedicalQueueAvgLengthA = mySim.AgentEDepartment.MedicalTreatQueueA.GetAverageQueueLength(mySim.CurrentTime),
+            MedicalTreatQueueB =  mySim.AgentEDepartment.MedicalTreatQueueB.GetAllItems(),
+            MedicalQueueAvgLengthB = mySim.AgentEDepartment.MedicalTreatQueueB.GetAverageQueueLength(mySim.CurrentTime),
+            AllDoctors = mySim.AgentResources.AllDoctors.ToList(),
+            AllNurses = mySim.AgentResources.AllNurses.ToList(),
+            AllPatients = mySim.AgentEnviroment.AllPatientsInSystem.Values.ToList(),
+            ARooms = mySim.AgentResources.AllRoomsTypeA.ToList(),
+            BRooms = mySim.AgentResources.AllRoomsTypeB.ToList(),
+        };
+        
+        OnRefreshUI?.Invoke(state);
+    }
+    
+    private void UpdateWelch(OSPABA.Simulation Sim)
+    {
+        if (Sim.CurrentTime - _lastWelchUpdateTime < WELCH_INTERVAL)
+            return;
+        _lastWelchUpdateTime = Sim.CurrentTime;
+
+        var mySim = (MySimulation)Sim;
+        var welchDto = new WelchDto();
+        welchDto.CurrentTime = mySim.CurrentTime / WELCH_INTERVAL;
+        welchDto.CurrentPatientCount = mySim.AgentEnviroment.AllPatientsInSystem.Count;
+        welchDto.CurrentWalkInPatientCount = mySim.AgentEnviroment.AllPatientsInSystem
+            .Count(k => !k.Value.ArrivedByAmbulance);
+        welchDto.CurrentAmbulancePatientCount = mySim.AgentEnviroment.AllPatientsInSystem
+            .Count(k => k.Value.ArrivedByAmbulance);;
+        welchDto.CurrentEntryQueueLength = mySim.AgentEDepartment.EntryQueue.Count;
+        welchDto.CurrentMedicalTreatWaitingCount = mySim.AgentEDepartment.MedicalTreatQueueA.Count +  mySim.AgentEDepartment.MedicalTreatQueueB.Count;
+        welchDto.CurrentAllDoctorsUtil = (double)mySim.AgentResources.AllDoctors.Count(doctor => doctor.Activity == StaffActivity.Working) / mySim.AgentResources.AllDoctors.Count;
+        welchDto.CurrentAllNursesUtil = (double)mySim.AgentResources.AllNurses.Count(nurse => nurse.Activity == StaffActivity.Working) / mySim.AgentResources.AllNurses.Count;
+        welchDto.CurrentAllRoomAUtil = (double)mySim.AgentResources.AllRoomsTypeA.Count(room => room.CurrentStatus == RoomStatus.Occupied) / mySim.AgentResources.AllRoomsTypeA.Count;
+        welchDto.CurrentAllRoomBUtil = (double)mySim.AgentResources.AllRoomsTypeB.Count(room => room.CurrentStatus == RoomStatus.Occupied) / mySim.AgentResources.AllRoomsTypeB.Count;
+        welchDto.TotalPatientsInSystem = mySim.AgentEnviroment.TotalPatientsStats;
+        welchDto.TotalWalkInPatientsInSystem = mySim.AgentEnviroment.TotalWalkInPatientsStats;
+        welchDto.TotalAmbulancePatientsInSystem = mySim.AgentEnviroment.TotalAmbulancedPatientsStats;
+        welchDto.TotalTimeInSystemAll = mySim.AgentEnviroment.TimeInSystem.GetAverage();
+        welchDto.TotalTimeInSystemWalkIn = mySim.AgentEnviroment.TimeInSystemWalkInPatient.GetAverage();
+        welchDto.TotalTimeInSystemAmbulance = mySim.AgentEnviroment.TimeInSystemAmbulancePatient.GetAverage();
+        welchDto.EntryQueueWaitingTimeWalkIn = mySim.AgentEnviroment.EntranceWaitingTimeWalkInP.GetAverage();
+        welchDto.EntryQueueWaitingTimeAmbulanced = mySim.AgentEnviroment.EntranceWaitingTimeAmbulanceP.GetAverage();
+        welchDto.EntryQueueLength = mySim.AgentEDepartment.EntryQueue.GetAverageQueueLength(Sim.CurrentTime);
+        welchDto.MedicalTreatWaitingTimeA = mySim.AgentEnviroment.MedicalTreatWaitingTimePA.GetAverage();
+        welchDto.MedicalTreatWaitingTimeAB = mySim.AgentEnviroment.MedicalTreatWaitingTimePAB.GetAverage();
+        welchDto.MedicalTreatWaitingTimeB = mySim.AgentEnviroment.MedicalTreatWaitingTimePB.GetAverage();
+        welchDto.AllDoctorsUtil = mySim.AgentResources.GetUtilAllDoctors();
+        welchDto.AllNursesUtil = mySim.AgentResources.GetUtilAllNurses();
+        welchDto.AllRoomsAUtil = mySim.AgentResources.GetUtilAllRoomsA();
+        welchDto.AllRoomsBUtil = mySim.AgentResources.GetUtilAllRoomsB();
+        welchDto.FromEntryToMedicalWalkIn = mySim.AgentEnviroment.TimeFromEntryToMedicalTreatWalkIn.GetAverage();
+        welchDto.FromEntryToMedicalAmbulanced = mySim.AgentEnviroment.TimeFromEntryToMedicalTreatAmbulance.GetAverage();
+        welchDto.MedicalQueueLengthTypeA = mySim.AgentEDepartment.MedicalTreatQueueA.GetAverageQueueLength(Sim.CurrentTime);
+        welchDto.MedicalQueueLengthTypeB = mySim.AgentEDepartment.MedicalTreatQueueB.GetAverageQueueLength(Sim.CurrentTime);
+        OnWelchUpdate?.Invoke(welchDto);
+    }
+
+    public void PauseSimulation()
+    {
+        _core.PauseSimulation();
+    }
+
+    public void ResumeSimulation()
+    {
+        _core.ResumeSimulation();
+    }
+
+    public void StopSimulation()
+    {
+        _core?.StopSimulation();
+        _core = null;
+    }
+    
+    public bool IsPaused()
+    {
+        return _core.IsPaused();
+    }
+
+    public void SetSimulationSpeed(double interval, double duration)
+    {
+        _core.SetSimSpeed(interval, duration);
+    }
+
+    public void OnLoggerChange(string message)
+    {
+        OnLoggerUpdate?.Invoke(message, _core.CurrentTime);   
+    }
+}

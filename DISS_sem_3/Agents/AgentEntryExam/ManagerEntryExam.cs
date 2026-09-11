@@ -26,16 +26,19 @@ namespace Agents.AgentEntryExam
 		//meta! sender="AgentEDepartment", id="47", type="Request"
 		public void ProcessEntryExamPatient(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.Start;
+			myMsg.Addressee = MyAgent.FindAssistant(SimId.ProcessEntryExam);
+			StartContinualAssistant(myMsg);
 		}
-
-		//meta! sender="ProcessEntryFinished", id="71", type="Finish"
-		public void ProcessFinishProcessEntryFinished(MessageForm message)
-		{
-		}
-
+		
 		//meta! sender="ProcessEntryExam", id="53", type="Finish"
-		public void ProcessFinishProcessEntryExam(MessageForm message)
+		public void ProcessFinish(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.EntryExamPatient;
+			myMsg.Addressee = MyAgent.Parent;
+			Response(myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -55,21 +58,12 @@ namespace Agents.AgentEntryExam
 		{
 			switch (message.Code)
 			{
-			case Mc.Finish:
-				switch (message.Sender.Id)
-				{
-				case SimId.ProcessEntryFinished:
-					ProcessFinishProcessEntryFinished(message);
-				break;
-
-				case SimId.ProcessEntryExam:
-					ProcessFinishProcessEntryExam(message);
-				break;
-				}
-			break;
-
 			case Mc.EntryExamPatient:
 				ProcessEntryExamPatient(message);
+			break;
+
+			case Mc.Finish:
+				ProcessFinish(message);
 			break;
 
 			default:

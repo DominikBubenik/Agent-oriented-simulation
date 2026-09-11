@@ -6,12 +6,44 @@
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
     </PropertyGroup>
 
     <ItemGroup>
       <Reference Include="ABACore">
         <HintPath>..\ABACore.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MainLogic\MainLogic.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="GuiApp\Windows\AnimatorWindow.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="GuiApp\Windows\WelchWindow.cs">
+        <SubType>Form</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Assets\background.jpg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Assets\doctor.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Assets\walkIn_patient.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Assets\ambulance_patient.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Assets\nurse.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

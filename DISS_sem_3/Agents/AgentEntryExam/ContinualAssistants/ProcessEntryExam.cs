@@ -1,6 +1,8 @@
 using OSPABA;
 using Simulation;
 using Agents.AgentEntryExam;
+using DISS_sem_3.Entities;
+using MainLogic;
 
 namespace Agents.AgentEntryExam.ContinualAssistants
 {
@@ -21,6 +23,18 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		//meta! sender="AgentEntryExam", id="53", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Room.Nurse = myMsg.Nurse;
+			myMsg.Nurse.StartWork();
+			
+			myMsg.Room.Patient = myMsg.Patient;
+			myMsg.Room.Patient.PatientStatus = PatientStatus.EntryExam;
+			if(MySim.AnimatorExists) MyAgent.SetPositionBeforeExam(myMsg);
+			if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Entry exam started P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
+			
+			var duration = myMsg.Patient.ArrivedByAmbulance ? MyAgent.GetAmbulanceExamDuration() : MyAgent.GetWalkInExamDuration();
+			myMsg.Code = Mc.Finish;
+			Hold(duration, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +42,18 @@ namespace Agents.AgentEntryExam.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					var myMsg = (MyMessage)message;
+					MyAgent.AssignPriority(myMsg.Patient);
+					myMsg.Patient.PatientStatus = PatientStatus.MedicalWait;
+					myMsg.Nurse.StopWork();
+					myMsg.Room.StopOccupancy();
+					if(MySim.AnimatorExists) MyAgent.SetPositionAfterExam(myMsg);
+					if (MySim is MySimulation sim && sim.ObservationMode) 
+						sim.NotifyLogger($"Entry exam Finished P> {myMsg.Patient.Name}; N> {myMsg.Nurse.Id}, R> {myMsg.Room.Id}");
+					
+					AssistantFinished(myMsg);
+					break;
 			}
 		}
 

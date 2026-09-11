@@ -26,11 +26,9 @@ namespace Agents.AgentBoss
 		//meta! sender="AgentEnviroment", id="9", type="Notice"
 		public void ProcessPatientArrival(MessageForm message)
 		{
-		}
-
-		//meta! sender="AgentEDepartment", id="23", type="Response"
-		public void ProcessTreatPatient(MessageForm message)
-		{
+			message.Code = Mc.TreatPatient;
+			message.Addressee = MySimInstance.FindAgent(SimId.AgentEDepartment);
+			Notice(message);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -39,6 +37,20 @@ namespace Agents.AgentBoss
 			switch (message.Code)
 			{
 			}
+		}
+
+		//meta! sender="AgentEDepartment", id="179", type="Notice"
+		public void ProcessPatientTreated(MessageForm message)
+		{
+			message.Code = Mc.PatientExit;
+			message.Addressee = MySimInstance.YellowPages.FindFirstAgent(Mc.PatientExit);
+			Notice(message);
+		}
+
+		//meta! sender="WarmUp", id="190", type="Finish"
+		public void ProcessFinish(MessageForm message)
+		{
+			MyAgent.MyCastSim().ResetStatistics();
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -50,12 +62,16 @@ namespace Agents.AgentBoss
 		{
 			switch (message.Code)
 			{
-			case Mc.TreatPatient:
-				ProcessTreatPatient(message);
+			case Mc.PatientTreated:
+				ProcessPatientTreated(message);
 			break;
 
 			case Mc.PatientArrival:
 				ProcessPatientArrival(message);
+			break;
+
+			case Mc.Finish:
+				ProcessFinish(message);
 			break;
 
 			default:
@@ -71,5 +87,7 @@ namespace Agents.AgentBoss
 				return (AgentBoss)base.MyAgent;
 			}
 		}
+		
+		public MySimulation MySimInstance => (MySimulation)MySim;
 	}
 }

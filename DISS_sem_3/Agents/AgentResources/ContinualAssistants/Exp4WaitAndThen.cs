@@ -1,13 +1,13 @@
+using Agents.AgentResources;
 using OSPABA;
 using Simulation;
-using Agents.AgentEnviroment;
 
-namespace Agents.AgentEnviroment.ContinualAssistants
+namespace Agents.AgentResources.ContinualAssistants
 {
-	//meta! id="19"
-	public class RegularPatient : OSPABA.Scheduler
+	//meta! id="198"
+	public class Exp4WaitAndThen : OSPABA.Process
 	{
-		public RegularPatient(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
+		public Exp4WaitAndThen(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
 		}
@@ -18,9 +18,12 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			// Setup component for the next replication
 		}
 
-		//meta! sender="AgentEnviroment", id="20", type="Start"
+		//meta! sender="AgentResources", id="199", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			var myMsg = (MyMessage)message;
+			myMsg.Code = Mc.Finish;
+			Hold(((MySimulation)MySim).MaxTimeWaitStrategy, myMsg);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +31,9 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					AssistantFinished(message);
+					break;
 			}
 		}
 
@@ -46,11 +52,11 @@ namespace Agents.AgentEnviroment.ContinualAssistants
 			}
 		}
 		//meta! tag="end"
-		public new AgentEnviroment MyAgent
+		public new AgentResources MyAgent
 		{
 			get
 			{
-				return (AgentEnviroment)base.MyAgent;
+				return (AgentResources)base.MyAgent;
 			}
 		}
 	}

@@ -1,13 +1,13 @@
+using Agents.AgentBoss;
 using OSPABA;
 using Simulation;
-using Agents.AgentMedicalTeat;
 
-namespace Agents.AgentMedicalTeat.ContinualAssistants
+namespace Agents.AgentBoss.ContinualAssistants
 {
-	//meta! id="77"
-	public class ProcessMedicalTreatFinished : OSPABA.Process
+	//meta! id="189"
+	public class WarmUp : OSPABA.Process
 	{
-		public ProcessMedicalTreatFinished(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
+		public WarmUp(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
 		}
@@ -18,9 +18,11 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 			// Setup component for the next replication
 		}
 
-		//meta! sender="AgentMedicalTeat", id="78", type="Start"
+		//meta! sender="AgentBoss", id="190", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
+			message.Code = Mc.Finish;
+			Hold(MyAgent.MyCastSim().WarmUpTime, message);
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -28,6 +30,9 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					AssistantFinished(message);
+					break;
 			}
 		}
 
@@ -46,11 +51,11 @@ namespace Agents.AgentMedicalTeat.ContinualAssistants
 			}
 		}
 		//meta! tag="end"
-		public new AgentMedicalTeat MyAgent
+		public new AgentBoss MyAgent
 		{
 			get
 			{
-				return (AgentMedicalTeat)base.MyAgent;
+				return (AgentBoss)base.MyAgent;
 			}
 		}
 	}
