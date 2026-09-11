@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Airport_GUI;
 using DISS_SEM_GUI;
 using DISS_SEM_GUI.EventsArguments;
 
@@ -87,7 +86,7 @@ public class TurboController
          }
 
          // Send the complete history to the window
-         _turboWindow?.UpdateDashboard(st.Replication, _history);
+         _turboWindow?.UpdateDashboard(st.Replication, _args.Replications, _history);
          _turboWindow?.UpdateStats(st);
          
          if (_args != null && st.Replication >= _args.Replications -1)

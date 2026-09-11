@@ -23,78 +23,52 @@ namespace Agents.AgentResources.InstantAssistants
 		{
 			var myMsg = (MyMessage)message;
 			var mySim = (MySimulation)MySim;
+			var rooms = GetAvailableRooms(myMsg);
+
 			switch (mySim.ResourceAllocatingStrategy)
 			{
 				case ResourceAllocatingStrategy.Exp0FirstAvailable:
-					Exp0FirstAvailable(myMsg);
+					Exp0FirstAvailable(myMsg, rooms);
 					break;
 				case ResourceAllocatingStrategy.Exp1LeastUtilized:
-					Exp1LeastUtilizedStaff(myMsg);
+					Exp1LeastUtilizedStaff(myMsg, rooms);
 					break;
 				case ResourceAllocatingStrategy.Exp2KeepOneNOneD:
-					Exp2KeepOneNOneD(myMsg);
+					Exp2KeepOneNOneD(myMsg, rooms);
 					break;
 				case ResourceAllocatingStrategy.Exp3KeepJustOneNurse:
-					Exp3KeepOneNurse(myMsg);
+					Exp3KeepOneNurse(myMsg, rooms);
 					break;
 				case ResourceAllocatingStrategy.Exp4WaitAndThen:
-					Exp4WaitAndThen(myMsg);
+					Exp4WaitAndThen(myMsg, rooms);
 					break;
 				case ResourceAllocatingStrategy.Exp5RoomWithResources:
-					Exp5RoomWithResources(myMsg);
+					Exp5RoomWithResources(myMsg, rooms);
 					break;	
 				case ResourceAllocatingStrategy.BestVariant:
-					BestVariant(myMsg);
+					BestVariant(myMsg, rooms);
 					break;
 			}
 		}
 
-		private void Exp0FirstAvailable(MyMessage myMsg)
+		private void Exp0FirstAvailable(MyMessage myMsg, List<Room> rooms)
 		{
-			var nurses = MyAgent.Nurses;
-			var doctors = MyAgent.Doctors;
-			List<Room> rooms;
-			if (myMsg.Patient.Priority < 3)
-			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
-			
-			if (nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0)
+			if (MyAgent.Nurses.Count > 0 && rooms.Count > 0 && MyAgent.Doctors.Count > 0)
 			{
 				AssignStaff(myMsg);
-
 				MyAgent.AllocateRoom(myMsg, rooms, true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 			}
 			else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 			}
 		}
 		
-		private void Exp1LeastUtilizedStaff(MyMessage myMsg)
+		private void Exp1LeastUtilizedStaff(MyMessage myMsg, List<Room> rooms)
 		{
 			var nurses = MyAgent.Nurses;
 			var doctors = MyAgent.Doctors;
-			List<Room> rooms;
-			if (myMsg.Patient.Priority < 3)
-			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
 			
 			if (nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0)
 			{
@@ -105,133 +79,81 @@ namespace Agents.AgentResources.InstantAssistants
 				doctors.Remove(myMsg.Doctor);
 
 				MyAgent.AllocateRoom(myMsg, rooms, true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 			} else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 			}
 		}
 		
-		private void Exp2KeepOneNOneD(MyMessage myMsg)
+		private void Exp2KeepOneNOneD(MyMessage myMsg, List<Room> rooms)
 		{
-			var nurses = MyAgent.Nurses;
-			var doctors = MyAgent.Doctors;
-			List<Room> rooms;
-			if (myMsg.Patient.Priority < 3)
+			if (MyAgent.Nurses.Count == 0 || rooms.Count == 0 || MyAgent.Doctors.Count == 0)
 			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
-
-			if (nurses.Count == 0 || rooms.Count == 0 || doctors.Count == 0)
-			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 				return;
 			}
 
-			var enoughResources = nurses.Count > 1 && doctors.Count > 1 && 
+			var enoughResources = MyAgent.Nurses.Count > 1 && MyAgent.Doctors.Count > 1 && 
 			                      (rooms.Count > 1 || (rooms.Count > 0 && !rooms[0].IsTypeA()));
 			
 			var tooLong =  myMsg.MedicalQueueLengthB >  ((MySimulation)MySim).MaxMedicalQueueLengthCount;
-			
 			var isPriority =  myMsg.Patient.Priority < 3;
 			
 			if (enoughResources || isPriority || tooLong)
 			{
 				AssignStaff(myMsg);
-
 				MyAgent.AllocateRoom(myMsg, rooms, true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 			}
 			else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 			}
 		}
 		
-		private void Exp3KeepOneNurse(MyMessage myMsg)
+		private void Exp3KeepOneNurse(MyMessage myMsg, List<Room> rooms)
 		{
-			var nurses = MyAgent.Nurses;
-			var doctors = MyAgent.Doctors;
-			List<Room> rooms;
-			if (myMsg.Patient.Priority < 3)
+			if (MyAgent.Nurses.Count == 0 || rooms.Count == 0 || MyAgent.Doctors.Count == 0)
 			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
-
-			if (nurses.Count == 0 || rooms.Count == 0 || doctors.Count == 0)
-			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 				return;
 			}
 			
-			var enoughResources = nurses.Count > 1 && doctors.Count > 0 && 
+			var enoughResources = MyAgent.Nurses.Count > 1 && MyAgent.Doctors.Count > 0 && 
 			                      (rooms.Count > 1 || (rooms.Count > 0 && !rooms[0].IsTypeA()));
 			
 			var tooLong = myMsg.MedicalQueueLengthB >  ((MySimulation)MySim).MaxMedicalQueueLengthCount;
-			
 			var isPriority = myMsg.Patient.Priority < 3;
 			
 			if (enoughResources || isPriority || tooLong)
 			{
 				AssignStaff(myMsg);
-
 				MyAgent.AllocateRoom(myMsg, rooms, true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 			}
 			else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 			}
 		}
 		
-		private void Exp4WaitAndThen(MyMessage myMsg)
+		private void Exp4WaitAndThen(MyMessage myMsg, List<Room> rooms)
 		{
-			var nurses = MyAgent.Nurses;
-			var doctors = MyAgent.Doctors;
-			List<Room> rooms;
-
-			if (myMsg.Patient.Priority < 3)
-			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
-
 			if (_lastCheck == 0) _lastCheck = MySim.CurrentTime;
 
-			var enoughResources = nurses.Count > 1 && doctors.Count > 1 && 
+			var enoughResources = MyAgent.Nurses.Count > 1 && MyAgent.Doctors.Count > 1 && 
 			                      (rooms.Count > 1 || (rooms.Count > 0 && !rooms[0].IsTypeA()));
 			var myCastSim = MySim as MySimulation;
-			// var tooLong = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && myMsg.MedicalQueueLengthB >  myCastSim.MaxMedicalQueueLengthCount;
-			var timePassed = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && ((MySim.CurrentTime - _lastCheck) >= myCastSim.MaxTimeWaitStrategy);
-			var isPriority = nurses.Count > 0 && rooms.Count > 0 && doctors.Count > 0 && myMsg.Patient.Priority < 3;
+			var timePassed = MyAgent.Nurses.Count > 0 && rooms.Count > 0 && MyAgent.Doctors.Count > 0 && ((MySim.CurrentTime - _lastCheck) >= myCastSim.MaxTimeWaitStrategy);
+			var isPriority = MyAgent.Nurses.Count > 0 && rooms.Count > 0 && MyAgent.Doctors.Count > 0 && myMsg.Patient.Priority < 3;
 			
 			if (enoughResources || isPriority || timePassed)
 			{
 				_lastCheck = 0;
 				AssignStaff(myMsg);
-			
 				MyAgent.AllocateRoom(myMsg, rooms, true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 				if (_noticeMsg != null)
 				{
 					MyAgent.MyManager.BreakContinualAssistant(new MyMessage(MySim));
@@ -240,7 +162,7 @@ namespace Agents.AgentResources.InstantAssistants
 			}
 			else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 				if (_noticeMsg == null)
 				{
 					_noticeMsg = (MyMessage)myMsg.CreateCopy();
@@ -252,63 +174,60 @@ namespace Agents.AgentResources.InstantAssistants
 			}
 		}
 		
-		private void Exp5RoomWithResources(MyMessage myMsg)
+		private void Exp5RoomWithResources(MyMessage myMsg, List<Room> rooms)
 		{
-			List<Room> rooms;
-			if (myMsg.Patient.Priority < 3)
-			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
-			
 			if (MyAgent.Nurses.Count > 0 && rooms.Count > 0 && MyAgent.Doctors.Count > 0)
 			{
-				// AssignStaff(myMsg);
-
 				MyAgent.AllocateRoom(myMsg, rooms, true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 			}
 			else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
 			}
 		}
 		
-		private void BestVariant(MyMessage myMsg)
+		private void BestVariant(MyMessage myMsg, List<Room> rooms)
 		{
 			var nurses = MyAgent.Nurses;
 			var doctors = MyAgent.Doctors;
-			List<Room> rooms;
-			if (myMsg.Patient.Priority < 3)
-			{
-				rooms = MyAgent.FreeRoomsTypeA;
-			} else if (myMsg.Patient.Priority < 5)
-			{
-				rooms = MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
-			}
-			else
-			{
-				rooms = MyAgent.FreeRoomsTypeB;
-			}
 
-			var allAvailable = nurses.Count > 0 && doctors.Count > 0 && rooms.Count > 0;//(rooms.Count > 1 || (rooms.Count > 0 && !rooms[0].IsTypeA()));
+			var allAvailable = nurses.Count > 0 && doctors.Count > 0 && rooms.Count > 0;
 			var enoughResources = nurses.Count > 1 && rooms.Count > 1 && doctors.Count > 1;
 			var queueIsTooLong = myMsg.MedicalQueueLengthB > ((MySimulation)MySim).MaxMedicalQueueLengthCount;
 			var isPriority = myMsg.Patient.Priority < 3;
 			if (allAvailable && (queueIsTooLong || enoughResources || isPriority))
 			{
 				MyAgent.AllocateRoom(myMsg, rooms, doctorNeeded: true, bestVariant: true);
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"MedicalTreat Resources allocated  Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				NotifyAllocation(myMsg, true);
 			}
 			else
 			{
-				if (MySim is MySimulation sim && sim.ObservationMode) sim.NotifyLogger($"Resources not allocated");
+				NotifyAllocation(myMsg, false);
+			}
+		}
+
+		private List<Room> GetAvailableRooms(MyMessage myMsg)
+		{
+			if (myMsg.Patient.Priority < 3)
+			{
+				return MyAgent.FreeRoomsTypeA;
+			}
+			if (myMsg.Patient.Priority < 5)
+			{
+				return MyAgent.FreeRoomsTypeB.Count == 0 ? MyAgent.FreeRoomsTypeA : MyAgent.FreeRoomsTypeB;
+			}
+			return MyAgent.FreeRoomsTypeB;
+		}
+
+		private void NotifyAllocation(MyMessage myMsg, bool success)
+		{
+			if (MySim is MySimulation sim && sim.ObservationMode)
+			{
+				if (success)
+					sim.NotifyLogger($"MedicalTreat Resources allocated Doctor: {myMsg.Doctor.Id} ,Nurse: {myMsg.Nurse.Id}, Room {myMsg.Room.Id}");
+				else
+					sim.NotifyLogger("Resources not allocated");
 			}
 		}
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -7,7 +7,7 @@ using System.IO;
 using DISS_SEM_GUI.EventsArguments;
 using MainLogic;
 
-namespace Airport_GUI;
+namespace DISS_SEM_GUI;
 
 public partial class TurboWindow : Form
 {
@@ -18,22 +18,22 @@ public partial class TurboWindow : Form
     
     private readonly Dictionary<string, ScottPlot.WinForms.FormsPlot> _plotMapping;
     private readonly Stopwatch _uiRefreshThrottle = Stopwatch.StartNew();
-    private const int REFRESH_MS = 500; // Throttling ensures the UI thread stays responsive
+    private const int REFRESH_MS = 500; 
     private readonly Stopwatch _renderThrottle = Stopwatch.StartNew();
     private const int MIN_RENDER_MS = 200;
 
     public TurboWindow()
     {
         InitializeComponent();
-        InitializeExportUi();
 
-        // Wire buttons safely to events
+        // Wire buttons
         btnRun.Click += (s, e) => OnRunRequested?.Invoke(this, EventArgs.Empty);
         btnPause.Click += (s, e) => OnPauseRequested?.Invoke(this, EventArgs.Empty);
         btnResume.Click += (s, e) => OnResumeRequested?.Invoke(this, EventArgs.Empty);
         btnStop.Click += (s, e) => OnStopRequested?.Invoke(this, EventArgs.Empty);
+        btnBrowsePath.Click += (s, e) => BrowsePathClick();
 
-        // MAP KEYS: These must match the keys used in your SimulationModel[cite: 11]
+        // Mapping metrics to specific plot controls
         _plotMapping = new Dictionary<string, ScottPlot.WinForms.FormsPlot>
         {
             { "TotalPatientsInSystem", formsPlot1 },
@@ -61,10 +61,13 @@ public partial class TurboWindow : Form
 
     private void SetupGraphStyles()
     {
-        string[] titles = { "Total Patients", "Walk-In Count", "Ambulance Count", "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)", 
-            "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "AvgEntryQueueLength", "AvgMedicTreatWaitTime TypeA", "AvgMedicTreatWaitTime TypeAB",
-            "AvgMedicTreatWaitTime TypeB", "Doctors Utilization", "Nurses Utilization", "Rooms A Utilization", "Rooms B Utilization", "TimeFromEntryToMedicalTreatWalkIn",
-            "TimeFromEntryToMedicalTreatAmbulance"
+        string[] titles = { 
+            "Total Patients", "Walk-In Count", "Ambulance Count", 
+            "Avg Time (Total)", "Avg Time (Walk-In)", "Avg Time (Ambulance)", 
+            "Avg Entry WaitTime (WalkIn)", "Avg Entry WaitTime (Ambulance)", "Avg Entry Queue Length", 
+            "Avg Medic Treat WaitTime A", "Avg Medic Treat WaitTime AB", "Avg Medic Treat WaitTime B", 
+            "Doctors Utilization", "Nurses Utilization", "Rooms A Utilization", "Rooms B Utilization", 
+            "Time Entry to Treatment (Walk-In)", "Time Entry to Treatment (Ambulance)"
         };
         var plots = new[]
         {
@@ -77,36 +80,30 @@ public partial class TurboWindow : Form
             plots[i].Plot.Title(titles[i]);
             plots[i].Plot.XLabel("Replication");
             plots[i].Plot.YLabel("Value");
-            // Disable interactions to improve performance during high-speed updates
             plots[i].UserInputProcessor.Disable(); 
         }
     }
 
-    public void UpdateDashboard(int replication, Dictionary<string, StatHistory> history)
+    public void UpdateDashboard(int replication, int totalReplications, Dictionary<string, StatHistory> history)
     {
-        // THROTTLE: Skip frame if updated too recently to keep the window clickable[cite: 15]
-        // if (_uiRefreshThrottle.ElapsedMilliseconds < REFRESH_MS) return;
-        // _uiRefreshThrottle.Restart();
         if (this.IsDisposed || this.Disposing) return;
-        if ((replication + 1) % 10 != 0)
-        {
-            return;
-        }
+        if ((replication + 1) % 10 != 0 && replication != totalReplications - 1) return;
+
         if (this.InvokeRequired)
         {
-            this.BeginInvoke(new Action(() => UpdateDashboard(replication, history)));
+            this.BeginInvoke(new Action(() => UpdateDashboard(replication, totalReplications, history)));
             return;
         }
 
-        txtTurboReplication.Text = replication.ToString();
+        lblReplicationInfo.Text = $"Replication: {replication + 1} / {totalReplications}";
+        progressBar.Maximum = totalReplications;
+        progressBar.Value = Math.Min(replication + 1, totalReplications);
 
         foreach (var mapping in _plotMapping)
         {
             if (history.TryGetValue(mapping.Key, out var data))
             {
                 double[] xArr, yArr, lArr, uArr;
-                
-                // LOCK: Thread-safety prevents crashes if the simulation adds points while we read[cite: 15]
                 lock(data) 
                 {
                     if (data.X.Count == 0) continue;
@@ -116,7 +113,6 @@ public partial class TurboWindow : Form
                     uArr = data.Upper.ToArray();
                 }
 
-                // DOWNSAMPLING: If data is massive, only plot 400 points to keep rendering fast[cite: 15]
                 if (xArr.Length > 400)
                 {
                     int step = xArr.Length / 400;
@@ -129,20 +125,16 @@ public partial class TurboWindow : Form
                 UpdatePlot(mapping.Value, xArr, yArr, lArr, uArr);
             }
         }
-        Application.DoEvents(); 
     }
 
     private void UpdatePlot(ScottPlot.WinForms.FormsPlot plot, double[] xs, double[] ys, double[]? lowerYs, double[]? upperYs)
     {
         plot.Plot.Clear();
-
-        // Main line (Average)
         var avg = plot.Plot.Add.Scatter(xs, ys);
         avg.LineWidth = 2;
         avg.MarkerSize = 0;
         avg.Color = ScottPlot.Color.FromHex("#0000FF");
 
-        // CI Lines (Thin boundaries)[cite: 12]
         if (lowerYs != null && lowerYs.Length == ys.Length) {
             var low = plot.Plot.Add.Scatter(xs, lowerYs);
             low.LineWidth = 1; low.MarkerSize = 0;
@@ -154,13 +146,12 @@ public partial class TurboWindow : Form
             high.Color = ScottPlot.Color.FromHex("#880000FF");
         }
 
-        // AUTO-LIMITS: Prevent "empty" looking graphs by forcing axes to data range[cite: 12]
         double yMin = ys.Min();
         double yMax = ys.Max();
-        if (lowerYs != null) yMin = Math.Min(yMin, lowerYs.Min());
-        if (upperYs != null) yMax = Math.Max(yMax, upperYs.Max());
+        if (lowerYs != null && lowerYs.Length > 0) yMin = Math.Min(yMin, lowerYs.Min());
+        if (upperYs != null && upperYs.Length > 0) yMax = Math.Max(yMax, upperYs.Max());
 
-        double yPadding = (yMax - yMin) * 0.05;
+        double yPadding = (yMax - yMin) * 0.1;
         if (yPadding == 0) yPadding = 1.0;
 
         plot.Plot.Axes.SetLimits(xs.Min(), xs.Max(), yMin - yPadding, yMax + yPadding);
@@ -176,39 +167,33 @@ public partial class TurboWindow : Form
         {
             if (stats.Stats.TryGetValue(key, out var s) && s != null)
             {
-                valBox.Text = time ?  $"{TimeSpan.FromSeconds(s.Avg):hh\\:mm\\:ss}": s.Avg.ToString("F3");
+                valBox.Text = time ? TimeSpan.FromSeconds(s.Avg).ToString(@"hh\:mm\:ss") : s.Avg.ToString("F3");
                 ciBox.Text = $"[{s.LowerBound:F2} - {s.UpperBound:F2}]";
             }
             else 
             {
-                valBox.Text = "No Data"; // Diagnostic indicator
+                valBox.Text = "No Data";
             }
         }
 
         Map("TotalPatientsInSystem", txtTurboTotal, txtTurboTotal_CI);
         Map("TotalWalkInInSystem", txtTurboWalkIn, txtTurboWalkIn_CI);
         Map("TotalAmbulancedInSystem", txtTurboAmbulance, txtTurboAmbulance_CI);
-        
         Map("TotalTimeInSystem", txtTurboAvgTime, txtTurboAvgTime_CI, true);
         Map("TotalTimeInSystemWalkIn", txtTurboTimeWalkIn, txtTurboTimeWalkIn_CI, true);
         Map("TotalTimeInSystemAmbulanced", txtTurboTimeAmbulance, txtTurboTimeAmbulance_CI, true);
-        
         Map("EntryQueueWaitWalkIn", txtTurboEntryWaitTimeWalkIn, txtTurboEntryWaitTimeWalkIn_CI, true);
         Map("EntryQueueWaitAmbulanced", txtTurboEntryWaitAmbulance, txtTurboEntryWaitTimeAmbulance_CI, true);
         Map("EntryQueueLength", txtTurboEntryQueueLength, txtTurboEntryQueueLength_CI);
-        
-        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA,txtTurboMedicalTrWaitingTimeA_CI, true);
+        Map("MedicalTreatWaitingTimeA", txtTurboMedicalTrWaitingTimeA, txtTurboMedicalTrWaitingTimeA_CI, true);
         Map("MedicalTreatWaitingTimeAB", txtTurboMedicalTrWaitingTimeAB, txtTurboMedicalTrWaitingTimeAB_CI, true);
         Map("MedicalTreatWaitingTimeB", txtTurboMedicalTrWaitingTimeB, txtTurboMedicalTrWaitingTimeB_CI, true);
-        
         Map("AllDoctorsUtil", txtTurboAllDoctorsUtil, txtTurboAllDoctorsUtil_CI);
         Map("AllNursesUtil", txtTurboAllNursesUtil, txtTurboAllNursesUtil_CI);
         Map("AllRoomAUtil", txtTurboAllRoomAUtil, txtTurboAllRoomAUtil_CI);
         Map("AllRoomBUtil", txtTurboAllRoomBUtil, txtTurboAllRoomBUtil_CI);
-        
         Map("FromEntryToMedicalWalkIn", txtTurboTimeFromEntryToMedicalWalkIn, txtTurboTimeFromEntryToMedicalWalkIn_CI, true);
         Map("FromEntryToMedicalAmbulance", txtTurboTimeFromEntryToMedicalAmbulance, txtTurboTimeFromEntryToMedicalAmbulance_CI, true);
-        
         Map("TimeFromEntryToMedicalPriority1", txtTurboTimeFromEntryToMedicalPriority1, txtTurboTimeFromEntryToMedicalPriority1_CI, true);
         Map("TimeFromEntryToMedicalPriority2", txtTurboTimeFromEntryToMedicalPriority2, txtTurboTimeFromEntryToMedicalPriority2_CI, true);
         Map("TimeFromEntryToMedicalPriority3", txtTurboTimeFromEntryToMedicalPriority3, txtTurboTimeFromEntryToMedicalPriority3_CI, true);
@@ -219,22 +204,29 @@ public partial class TurboWindow : Form
     public void SetStatus(string status)
     {
         if (this.InvokeRequired) { this.BeginInvoke(new Action(() => SetStatus(status))); return; }
-        if (lblStatus != null) lblStatus.Text = status;
+        if (lblStatus != null) lblStatus.Text = $"Status: {status}";
     }
 
     public double GetSkipFractionFromUI()
     {
-        string text = txtTurboSkipPercent.Text.Replace("%", "").Trim();
-        return double.TryParse(text, out double val) ? Math.Clamp(val / 100.0, 0, 0.95) : 0.05;
+        return (double)numTurboSkipPercent.Value / 100.0;
     }
-    
-    /**
-    * Kod vygenerovany s pomocou AI, zdokumentovane v kapitole 5
-    */
+
+    private void BrowsePathClick()
+    {
+        using (var fbd = new FolderBrowserDialog())
+        {
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                txtExportPath.Text = fbd.SelectedPath;
+            }
+        }
+    }
+
     public string GetExportFilePath()
     {
         string dir = string.IsNullOrWhiteSpace(txtExportPath.Text) ? AppDomain.CurrentDomain.BaseDirectory : txtExportPath.Text;
-        string file = string.IsNullOrWhiteSpace(txtExportFilename.Text) ? "simulation_results.csv" : txtExportFilename.Text;
+        string file = string.IsNullOrWhiteSpace(txtExportFilename.Text) ? "emergency_dept_results.csv" : txtExportFilename.Text;
         return Path.Combine(dir, file);
     }
 }

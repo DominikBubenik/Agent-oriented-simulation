@@ -50,25 +50,6 @@ namespace Agents.AgentEDepartment
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
-			
-			//TODO premyslet
-			
-			// var initiateMTResources = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
-			// initiateMTResources.Patient = patient;
-			// initiateMTResources.Code = Mc.GetMedicalTreatResources;
-			// initiateMTResources.Addressee = MySim.FindAgent(SimId.AgentResources);
-			// Notice(initiateMTResources);
-			//
-			// //tu bude najskor medicaltreat a potom bude entry exam znovu
-			// if (!MyAgent.EntryQueue.IsEmpty())
-			// {
-			// 	var initiateEntryExam = (MyMessage)myMsg.CreateCopy();//new MyMessage(MySim);
-			// 	initiateEntryExam.Code = Mc.GetEntryExamResources;
-			// 	initiateEntryExam.Addressee = MySim.FindAgent(SimId.AgentResources);
-			// 	Notice(initiateEntryExam);
-			// }
-		
-			
 		}
 
 		//meta! sender="AgentMedicalTeat", id="45", type="Response"
@@ -83,28 +64,6 @@ namespace Agents.AgentEDepartment
 			myMsg.Addressee = MySim.FindAgent(SimId.AgentResources);
 			myMsg.Code = Mc.FreeUpResources;
 			Notice(myMsg);
-
-			// if (!MyAgent.MedicalTreatQueueA.IsEmpty())
-			// {
-			// 	var initiateNext = (MyMessage)myMsg.CreateCopy();
-			// 	initiateNext.Patient = MyAgent.MedicalTreatQueueA.Pop();
-			// 	initiateNext.Code = Mc.GetMedicalTreatResources;
-			// 	Notice(initiateNext);				
-			// } 
-			// if (!MyAgent.MedicalTreatQueueB.IsEmpty())
-			// {
-			// 	var initiateNext = (MyMessage)myMsg.CreateCopy();
-			// 	initiateNext.Patient = MyAgent.MedicalTreatQueueB.Pop();
-			// 	initiateNext.Code = Mc.GetMedicalTreatResources;
-			// 	Notice(initiateNext);	
-			// }
-			// if (!MyAgent.EntryQueue.IsEmpty())
-			// {
-			// 	var initiateNext = (MyMessage)myMsg.CreateCopy();
-			// 	// initiateNext.Patient = MyAgent.MedicalTreatQueueB.Pop();
-			// 	initiateNext.Code = Mc.GetEntryExamResources;
-			// 	Notice(initiateNext);
-			// }
 			
 			var exitMsg = (MyMessage)myMsg.CreateCopy();
 			exitMsg.Patient = myMsg.Patient;

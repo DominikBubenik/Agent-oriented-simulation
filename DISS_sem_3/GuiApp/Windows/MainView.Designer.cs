@@ -1,4 +1,4 @@
-﻿﻿namespace DISS_SEM_GUI
+namespace DISS_SEM_GUI
 /**
  * Kod bol upraveny s pomocou AI, zdokumentovane v kapitole 7
  * Kod bol upraveny s pomocou AI, zdokumentovane v kapitole 11
@@ -13,64 +13,36 @@
         private System.Windows.Forms.Button btnRun;
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Panel pnlControls;
-        private System.Windows.Forms.TableLayoutPanel tblInputs;
+        private System.Windows.Forms.Panel pnlSidebar;
+        private System.Windows.Forms.FlowLayoutPanel flowMain;
 
         // Inputs
-        private System.Windows.Forms.Label lblSeed = null!;
-        private System.Windows.Forms.TextBox txtSeed = null!;
-        private System.Windows.Forms.CheckBox chkRandomSeed = null!;
-        private System.Windows.Forms.Label lblReplications = null!;
-        private System.Windows.Forms.TextBox txtReplications = null!;
-        private System.Windows.Forms.Label lblSystemCapacity = null!;
-        private System.Windows.Forms.ComboBox cmbExperimentVariant = null!;
-        private System.Windows.Forms.CheckBox chkAllocateBestRoom = null!;
-        private System.Windows.Forms.CheckBox chkObservationMode = null!;
-        private System.Windows.Forms.Label lblEndTime = null!;
-        private System.Windows.Forms.TextBox txtEndTime = null!;
-        private System.Windows.Forms.Label lblTimeInterval = null!;
-        private System.Windows.Forms.TextBox txtTimeInterval = null!;
-        private System.Windows.Forms.Label lblMaxWaitTimeExp4 = null!;
-        private System.Windows.Forms.TextBox txtMaxWaitTimeExp4 = null!;
-        private System.Windows.Forms.Label lblNurses = null!;
-        private System.Windows.Forms.TextBox txtNurses = null!;
-        private System.Windows.Forms.Label lblDoctors = null!;
-        private System.Windows.Forms.TextBox txtDoctors = null!;
-        private System.Windows.Forms.Label lblMaxEntryQueue = null!;
-        private System.Windows.Forms.TextBox txtMaxEntryQueue = null!;
-        private System.Windows.Forms.Label lblMaxMedicalQueue = null!;
-        private System.Windows.Forms.TextBox txtMaxMedicalQueue = null!;
-        // Sensitivity controls
-         private System.Windows.Forms.GroupBox grpSensitivity = null!;
-         private System.Windows.Forms.Label lblSensCapacity = null!;
-         private System.Windows.Forms.TextBox txtSensCapacity = null!;
-         private System.Windows.Forms.Label lblSensReplications = null!;
-         private System.Windows.Forms.TextBox txtSensReplications = null!;
-         private System.Windows.Forms.Label lblSensGraphPoints = null!;
-         private System.Windows.Forms.TextBox txtSensGraphPoints = null!;
-         private System.Windows.Forms.CheckBox chkSensRun = null!;
-
-        // Merged Sensitivity + Find/CSV controls
-         private System.Windows.Forms.GroupBox grpSensibilityFind = null!;
-         private System.Windows.Forms.CheckBox chkFindSensitivityGenerateCsv = null!; // renamed: Generate CSV file
-         private System.Windows.Forms.Label lblFindComfortTime = null!;
-         private System.Windows.Forms.TextBox txtFindComfortTime = null!;
-         private System.Windows.Forms.Label lblFindDetectorQueueAvg = null!;
-         private System.Windows.Forms.TextBox txtFindDetectorQueueAvg = null!;
-         private System.Windows.Forms.Label lblFindLuggageQueueAvg = null!;
-         private System.Windows.Forms.TextBox txtFindLuggageQueueAvg = null!;
-         private System.Windows.Forms.Label lblCsvDirectory = null!;
-         private System.Windows.Forms.TextBox txtCsvDirectory = null!;
-         private System.Windows.Forms.Button btnBrowseCsvDirectory = null!;
-         private System.Windows.Forms.Label lblCsvFileName = null!;
-         private System.Windows.Forms.TextBox txtCsvFileName = null!;
-
-        // Warming proof group
-        private System.Windows.Forms.GroupBox grpWarmingProof = null!;
-        private System.Windows.Forms.CheckBox chkWarmUpProof = null!;
-        // Warm-up input (ms)
-        private System.Windows.Forms.Label lblWarmUp = null!;
-        private System.Windows.Forms.TextBox txtWarmUp = null!;
-        
+        private System.Windows.Forms.Label lblSeed;
+        private System.Windows.Forms.NumericUpDown numSeed;
+        private System.Windows.Forms.CheckBox chkRandomSeed;
+        private System.Windows.Forms.Label lblReplications;
+        private System.Windows.Forms.NumericUpDown numReplications;
+        private System.Windows.Forms.Label lblExperimentVariant;
+        private System.Windows.Forms.ComboBox cmbExperimentVariant;
+        private System.Windows.Forms.CheckBox chkAllocateBestRoom;
+        private System.Windows.Forms.CheckBox chkObservationMode;
+        private System.Windows.Forms.Label lblEndTime;
+        private System.Windows.Forms.NumericUpDown numEndTime;
+        private System.Windows.Forms.Label lblMaxWaitTimeExp4;
+        private System.Windows.Forms.NumericUpDown numMaxWaitTimeExp4;
+        private System.Windows.Forms.Label lblNurses;
+        private System.Windows.Forms.NumericUpDown numNurses;
+        private System.Windows.Forms.Label lblDoctors;
+        private System.Windows.Forms.NumericUpDown numDoctors;
+        private System.Windows.Forms.Label lblMaxEntryQueue;
+        private System.Windows.Forms.NumericUpDown numMaxEntryQueue;
+        private System.Windows.Forms.Label lblMaxMedicalQueue;
+        private System.Windows.Forms.NumericUpDown numMaxMedicalQueue;
+        private System.Windows.Forms.Label lblWarmUp;
+        private System.Windows.Forms.NumericUpDown numWarmUp;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.CheckBox chkWarmUpProof;
 
         protected override void Dispose(bool disposing)
         {
@@ -80,406 +52,194 @@
             base.Dispose(disposing);
         }
 
-       private void InitializeComponent()
-{
-    this.pnlControls = new Panel();
-    this.btnRun = new Button();
-    this.btnPause = new Button();
-    this.WindowState = FormWindowState.Maximized;
+        private void InitializeComponent()
+        {
+            this.pnlControls = new System.Windows.Forms.Panel();
+            this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.flowMain = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnRun = new System.Windows.Forms.Button();
+            this.btnPause = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblStatus = new System.Windows.Forms.Label();
 
-    // Groups
-    GroupBox grpSimulation = new GroupBox();
-    GroupBox grpTime = new GroupBox();
-    GroupBox grpResources = new GroupBox();
+            // Action Buttons
+            System.Windows.Forms.Button btnObservation = new System.Windows.Forms.Button();
+            System.Windows.Forms.Button btnTurbo = new System.Windows.Forms.Button();
+            System.Windows.Forms.Button btnWelch = new System.Windows.Forms.Button();
+            System.Windows.Forms.Button btnSensitivity = new System.Windows.Forms.Button();
 
-    // Charts group - larger area
-    GroupBox grpCharts = new GroupBox();
-    grpCharts.Text = "Charts";
-    grpCharts.AutoSize = false;
-    // Allocate a large area for charts; designer will still respect Dock and FlowLayout
-    grpCharts.Width = 2000;
-    grpCharts.Height = 1200;
-    grpCharts.MinimumSize = new Size(900, 600);
+            // Groups
+            System.Windows.Forms.GroupBox grpSimulation = new System.Windows.Forms.GroupBox { Text = "Simulation Core", AutoSize = false, Padding = new System.Windows.Forms.Padding(10), Margin = new System.Windows.Forms.Padding(5) };
+            System.Windows.Forms.GroupBox grpResources = new System.Windows.Forms.GroupBox { Text = "Staff & Resources", AutoSize = false, Padding = new System.Windows.Forms.Padding(10), Margin = new System.Windows.Forms.Padding(5) };
+            System.Windows.Forms.GroupBox grpQueues = new System.Windows.Forms.GroupBox { Text = "Queue Management", AutoSize = false, Padding = new System.Windows.Forms.Padding(10), Margin = new System.Windows.Forms.Padding(5) };
+            System.Windows.Forms.GroupBox grpTime = new System.Windows.Forms.GroupBox { Text = "Time Management", AutoSize = false, Padding = new System.Windows.Forms.Padding(10), Margin = new System.Windows.Forms.Padding(5) };
+            System.Windows.Forms.GroupBox grpOptions = new System.Windows.Forms.GroupBox { Text = "Operational Options", AutoSize = false, Padding = new System.Windows.Forms.Padding(10), Margin = new System.Windows.Forms.Padding(5) };
 
-    // Create a scrollable container for chartsTable so user can scroll horizontally/vertically
-    Panel chartsPanel = new Panel();
-    chartsPanel.Dock = DockStyle.Fill;
-    chartsPanel.AutoScroll = true;
-    chartsPanel.AutoSize = false;
-    chartsPanel.Width = 2000;
-    chartsPanel.Height = 1200;
+            this.SuspendLayout();
 
-    TableLayoutPanel chartsTable = new TableLayoutPanel();
-    chartsTable.ColumnCount = 2;
-    chartsTable.RowCount = 3;
-    // Do not dock the table to Fill inside the scrollable panel; set explicit size larger than view
-    chartsTable.Dock = DockStyle.None;
-    chartsTable.AutoSize = false;
-    // Make the table wide so horizontal scrolling is triggered on smaller windows
-    chartsTable.Width = 1900;
-    chartsTable.Height = 1050;
-    chartsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-    chartsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-    // Use fixed taller rows so each plot gets more vertical space
-    chartsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 350));
-    chartsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 350));
-    chartsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 350));
+            // SIDEBAR
+            pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
+            pnlSidebar.Width = 200;
+            pnlSidebar.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
+            pnlSidebar.Padding = new System.Windows.Forms.Padding(10);
 
-    TableLayoutPanel simTable = new TableLayoutPanel();
-    TableLayoutPanel timeTable = new TableLayoutPanel();
-    TableLayoutPanel resTable = new TableLayoutPanel();
-    // Initialize tblInputs (used by AddInput helper) to avoid it being unassigned
-    tblInputs = new TableLayoutPanel();
+            void StyleSidebarButton(System.Windows.Forms.Button b, string text, System.Drawing.Color backColor, int top)
+            {
+                b.Text = text;
+                b.Width = 180;
+                b.Height = 45;
+                b.Location = new System.Drawing.Point(10, top);
+                b.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                b.ForeColor = System.Drawing.Color.White;
+                b.BackColor = backColor;
+                b.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+                b.FlatAppearance.BorderSize = 0;
+                pnlSidebar.Controls.Add(b);
+            }
 
-    // INIT CONTROLS
-    lblSeed = new Label(); txtSeed = new TextBox();
-    lblReplications = new Label(); txtReplications = new TextBox();
-    lblSystemCapacity = new Label(); cmbExperimentVariant = new ComboBox();
-    chkAllocateBestRoom = new  CheckBox();
-    chkObservationMode = new CheckBox();
-    chkObservationMode.Checked = true;
+            StyleSidebarButton(btnRun, "RUN SIMULATION", System.Drawing.Color.FromArgb(0, 122, 204), 20);
+            btnRun.Click += RunBtnClick;
 
-    lblEndTime = new Label(); txtEndTime = new TextBox();
-    lblTimeInterval = new Label(); txtTimeInterval = new TextBox();
-    lblMaxWaitTimeExp4 = new Label(); txtMaxWaitTimeExp4 = new TextBox();
+            StyleSidebarButton(btnPause, "PAUSE", System.Drawing.Color.FromArgb(63, 63, 70), 75);
+            btnPause.Click += PauseBtnClick;
 
-    // Initialize resource inputs (were declared earlier)
-    lblNurses = new Label(); txtNurses = new TextBox();
-    lblDoctors = new Label(); txtDoctors = new TextBox();
-    lblMaxEntryQueue = new Label(); txtMaxEntryQueue = new TextBox();
-    lblMaxMedicalQueue = new Label(); txtMaxMedicalQueue = new TextBox();
+            StyleSidebarButton(btnObservation, "Observation", System.Drawing.Color.FromArgb(63, 63, 70), 140);
+            btnObservation.Click += ObservationBtnClick;
 
-    // Sensibility init
-    grpSensitivity = new GroupBox();
-    lblSensCapacity = new Label(); txtSensCapacity = new TextBox();
-    lblSensReplications = new Label(); txtSensReplications = new TextBox();
-    lblSensGraphPoints = new Label(); txtSensGraphPoints = new TextBox();
-    chkSensRun = new CheckBox();
+            StyleSidebarButton(btnTurbo, "Turbo Mode", System.Drawing.Color.FromArgb(63, 63, 70), 195);
+            btnTurbo.Click += TurboBtnClick;
 
-    // Merged Sensibility+Find/CSV init
-    grpSensibilityFind = new GroupBox();
-    chkFindSensitivityGenerateCsv = new CheckBox();
-    lblFindComfortTime = new Label(); txtFindComfortTime = new TextBox();
-    lblFindDetectorQueueAvg = new Label(); txtFindDetectorQueueAvg = new TextBox();
-    lblFindLuggageQueueAvg = new Label(); txtFindLuggageQueueAvg = new TextBox();
-    lblCsvDirectory = new Label(); txtCsvDirectory = new TextBox(); btnBrowseCsvDirectory = new Button();
-    lblCsvFileName = new Label(); txtCsvFileName = new TextBox();
+            StyleSidebarButton(btnWelch, "Welch Analysis", System.Drawing.Color.FromArgb(63, 63, 70), 250);
+            btnWelch.Click += WelchBtnClick;
 
-    // WARMING PROOF init
-    grpWarmingProof = new GroupBox();
-    chkWarmUpProof = new CheckBox();
-    // Warm-up input (ms)
-    lblWarmUp = new Label(); txtWarmUp = new TextBox();
-    
+            StyleSidebarButton(btnSensitivity, "Sensitivity", System.Drawing.Color.FromArgb(63, 63, 70), 305);
+            btnSensitivity.Click += SensitivityBtnClick;
 
-    this.SuspendLayout();
+            lblStatus.ForeColor = System.Drawing.Color.White;
+            lblStatus.Location = new System.Drawing.Point(10, 400);
+            lblStatus.AutoSize = true;
+            lblStatus.Text = "Status: Idle";
+            pnlSidebar.Controls.Add(lblStatus);
 
-    // PANEL
-    // Use full available client area for controls including large charts
-    pnlControls.Dock = DockStyle.Fill;
-    // Allow scrolling when the content (charts) is larger than the window
-    pnlControls.AutoScroll = true;
-    // do not set fixed height so the panel can expand/shrink with the window
-    pnlControls.Padding = new Padding(10);
+            progressBar.Width = 180;
+            progressBar.Location = new System.Drawing.Point(10, 430);
+            pnlSidebar.Controls.Add(progressBar);
 
-    // BUTTON RUN
-    btnRun.Text = "Run";
-    btnRun.Width = 120;
-    btnRun.Height = 50;
-    btnRun.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-    btnRun.Click += RunBtnClick;
-    //BUTTON PAUSE
-    btnPause.Text = "Pause";
-    btnPause.Width = 120;
-    btnPause.Height = 50;
-    btnPause.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-    btnPause.Click += PauseBtnClick;
+            // MAIN CONTENT
+            pnlControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            pnlControls.AutoScroll = true;
+            pnlControls.BackColor = System.Drawing.Color.White;
 
-    // BUTTON SENSITIVITY
-    Button btnSensitivity = new Button();
-    btnSensitivity.Text = "Sensitivity";
-    btnSensitivity.Width = 120;
-    btnSensitivity.Height = 50;
-    btnSensitivity.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-    btnSensitivity.Click += SensitivityBtnClick;
-    // BUTTON OBSERVATION
-    Button btnObservation = new Button();
-    btnObservation.Text = "Observation";
-    btnObservation.Width = 120;
-    btnObservation.Height = 50;
-    btnObservation.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-    btnObservation.Click += ObservationBtnClick;
+            flowMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            flowMain.Padding = new System.Windows.Forms.Padding(20);
+            flowMain.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            flowMain.WrapContents = true;
+            pnlControls.Controls.Add(flowMain);
 
-    // BUTTON TURBO
-    Button btnTurbo = new Button();
-    btnTurbo.Text = "Turbo";
-    btnTurbo.Width = 120;
-    btnTurbo.Height = 50;
-    btnTurbo.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-    btnTurbo.Click += TurboBtnClick;
-    
-    // BUTTON WELCH
-    Button btnWelch = new Button();
-    btnWelch.Text = "Welch";
-    btnWelch.Width = 120;
-    btnWelch.Height = 50;
-    btnWelch.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-    btnWelch.Click += WelchBtnClick;
+            void AddToTable(System.Windows.Forms.TableLayoutPanel table, System.Windows.Forms.Control lbl, System.Windows.Forms.Control input)
+            {
+                int row = table.RowCount++;
+                table.Controls.Add(lbl, 0, row);
+                table.Controls.Add(input, 1, row);
+            }
 
-    FlowLayoutPanel leftPanel = new FlowLayoutPanel();
-    leftPanel.Dock = DockStyle.Left;
-    leftPanel.Width = 140;
-    leftPanel.Controls.Add(btnRun);
-    leftPanel.Controls.Add(btnPause);
-    leftPanel.Controls.Add(btnSensitivity);
-    leftPanel.Controls.Add(btnObservation);
-    leftPanel.Controls.Add(btnTurbo);
-    leftPanel.Controls.Add(btnWelch);
-    // Keep a simple checkbox in main view to toggle sensitivity mode
-    chkSensRun.Text = "Run Sensitivity";
-    chkSensRun.AutoSize = true;
-    leftPanel.Controls.Add(chkSensRun);
+            System.Windows.Forms.TableLayoutPanel CreateTable()
+            {
+                var t = new System.Windows.Forms.TableLayoutPanel { ColumnCount = 2, AutoSize = true, Dock = System.Windows.Forms.DockStyle.Top };
+                t.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250));
+                t.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200));
+                return t;
+            }
 
-    // COMMON SETTINGS
-    Font font = new Font("Segoe UI", 10);
-    this.Font = font;
+            System.Windows.Forms.Label CreateLabel(string text) => new System.Windows.Forms.Label { Text = text, Anchor = System.Windows.Forms.AnchorStyles.Left, AutoSize = true, Font = new System.Drawing.Font("Segoe UI", 10) };
+            System.Windows.Forms.NumericUpDown CreateNum(int min, int max, int val) => new System.Windows.Forms.NumericUpDown { Minimum = min, Maximum = max, Value = val, Width = 180, Font = new System.Drawing.Font("Segoe UI", 10) };
 
-    void SetupTable(TableLayoutPanel table)
-    {
-        table.ColumnCount = 2;
-        table.RowCount = 5;
-        table.AutoSize = true;
-        table.Dock = DockStyle.Fill;
+            // SIMULATION GROUP
+            grpSimulation.MinimumSize = new System.Drawing.Size(500, 200);
+            var simTable = CreateTable();
+            lblSeed = CreateLabel("Random Seed:");
+            numSeed = CreateNum(1, int.MaxValue, 12345);
+            chkRandomSeed = new System.Windows.Forms.CheckBox { Text = "Use Random", AutoSize = true, Font = new System.Drawing.Font("Segoe UI", 10) };
 
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            var seedContainer = new System.Windows.Forms.FlowLayoutPanel { FlowDirection = System.Windows.Forms.FlowDirection.TopDown, AutoSize = true };
+            seedContainer.Controls.Add(numSeed);
+            seedContainer.Controls.Add(chkRandomSeed);
+
+            lblReplications = CreateLabel("Replications:");
+            numReplications = CreateNum(1, 1000000, 1000);
+
+            AddToTable(simTable, lblSeed, seedContainer);
+            AddToTable(simTable, lblReplications, numReplications);
+            grpSimulation.Controls.Add(simTable);
+
+            // RESOURCES GROUP
+            grpResources.MinimumSize = new System.Drawing.Size(500, 200);
+            var resTable = CreateTable();
+            lblNurses = CreateLabel("Nurse Count:");
+            numNurses = CreateNum(1, 100, 8);
+            lblDoctors = CreateLabel("Doctor Count:");
+            numDoctors = CreateNum(1, 100, 6);
+
+            AddToTable(resTable, lblNurses, numNurses);
+            AddToTable(resTable, lblDoctors, numDoctors);
+            grpResources.Controls.Add(resTable);
+
+            // QUEUES GROUP
+            grpQueues.MinimumSize = new System.Drawing.Size(500, 200);
+            var qTable = CreateTable();
+            lblMaxEntryQueue = CreateLabel("Max Entry Queue:");
+            numMaxEntryQueue = CreateNum(0, 1000, 3);
+            lblMaxMedicalQueue = CreateLabel("Max Medical Queue:");
+            numMaxMedicalQueue = CreateNum(0, 1000, 0);
+
+            AddToTable(qTable, lblMaxEntryQueue, numMaxEntryQueue);
+            AddToTable(qTable, lblMaxMedicalQueue, numMaxMedicalQueue);
+            grpQueues.Controls.Add(qTable);
+
+            // TIME GROUP
+            grpTime.MinimumSize = new System.Drawing.Size(500, 200);
+            var timeTable = CreateTable();
+            lblEndTime = CreateLabel("End Time (hours):");
+            numEndTime = CreateNum(1, 1000000, 672);
+            lblWarmUp = CreateLabel("Warm-up (hours):");
+            numWarmUp = CreateNum(0, 1000000, 168);
+            lblMaxWaitTimeExp4 = CreateLabel("Exp 4 Wait (min):");
+            numMaxWaitTimeExp4 = CreateNum(0, 60, 0);
+
+            AddToTable(timeTable, lblEndTime, numEndTime);
+            AddToTable(timeTable, lblWarmUp, numWarmUp);
+            AddToTable(timeTable, lblMaxWaitTimeExp4, numMaxWaitTimeExp4);
+            grpTime.Controls.Add(timeTable);
+
+            // OPTIONS GROUP
+            grpOptions.MinimumSize = new System.Drawing.Size(500, 250);
+            var optTable = CreateTable();
+            lblExperimentVariant = CreateLabel("Allocation Strategy:");
+            cmbExperimentVariant = new System.Windows.Forms.ComboBox { DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList, Width = 180, Font = new System.Drawing.Font("Segoe UI", 10) };
+            chkAllocateBestRoom = new System.Windows.Forms.CheckBox { Text = "Allocate Best Room", AutoSize = true, Font = new System.Drawing.Font("Segoe UI", 10) };
+            chkObservationMode = new System.Windows.Forms.CheckBox { Text = "Observation Mode", AutoSize = true, Checked = true, Font = new System.Drawing.Font("Segoe UI", 10) };
+            chkWarmUpProof = new System.Windows.Forms.CheckBox { Text = "Warm-up Proof Mode", AutoSize = true, Font = new System.Drawing.Font("Segoe UI", 10) };
+
+            AddToTable(optTable, lblExperimentVariant, cmbExperimentVariant);
+            AddToTable(optTable, new System.Windows.Forms.Label(), chkAllocateBestRoom);
+            AddToTable(optTable, new System.Windows.Forms.Label(), chkObservationMode);
+            AddToTable(optTable, new System.Windows.Forms.Label(), chkWarmUpProof);
+            grpOptions.Controls.Add(optTable);
+
+            // ASSEMBLE
+            flowMain.Controls.Add(grpSimulation);
+            flowMain.Controls.Add(grpResources);
+            flowMain.Controls.Add(grpQueues);
+            flowMain.Controls.Add(grpTime);
+            flowMain.Controls.Add(grpOptions);
+
+            this.Controls.Add(pnlControls);
+            this.Controls.Add(pnlSidebar);
+            this.Text = "Emergency Department Simulation System";
+            this.ClientSize = new System.Drawing.Size(1200, 800);
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+
+            this.ResumeLayout(false);
+        }
     }
-
-    void StyleInput(Label l, TextBox t, string text, string defaultVal)
-    {
-        // Set displayed text and default value
-        l.Text = text;
-        t.Text = defaultVal;
-
-        // Make the label a fixed, wider control so the label text can be longer.
-        // Use AutoSize = false and explicit width so labels line up consistently.
-        l.AutoSize = false;
-        l.Width = 260; // increase if you want even longer labels
-        l.TextAlign = ContentAlignment.MiddleLeft;
-
-        // Slightly larger inputs for readability
-        t.Width = 250;
-
-        // Keep anchors so controls stay left-aligned inside their cell
-        l.Anchor = AnchorStyles.Left;
-        t.Anchor = AnchorStyles.Left;
-
-        l.Margin = new Padding(5);
-        t.Margin = new Padding(5);
-    }
-
-    // ================= SIMULATION =================
-    grpSimulation.Text = "Simulation";
-    grpSimulation.AutoSize = true;
-
-    SetupTable(simTable);
-    // Ensure the simulation table has enough rows for all inputs (seed, replications, system capacity, observation)
-    simTable.RowCount = 6;
-
-    StyleInput(lblSeed, txtSeed, "Seed", "12345");
-    StyleInput(lblReplications, txtReplications, "Replications", "1000");
-    lblSystemCapacity.Text = "Experiment Variant";
-    lblSystemCapacity.AutoSize = false;
-    lblSystemCapacity.Width = 260;
-    lblSystemCapacity.TextAlign = ContentAlignment.MiddleLeft;
-    lblSystemCapacity.Anchor = AnchorStyles.Left;
-    lblSystemCapacity.Margin = new Padding(5);
-
-    cmbExperimentVariant.Width = 250;
-    cmbExperimentVariant.Anchor = AnchorStyles.Left;
-    cmbExperimentVariant.Margin = new Padding(5);
-    cmbExperimentVariant.DropDownStyle = ComboBoxStyle.DropDownList;
-    cmbExperimentVariant.Items.Add("Exp 0 First Available");
-    cmbExperimentVariant.Items.Add("Exp 1 Least utilized");
-    cmbExperimentVariant.Items.Add("1500");
-    cmbExperimentVariant.Items.Add("2000");
-
-// Set default selected item
-    cmbExperimentVariant.SelectedIndex = 0; 
-    
-    chkAllocateBestRoom.Text = "Allocate best room";
-    chkObservationMode.Text = "Observation";
-
-    // Put seed textbox and random checkbox next to each other
-    simTable.Controls.Add(lblSeed, 0, 0);
-    // inline panel for seed input + random checkbox
-    var seedPanel = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, AutoSize = true };
-    seedPanel.Controls.Add(txtSeed);
-    chkRandomSeed = new CheckBox { Text = "Random", AutoSize = true, CheckAlign = System.Drawing.ContentAlignment.MiddleLeft };
-    seedPanel.Controls.Add(chkRandomSeed);
-    simTable.Controls.Add(seedPanel, 1, 0);
-    simTable.Controls.Add(lblReplications, 0, 1);
-    simTable.Controls.Add(txtReplications, 1, 1);
-    simTable.Controls.Add(lblSystemCapacity, 0, 2);
-    simTable.Controls.Add(cmbExperimentVariant, 1, 2);
-    simTable.Controls.Add(chkAllocateBestRoom, 0, 3);
-    simTable.Controls.Add(chkObservationMode, 1, 4);
-
-    grpSimulation.Controls.Add(simTable);
-
-    // ================= TIME =================
-    grpTime.Text = "Time";
-    grpTime.AutoSize = true;
-
-    SetupTable(timeTable);
-
-    StyleInput(lblEndTime, txtEndTime, "End Time", "672");
-    // Time Interval input accepts HH:MM:SS or numeric seconds. If provided it will set End = Start + Interval
-    StyleInput(lblTimeInterval, txtTimeInterval, "Time Interval (HH:MM:SS)", "24:00:00");
-    // Current simulation time (read-only) - will be updated from the controller/model
-    lblMaxWaitTimeExp4 = new Label(); txtMaxWaitTimeExp4 = new TextBox();
-    StyleInput(lblMaxWaitTimeExp4, txtMaxWaitTimeExp4, "Exp 4 max WaitTime (minutes)", "0.5");
-    
-    timeTable.Controls.Add(lblEndTime, 0, 1);
-    timeTable.Controls.Add(txtEndTime, 1, 1);
-    timeTable.Controls.Add(lblMaxWaitTimeExp4, 0, 3);
-    timeTable.Controls.Add(txtMaxWaitTimeExp4, 1, 3);
-
-
-    // Add Warm-up input into the Time group (row 4)
-    StyleInput(lblWarmUp, txtWarmUp, "Warm-up (hours)", "168");
-    timeTable.Controls.Add(lblWarmUp, 0, 4);
-    timeTable.Controls.Add(txtWarmUp, 1, 4);
-
-    grpTime.Controls.Add(timeTable);
-
-    // ================= RESOURCES =================
-    grpResources.Text = "Resources";
-    grpResources.AutoSize = true;
-
-    SetupTable(resTable);
-
-    StyleInput(lblNurses, txtNurses, "Nurses", "8");
-    StyleInput(lblDoctors, txtDoctors, "Doctors", "6");
-    StyleInput(lblMaxEntryQueue, txtMaxEntryQueue, "MaxEntryQueue", "3");
-    StyleInput(lblMaxMedicalQueue, txtMaxMedicalQueue, "MaxMedicalQueue", "0");
-
-    resTable.Controls.Add(lblNurses, 0, 0);
-    resTable.Controls.Add(txtNurses, 1, 0);
-    resTable.Controls.Add(lblDoctors, 0, 1);
-    resTable.Controls.Add(txtDoctors, 1, 1); 
-    resTable.Controls.Add(lblMaxEntryQueue, 0, 2);
-    resTable.Controls.Add(txtMaxEntryQueue, 1, 2); 
-    resTable.Controls.Add(lblMaxMedicalQueue, 0, 3);
-    resTable.Controls.Add(txtMaxMedicalQueue, 1, 3);
-
-    grpResources.Controls.Add(resTable);
-
-    // ================= MERGED SENSIBILITY + CSV =================
-    grpSensibilityFind.Text = "System Sensibility & CSV";
-    grpSensibilityFind.AutoSize = true;
-    TableLayoutPanel sensFindTable = new TableLayoutPanel();
-    sensFindTable.ColumnCount = 2; sensFindTable.RowCount = 6; sensFindTable.AutoSize = true; sensFindTable.Dock = DockStyle.Fill;
-    sensFindTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-    sensFindTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-
-    // sensitivity inputs
-    StyleInput(lblSensCapacity, txtSensCapacity, "Capacity", "1000");
-    StyleInput(lblSensReplications, txtSensReplications, "Replications", "10");
-    StyleInput(lblSensGraphPoints, txtSensGraphPoints, "Graph Points", "10");
-    chkSensRun.Text = "Run Sensitivity"; chkSensRun.AutoSize = true;
-
-    // find/CSV inputs
-    chkFindSensitivityGenerateCsv.Text = "Generate CSV file"; chkFindSensitivityGenerateCsv.AutoSize = true;
-    // Comfort security duration: accept HH:MM:SS text (default 00:10:00)
-    StyleInput(lblFindComfortTime, txtFindComfortTime, "Comfort security duration (HH:MM:SS)", "00:10:00");
-    // Averages
-    StyleInput(lblFindDetectorQueueAvg, txtFindDetectorQueueAvg, "Avg detector queue (int)", "20");
-    StyleInput(lblFindLuggageQueueAvg, txtFindLuggageQueueAvg, "Avg waiting for luggage (int)", "10");
-
-    StyleInput(lblCsvDirectory, txtCsvDirectory, "CSV Directory", "");
-    btnBrowseCsvDirectory = new Button(); btnBrowseCsvDirectory.Text = "Browse..."; btnBrowseCsvDirectory.Width = 100;
-    StyleInput(lblCsvFileName, txtCsvFileName, "CSV File name (no ext)", "sensitivity_results");
-
-    sensFindTable.Controls.Add(lblSensCapacity, 0, 0); sensFindTable.Controls.Add(txtSensCapacity, 1, 0);
-    sensFindTable.Controls.Add(lblSensReplications, 0, 1); sensFindTable.Controls.Add(txtSensReplications, 1, 1);
-    sensFindTable.Controls.Add(lblSensGraphPoints, 0, 2); sensFindTable.Controls.Add(txtSensGraphPoints, 1, 2);
-    sensFindTable.Controls.Add(chkSensRun, 1, 3);
-
-    sensFindTable.Controls.Add(chkFindSensitivityGenerateCsv, 0, 4); sensFindTable.SetColumnSpan(chkFindSensitivityGenerateCsv, 2);
-    sensFindTable.Controls.Add(lblFindComfortTime, 0, 5); sensFindTable.Controls.Add(txtFindComfortTime, 1, 5);
-    sensFindTable.Controls.Add(lblFindDetectorQueueAvg, 0, 6); sensFindTable.Controls.Add(txtFindDetectorQueueAvg, 1, 6);
-    sensFindTable.Controls.Add(lblFindLuggageQueueAvg, 0, 7); sensFindTable.Controls.Add(txtFindLuggageQueueAvg, 1, 7);
-    sensFindTable.Controls.Add(lblCsvDirectory, 0, 8); sensFindTable.Controls.Add(txtCsvDirectory, 1, 8);
-    sensFindTable.Controls.Add(btnBrowseCsvDirectory, 1, 9);
-    sensFindTable.Controls.Add(lblCsvFileName, 0, 10); sensFindTable.Controls.Add(txtCsvFileName, 1, 10);
-
-    grpSensibilityFind.Controls.Add(sensFindTable);
-
-    // ================= WARMING PROOF GROUP =================
-    grpWarmingProof.Text = "Warming Proof";
-    grpWarmingProof.AutoSize = true;
-    TableLayoutPanel warmTable = new TableLayoutPanel();
-    warmTable.ColumnCount = 2;
-    warmTable.RowCount = 2;
-    warmTable.AutoSize = true;
-    warmTable.Dock = DockStyle.Fill;
-    warmTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-    warmTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-
-    chkWarmUpProof.Text = "Warm up proof";
-    chkWarmUpProof.AutoSize = true;
-
-    warmTable.Controls.Add(chkWarmUpProof, 0, 0);
-    warmTable.SetColumnSpan(chkWarmUpProof, 2);
-    
-    grpWarmingProof.Controls.Add(warmTable);
-
-    // ================= MAIN LAYOUT =================
-    FlowLayoutPanel mainLayout = new FlowLayoutPanel();
-    mainLayout.Dock = DockStyle.Fill;
-    mainLayout.AutoSize = true;
-    mainLayout.WrapContents = true;
-
-    // Create a left column that stacks simulation-related groups vertically
-    FlowLayoutPanel leftColumn = new FlowLayoutPanel();
-    leftColumn.FlowDirection = FlowDirection.TopDown;
-    leftColumn.WrapContents = false;
-    leftColumn.AutoSize = true;
-    leftColumn.Width = 380; // column width for grouped controls
-    leftColumn.Controls.Add(grpSimulation);
-    // Sensitivity controls moved to SensitivityWindow. Do not add grpSensibilityFind to main view.
-    leftColumn.Controls.Add(grpWarmingProof);
-
-    // Add the left column as a single element to the main layout
-    mainLayout.Controls.Add(leftColumn);
-
-    // Add the rest of groups to the main layout
-    mainLayout.Controls.Add(grpTime);
-    mainLayout.Controls.Add(grpResources);
-
-    // Ensure grpStats starts on a new row after resource groups
-    mainLayout.SetFlowBreak(grpResources, true);
-
-
-    pnlControls.Controls.Add(mainLayout);
-    pnlControls.Controls.Add(leftPanel);
-    
-    grpSimulation.Width = 350;
-    grpSimulation.Height = 500;
-    grpTime.Width = 250;
-    grpResources.Width = 350;
-    grpWarmingProof.Width = 400;
-    // make room for warm-up input
-    grpWarmingProof.Height = Math.Max(grpWarmingProof.Height, 160);
-
-     // ================= FORM =================
-      // Give the form a larger default client size; user can still maximize
-      this.ClientSize = new Size(1400, 1000);
-       this.Controls.Add(pnlControls);
-       this.Text = "Airport Multi-Lane Simulation";
-
-       this.ResumeLayout(false);
- }
-     }
- }
+}
